@@ -150,6 +150,24 @@ def score(g,seeds):
         return {"ok":math.isfinite(agg),"agg":agg,"rob":rob,"metrics":m,"complexity":complexity,"diversity":div}
     except Exception:return {"ok":False,"agg":-1e12,"rob":-1e12}
 
+def semantically_equivalent(a,b):
+    try:
+        _,na=load(a);_,nb=load(b)
+        probes=[-1.2,-.4,0.0,.3,.9,1.7]
+        for x in probes:
+            if abs(float(na["represent"](x))-float(nb["represent"](x)))>1e-12: return False
+        for v in (.2,.7,1.3):
+            for noise in (-1.0,-.2,.0,.6,1.2):
+                if abs(float(na["generate"](v,noise))-float(nb["generate"](v,noise)))>1e-12: return False
+        metric_sets=([.3,.5,.7,.2,.1],[.9,1.1,1.0,.05,.3],[.2,.2,.2,.0,.0])
+        for m in metric_sets:
+            if abs(float(na["evaluate"](m))-float(nb["evaluate"](m)))>1e-12: return False
+        for q in ((0,.1,.2,.3),(1,.5,.4,.8),(3,.9,.7,.2)):
+            if abs(float(na["search_pressure"](*q))-float(nb["search_pressure"](*q)))>1e-12: return False
+        return True
+    except Exception:
+        return False
+
 def fetch(url):
     req=urllib.request.Request(url,headers={"User-Agent":"MICCGI-M009B/1.0"})
     try:
@@ -187,7 +205,7 @@ def main():
             donor_ev=score(donor,hold)
             child=refactor(donor,serial);serial+=1
             e=score(child,hold)
-            same_metrics=e["ok"] and all(abs(a-b)<=1e-10*max(1.0,abs(b)) for a,b in zip(e["metrics"],donor_ev["metrics"]))
+            same_metrics=e["ok"] and semantically_equivalent(donor,child)
             if not same_metrics:
                 raise RuntimeError("NO_SUCCESSOR_WITHIN_BUDGET")
             pool.append((e["agg"]+.03*e["diversity"],child,e))
