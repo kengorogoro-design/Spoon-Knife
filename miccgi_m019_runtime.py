@@ -58,44 +58,62 @@ def naive_select(rq,bq):
     c=all_candidates(rr,br)
     return max(c,key=lambda k:c[k]["value"]-1.96*c[k]["se"])
 
-def adaptive_select(rq,bq):
-    c2=all_candidates(rq[1],bq[1]);c3=all_candidates(rq[2],bq[2])
+def controller_select(prev_rr,prev_br,recent_rr,recent_br,params):
+    w,k,z=params
+    p=all_candidates(prev_rr,prev_br);r=all_candidates(recent_rr,recent_br)
     scored=[]
-    for k in c3:
-        recent=c3[k]["value"];recent_se=c3[k]["se"];prev=c2[k]["value"]
-        drift=abs(recent-prev)
-        # recent evidence dominates; drift and uncertainty penalize brittle policies.
-        score=recent-1.28*recent_se-0.75*drift
-        # slight preference for deployed policies under near ties.
-        complexity=0 if len(set(k))==1 else 1
-        score-=complexity*1e-7
-        scored.append((score,k,{"recent":recent,"recent_se":recent_se,"prev":prev,"drift":drift}))
+    for key in r:
+        score=w*r[key]["value"]+(1-w)*p[key]["value"]-k*abs(r[key]["value"]-p[key]["value"])-z*r[key]["se"]
+        scored.append((score,key))
     scored.sort(reverse=True)
-    return scored[0][1],scored
+    return scored[0][1]
 
-def campaign(c):
+def calibrate_controller(campaign_quarters):
+    grid=[]
+    for w in (0.5,0.7,0.85,1.0):
+      for k in (0.0,0.25,0.5,1.0,1.5):
+       for z in (0.0,0.64,1.0,1.28,1.96):
+        regrets=[]
+        for rq,bq in campaign_quarters:
+            sel=controller_select(rq[0],bq[0],rq[1],bq[1],(w,k,z))
+            q3=all_candidates(rq[2],bq[2]);oracle=max(q3,key=lambda x:q3[x]["value"])
+            regrets.append(q3[oracle]["value"]-q3[sel]["value"])
+        grid.append((sum(regrets),max(regrets),w,k,z))
+    grid.sort()
+    best=grid[0]
+    return (best[2],best[3],best[4]),grid[:10]
+
+def load_campaign(c):
     rr,rrc=fetch("random",c);br,brc=fetch("bts",c)
-    rq=quarters(rr);bq=quarters(br)
-    naive=naive_select(rq,bq);adaptive,rank=adaptive_select(rq,bq)
-    test=all_candidates(rq[3],bq[3]);oracle=max(test,key=lambda k:test[k]["value"])
+    return quarters(rr),quarters(br),rrc,brc
+
+def evaluate_campaign(c,rq,bq,rrc,brc,params):
+    naive=naive_select(rq,bq)
+    adaptive=controller_select(rq[1],bq[1],rq[2],bq[2],params)
+    test=all_candidates(rq[3],bq[3]);oracle=max(test,key=lambda x:test[x]["value"])
     nv=test[naive]["value"];av=test[adaptive]["value"];ov=test[oracle]["value"]
-    return {"campaign":c,"datasets":{"random":rrc,"bts":brc},
-            "naive_choice":list(naive),"adaptive_choice":list(adaptive),"oracle_choice":list(oracle),
-            "q4_values":{"naive":nv,"adaptive":av,"oracle":ov},
-            "naive_regret":ov-nv,"adaptive_regret":ov-av,"regret_reduction":(ov-nv)-(ov-av),
-            "adaptive_top5":[{"choice":list(x[1]),"score":x[0],**x[2]} for x in rank[:5]]}
+    return {"campaign":c,"datasets":{"random":rrc,"bts":brc},"naive_choice":list(naive),"adaptive_choice":list(adaptive),
+            "oracle_choice":list(oracle),"q4_values":{"naive":nv,"adaptive":av,"oracle":ov},
+            "naive_regret":ov-nv,"adaptive_regret":ov-av,"regret_reduction":nv-av+ov-ov}
 
 def main():
-    OUT.mkdir(exist_ok=True);cs=[campaign(c) for c in CAMPAIGNS]
+    OUT.mkdir(exist_ok=True)
+    loaded={c:load_campaign(c) for c in CAMPAIGNS}
+    params,top=calibrate_controller([(loaded[c][0],loaded[c][1]) for c in CAMPAIGNS])
+    cs=[evaluate_campaign(c,*loaded[c],params) for c in CAMPAIGNS]
+    for x in cs:
+        x["regret_reduction"]=x["naive_regret"]-x["adaptive_regret"]
     better=sum(x["adaptive_regret"]<x["naive_regret"] for x in cs)
     total_naive=sum(x["naive_regret"] for x in cs);total_adapt=sum(x["adaptive_regret"] for x in cs)
     established=better>=2 and total_adapt<total_naive
-    result={"admitted":established,"campaigns":cs,"improved_campaigns":better,
-            "total_naive_regret":total_naive,"total_adaptive_regret":total_adapt,
+    result={"admitted":established,"controller":{"recent_weight":params[0],"drift_penalty":params[1],"uncertainty_penalty":params[2]},
+            "controller_calibration_top10":[{"historical_total_regret":a,"historical_max_regret":b,"recent_weight":w,"drift_penalty":k,"uncertainty_penalty":z} for a,b,w,k,z in top],
+            "campaigns":cs,"improved_campaigns":better,"total_naive_regret":total_naive,"total_adaptive_regret":total_adapt,
             "aggregate_regret_reduction":total_naive-total_adapt,
-      "claim_boundary":{"NONSTATIONARITY_AWARE_POLICY_RECOMPILATION":"ESTABLISHED_FOR_RECORDED_OBD_TEMPORAL_WINDOWS" if established else "NOT_ESTABLISHED",
+      "claim_boundary":{"META_CALIBRATED_NONSTATIONARITY_CONTROLLER":"ESTABLISHED_FOR_RECORDED_OBD_Q4_HOLDOUT" if established else "NOT_ESTABLISHED",
         "LIVE_POLICY_DEPLOYMENT":"NOT_ESTABLISHED","REAL_PRODUCTION_INTERVENTION":"NOT_ESTABLISHED",
         "ECONOMIC_T0":"NOT_OBSERVED","VERIFIED_REALIZED_PROFIT":"NOT_PROVEN","MICCGI":"UNPROVEN"}}
     (OUT/"adjudication.json").write_text(json.dumps(result,indent=2,sort_keys=True))
     print(json.dumps(result,sort_keys=True));raise SystemExit(0 if established else 2)
+
 if __name__=="__main__":main()
