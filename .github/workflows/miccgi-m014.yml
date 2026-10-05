@@ -1,0 +1,26 @@
+name: MICCGI M014 randomized intervention policy
+on:
+  push:
+    branches:
+      - miccgi-m014-randomized-policy
+    paths:
+      - .github/workflows/miccgi-m014.yml
+      - miccgi_m014_runtime.py
+permissions:
+  contents: write
+jobs:
+  randomized-policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m014-randomized-policy
+          fetch-depth: 0
+      - name: Run randomized intervention policy induction
+        run: |
+          python3 miccgi_m014_runtime.py
+          git config user.name "MICCGI M014 Runtime"
+          git config user.email "miccgi-runtime@users.noreply.github.com"
+          git add miccgi_m014_state
+          git commit -m "MICCGI M014 final adjudication" || true
+          git push origin HEAD
