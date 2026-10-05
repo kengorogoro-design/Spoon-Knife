@@ -1,0 +1,12 @@
+{
+  "artifact": "MICCGI_REMOTE_SUCCESSOR_CAPSULE_A008",
+  "parent_a007_artifact_sha256": "e3cd93f0f797f14e31742548af5491dac2837617a9ef6be2cfb33fcb13c661ad",
+  "remote_probe_commit_sha": "4a4c110289cc9f01550925a9154055a061aa1447",
+  "remote_probe_file_sha256": "d4693e944249300458fdebf61d8c813e928d12e6385f885130d0522169f647c0",
+  "remote_generation": 8,
+  "claim_boundary": {
+    "micgi": "UNPROVEN",
+    "economic_t0": "NOT_OBSERVED",
+    "verified_realized_profit": "NOT_PROVEN"
+  }
+}
