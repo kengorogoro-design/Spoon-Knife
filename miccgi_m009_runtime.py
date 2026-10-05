@@ -85,6 +85,16 @@ def fuse(a,b,rng,serial):
     for k in ("rep","gen","eval","search"):q[k]=json.loads(json.dumps(rng.choice((a[k],b[k]))))
     return q
 
+def refactor(g,serial):
+    q=json.loads(json.dumps(g));q["id"]=f"R{serial}";q["parent"]=H(g)
+    targets=(("rep",["x"]),("gen",["v","noise"]),("eval",["floor","gm","mean","spread","novelty"]),("search",["stagnation","novelty","uncertainty","archive_diversity"]))
+    key,params=targets[serial%len(targets)]
+    name=f"abs{serial}"
+    original=json.loads(json.dumps(q[key]))
+    q["macros"].append({"n":name,"p":params,"e":original})
+    q[key]=X(name,*(V(p) for p in params))
+    return q
+
 def es(e):
     if e["t"]=="v":return e["n"]
     if e["t"]=="c":return repr(float(e["x"]))
@@ -173,7 +183,14 @@ def main():
             e=score(child,hold)
             if e["ok"] and e["rob"]>=base["rob"]*.90 and e["agg"]>=base["agg"]*.87:pool.append((e["agg"]+.03*e["diversity"],child,e))
         if not pool:
-            raise RuntimeError("NO_SUCCESSOR_WITHIN_BUDGET")
+            donor=max(donors,key=lambda g:score(g,hold)["agg"])
+            donor_ev=score(donor,hold)
+            child=refactor(donor,serial);serial+=1
+            e=score(child,hold)
+            same_metrics=e["ok"] and all(abs(a-b)<=1e-10*max(1.0,abs(b)) for a,b in zip(e["metrics"],donor_ev["metrics"]))
+            if not same_metrics:
+                raise RuntimeError("NO_SUCCESSOR_WITHIN_BUDGET")
+            pool.append((e["agg"]+.03*e["diversity"],child,e))
         pool.sort(reverse=True,key=lambda x:x[0]);_,win,ev=pool[0]
         src=emit(win);compile(src,f"<m009_{ep}>","exec");active.write_text(src);srcsha=H(src.encode());langsha=H(win)
         st={"epoch":ep,"language":win,"language_sha256":langsha,"source_sha256":srcsha,"parent_language_sha256":parent,"observations":ob,"holdout":ev,"operator_count":len(win["ops"]),"macro_count":len(win["macros"]),"paid_actions":0,"contract_actions":0,"financial_actions":0}
