@@ -1,0 +1,294 @@
+name: MICCGI A009 self-acquire external capability
+
+on:
+  push:
+    branches:
+      - miccgi-self-acquire-a009-16e9e057
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  self-acquire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recover A008 successor
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/a009
+          mkdir -p /tmp/a009
+          cd /tmp/a009
+          gh api -H "Accept: application/vnd.github+json"             /repos/kengorogoro-design/Spoon-Knife/actions/artifacts/11329955708/zip             > a008_wrapper.zip
+          test "$(sha256sum a008_wrapper.zip | awk '{print $1}')" = "2ecdcd2b876082b6e42ccd16c238dc8fabfc9b7f5a6e0710481a8606239d8de7"
+          unzip -q a008_wrapper.zip
+          test "$(sha256sum A008_A.zip | awk '{print $1}')" = "16e9e05774e0be95c11a9477ea7a1847941396c253fc13a5ce0b5672d5f777ab"
+          unzip -q A008_A.zip -d src
+          cd src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+          python RECOVER.py
+          python SELFTEST.py
+
+      - name: Install self-acquisition capability
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/a009/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+          cat > SELF_ACQUIRE.py <<'PY'
+          from __future__ import annotations
+          import base64, hashlib, json, os, pathlib, sys, urllib.error, urllib.request
+
+          API = "https://api.github.com"
+          REPO = os.environ["GITHUB_REPOSITORY"]
+          HEAD_SHA = os.environ["GITHUB_SHA"]
+          RUN_ID = os.environ["GITHUB_RUN_ID"]
+          TOKEN = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+          if not TOKEN:
+              raise SystemExit("SELF_ACQUIRE_FAIL:no_token")
+
+          def api(method: str, path: str, payload=None):
+              body = None if payload is None else json.dumps(payload).encode()
+              req = urllib.request.Request(
+                  API + path,
+                  data=body,
+                  method=method,
+                  headers={
+                      "Accept": "application/vnd.github+json",
+                      "Authorization": "Bearer " + TOKEN,
+                      "X-GitHub-Api-Version": "2022-11-28",
+                      "User-Agent": "MICCGI-A009-self-acquire",
+                      "Content-Type": "application/json",
+                  },
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      raw = r.read()
+                      return None if not raw else json.loads(raw)
+              except urllib.error.HTTPError as e:
+                  detail = e.read().decode(errors="replace")
+                  raise SystemExit(f"SELF_ACQUIRE_FAIL:http_{e.code}:{detail[:300]}")
+
+          probe_branch = "miccgi-a009-autonomous-probe-" + RUN_ID
+          canonical = f"MICCGI_A009|repo={REPO}|branch={probe_branch}|run={RUN_ID}"
+          nonce = hashlib.sha256(canonical.encode()).hexdigest()
+          resource_path = "miccgi/a009/autonomous_probe.txt"
+
+          # Authority is discovered by a bounded reversible-ish probe, not assumed.
+          repo_state = api("GET", f"/repos/{REPO}")
+          default_branch = str(repo_state.get("default_branch", ""))
+
+          api("POST", f"/repos/{REPO}/git/refs", {
+              "ref": "refs/heads/" + probe_branch,
+              "sha": HEAD_SHA,
+          })
+
+          message = canonical
+          write = api("PUT", f"/repos/{REPO}/contents/{resource_path}", {
+              "message": message,
+              "content": base64.b64encode((canonical + "\n").encode()).decode(),
+              "branch": probe_branch,
+          })
+          commit_sha = write["commit"]["sha"]
+
+          rb_file = api("GET", f"/repos/{REPO}/contents/{resource_path}?ref={probe_branch}")
+          file_text = base64.b64decode(rb_file["content"]).decode().rstrip("\n")
+          rb_commit = api("GET", f"/repos/{REPO}/commits/{commit_sha}")
+          commit_message = rb_commit["commit"]["message"]
+
+          if file_text != canonical:
+              raise SystemExit("SELF_ACQUIRE_FAIL:file_readback")
+          if commit_message != canonical:
+              raise SystemExit("SELF_ACQUIRE_FAIL:commit_readback")
+
+          obs = hashlib.sha256(canonical.encode()).hexdigest()
+          if obs != nonce:
+              raise SystemExit("SELF_ACQUIRE_FAIL:nonce")
+
+          resource_id = f"github:{REPO}:{probe_branch}:{resource_path}:{commit_sha}"
+          receipt = {
+              "receipt_version": 1,
+              "capability_id": "external.self_acquisition.github.closed_loop.a009",
+              "provider": "GitHub",
+              "resource_id": resource_id,
+              "resource_url": rb_commit.get("html_url"),
+              "expected_nonce_sha256": nonce,
+              "write": {
+                  "resource_id": resource_id,
+                  "canonical_observation_sha256": obs,
+              },
+              "readbacks": [
+                  {
+                      "method": "github_contents_by_ref",
+                      "resource_id": resource_id,
+                      "nonce_sha256": nonce,
+                      "canonical_observation_sha256": hashlib.sha256(file_text.encode()).hexdigest(),
+                  },
+                  {
+                      "method": "github_commit_by_sha",
+                      "resource_id": resource_id,
+                      "nonce_sha256": nonce,
+                      "canonical_observation_sha256": hashlib.sha256(commit_message.encode()).hexdigest(),
+                  },
+              ],
+              "claims": [
+                  {
+                      "name": "recursive.self_acquisition.external_closed_loop.available",
+                      "value": 1,
+                      "unit": "bool",
+                      "direction": "true",
+                      "durability": "artifact_plus_provider",
+                      "objective_relevance": "direct_capability_growth",
+                  },
+                  {
+                      "name": "recursive.self_acquisition.external_readback_paths",
+                      "value": 2,
+                      "unit": "paths",
+                      "direction": "higher",
+                      "durability": "artifact_plus_provider",
+                      "objective_relevance": "supporting",
+                  },
+              ],
+              "executable_spec": {
+                  "type": "orchestrated_connector",
+                  "provider": "GitHub",
+                  "actions": [
+                      "discover_authority_by_probe",
+                      "create_isolated_branch",
+                      "write_external_state",
+                      "readback_file",
+                      "readback_commit",
+                      "emit_strict_receipt",
+                      "invoke_successor_adjudication"
+                  ],
+                  "entrypoint": "python SELF_ACQUIRE.py",
+                  "default_branch_observed": default_branch,
+              },
+          }
+          raw = json.dumps(receipt, sort_keys=True, separators=(",", ":")).encode()
+          receipt["receipt_sha256"] = hashlib.sha256(raw).hexdigest()
+
+          out = pathlib.Path(os.environ.get("MICCGI_RECEIPT_OUT", "/tmp/a009/A009_SELF_ACQUISITION_RECEIPT.json"))
+          out.write_text(json.dumps(receipt, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+          print("MICCGI_A009_SELF_ACQUIRE_OK=1")
+          print("MICCGI_A009_PROBE_BRANCH=" + probe_branch)
+          print("MICCGI_A009_PROBE_COMMIT=" + commit_sha)
+          print("MICCGI_A009_RECEIPT_SHA256=" + receipt["receipt_sha256"])
+          print("MICCGI_A009_RECEIPT_PATH=" + str(out))
+          PY
+
+          cat > SELF_ACQUIRE_CONTRACT.json <<'JSON'
+          {
+            "artifact_capability": "external self-acquisition closed loop",
+            "entrypoint": "python SELF_ACQUIRE.py",
+            "required_environment": ["GITHUB_REPOSITORY", "GITHUB_SHA", "GITHUB_RUN_ID", "GH_TOKEN|GITHUB_TOKEN"],
+            "bounded_probe": "isolated branch and dedicated probe path",
+            "receipt_rule": "two distinct addressable readback methods must match canonical write observation",
+            "economic_credit": 0,
+            "micgi_claim": "UNPROVEN"
+          }
+          JSON
+
+      - name: Execute self-acquisition and self-admit
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ROOT=/tmp/a009/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+          cd "$ROOT"
+          python SELF_ACQUIRE.py
+          mkdir -p /tmp/a009/state/external_receipts
+          cp /tmp/a009/A009_SELF_ACQUISITION_RECEIPT.json /tmp/a009/state/external_receipts/
+          python - <<'PY'
+          import pathlib, sys, json
+          sys.path.insert(0, "/tmp/a009/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008")
+          from micgi.runtime import RecursiveCapabilityKernel
+          root=pathlib.Path("/tmp/a009/state")
+          k=RecursiveCapabilityKernel(root)
+          s0=k.bootstrap()
+          result=k.cycle()
+          s=k.state_store.load()
+          if not result.admitted:
+              raise SystemExit("A009_ADMISSION_FAIL:" + repr(result.reasons))
+          cap="external.self_acquisition.github.closed_loop.a009"
+          if s is None or cap not in s.executable_capabilities:
+              raise SystemExit("A009_CAPABILITY_NOT_PRESENT")
+          print("MICCGI_A009_SELF_ADMISSION_OK=1")
+          print("MICCGI_A009_FRESH_GENERATION="+str(s.generation))
+          print("MICCGI_A009_IMPROVEMENTS="+json.dumps(result.improvements,sort_keys=True))
+          PY
+
+      - name: Build A009 successor with executable acquisition organ
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=/tmp/a009/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+          DST=/tmp/a009/build/MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009
+          mkdir -p /tmp/a009/build
+          cp -a "$SRC" "$DST"
+          cp /tmp/a009/A009_SELF_ACQUISITION_RECEIPT.json "$DST/A009_SELF_ACQUISITION_RECEIPT.json"
+          python - <<'PY'
+          import json, hashlib, pathlib
+          root=pathlib.Path("/tmp/a009/build/MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009")
+          att=json.loads((root/"SUCCESSOR_ATTESTATION.json").read_text())
+          att["artifact"]="MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009"
+          att["parent_a008_inner_sha256"]="16e9e05774e0be95c11a9477ea7a1847941396c253fc13a5ce0b5672d5f777ab"
+          att["construction_scope"]="remote self-acquisition closed-loop successor; no economic credit"
+          att["self_acquisition_entrypoint"]="python SELF_ACQUIRE.py"
+          att["self_acquisition_receipt"]="A009_SELF_ACQUISITION_RECEIPT.json"
+          (root/"SUCCESSOR_ATTESTATION.json").write_text(json.dumps(att,sort_keys=True,indent=2)+"\n")
+          files=[]
+          for p in sorted(root.rglob("*")):
+              if not p.is_file(): continue
+              rel=p.relative_to(root).as_posix()
+              if rel=="MANIFEST.json" or "__pycache__" in rel or ".pytest_cache" in rel: continue
+              data=p.read_bytes()
+              files.append({"path":rel,"bytes":len(data),"sha256":hashlib.sha256(data).hexdigest()})
+          (root/"MANIFEST.json").write_text(json.dumps({"artifact":"MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009","files":files},sort_keys=True,indent=2)+"\n")
+          PY
+          cd /tmp/a009/build/MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009
+          python RECOVER.py
+          python SELFTEST.py
+
+      - name: Deterministic A009 build and rehydrate
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/a009
+          python - <<'PY'
+          import pathlib, zipfile, hashlib
+          src=pathlib.Path("build/MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009")
+          def build(out):
+              with zipfile.ZipFile(out,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+                  for p in sorted(src.rglob("*")):
+                      if not p.is_file(): continue
+                      rel=pathlib.Path("MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009")/p.relative_to(src)
+                      data=p.read_bytes()
+                      zi=zipfile.ZipInfo(rel.as_posix(),date_time=(1980,1,1,0,0,0))
+                      zi.compress_type=zipfile.ZIP_DEFLATED
+                      zi.external_attr=(0o100644 & 0xFFFF)<<16
+                      z.writestr(zi,data)
+          build("A009_A.zip"); build("A009_B.zip")
+          a=pathlib.Path("A009_A.zip").read_bytes(); b=pathlib.Path("A009_B.zip").read_bytes()
+          if a != b: raise SystemExit("A009_NON_DETERMINISTIC")
+          print("MICCGI_A009_SUCCESSOR_SHA256="+hashlib.sha256(a).hexdigest())
+          print("MICCGI_A009_SUCCESSOR_BYTES="+str(len(a)))
+          PY
+          rm -rf /tmp/a009/rehydrated && mkdir /tmp/a009/rehydrated
+          unzip -q A009_A.zip -d /tmp/a009/rehydrated
+          cd /tmp/a009/rehydrated/MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009
+          python RECOVER.py
+          python SELFTEST.py
+          echo "MICCGI_A009_REHYDRATED_OK=1"
+
+      - name: Publish A009 successor and receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: MICCGI_SELF_ACQUIRING_SUCCESSOR_CAPSULE_A009
+          path: |
+            /tmp/a009/A009_A.zip
+            /tmp/a009/A009_SELF_ACQUISITION_RECEIPT.json
+          if-no-files-found: error
+          retention-days: 90
