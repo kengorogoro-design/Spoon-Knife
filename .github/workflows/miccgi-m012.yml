@@ -1,0 +1,20 @@
+name: MICCGI M012 reality-grounded relation induction
+on:
+  push:
+    branches:
+      - miccgi-m012-reality-relations
+    paths:
+      - .github/workflows/miccgi-m012.yml
+      - miccgi_m012_runtime.py
+permissions:
+  contents: write
+jobs:
+  reality-relation-induction:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m012-reality-relations
+          fetch-depth: 0
+      - name: Run live World Bank relation induction
+        run: python3 miccgi_m012_runtime.py
