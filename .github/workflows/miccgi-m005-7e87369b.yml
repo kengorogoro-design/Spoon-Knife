@@ -1,0 +1,25 @@
+name: MICCGI M005 nonce-bound remote compute
+
+on:
+  push:
+    branches:
+      - miccgi-m005-7e87369b
+
+permissions:
+  contents: read
+
+jobs:
+  remote-compute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute M005 computation
+        shell: bash
+        run: |
+          set -euo pipefail
+          NONCE="7e87369b6666a0e7f91ec32c444d031b73c164139f51d45d6aaef10a3e2d0f27"
+          PARENT="4a6a088558c50eb544f363dd9edc43972bf7b9a4c3ba4968b748a7c855947956"
+          ACTUAL="$(printf %s "$NONCE" | sha256sum | awk '{print $1}')"
+          echo "MICCGI_M005_NONCE=$NONCE"
+          echo "MICCGI_M005_PARENT_RECEIPT_SHA256=$PARENT"
+          echo "MICCGI_M005_COMPUTED_SHA256=$ACTUAL"
+          python3 -c 'import platform; print("MICCGI_M005_REMOTE_PYTHON="+platform.python_version())'
