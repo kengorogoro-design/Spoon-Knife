@@ -1,0 +1,7 @@
+{
+  "parent_a008_sha256": "66deff7b328a483d5cdbe9729ec8a9e742ac83d089f7b61ed7a53efb6b6bdefb",
+  "branch": "miccgi-resume-a009-66deff7",
+  "nonce_sha256": "9a8ed143021fdd10e549cf616f82779324e9be3abcc1f16c23916a59b76a30d9",
+  "restored_generation": 8,
+  "scope": "fresh-run cross-generation continuity probe; no economic credit"
+}
