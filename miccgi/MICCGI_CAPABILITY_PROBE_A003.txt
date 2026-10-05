@@ -1,0 +1,4 @@
+MICCGI A003 external code actuation probe
+nonce_sha256=e1d6250f0a9138839b58e9cfa56b5204f09e43b342bf8ec0515893f328bcf96c
+source_artifact_sha256=9d57efdfe0a6e7a2730bed3896c73e8840c20e665ed4b67a0c6e9c1b6da982b7
+claim=external branch-isolated code write/read capability probe only; no economic credit
