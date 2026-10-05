@@ -1,0 +1,268 @@
+{
+  "admitted": true,
+  "average_rmse_improvement_vs_uniform": 0.013175058615957006,
+  "best_rmse_improvement_vs_uniform": 0.05635246396725229,
+  "claim_boundary": {
+    "ADAPTIVE_CAUSAL_EXPERIMENT_DESIGN": "ESTABLISHED_FOR_RECORDED_RCT_REPLAY",
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "LIVE_EXPERIMENT_EXECUTION": "NOT_ESTABLISHED",
+    "MICCGI": "UNPROVEN",
+    "REAL_PRODUCTION_INTERVENTION": "NOT_ESTABLISHED",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "dataset": {
+    "bytes": 3900976,
+    "rows": 64000,
+    "sha256": "27bab8c5d3669f26ec08ebb50a0a78317542f29501156f2e2af6781fab4cd7e2",
+    "url": "https://raw.githubusercontent.com/W-Tran/uplift-modelling/refs/heads/master/data/hillstrom/Kevin_Hillstrom_MineThatData_E-MailAnalytics_DataMiningChallenge_2008.03.20.csv"
+  },
+  "independent_audit_effects": [
+    {
+      "ci95": [
+        0.37636037438832337,
+        1.8792106110993356
+      ],
+      "effect": 1.1277854927438296,
+      "n_c": 3495,
+      "n_t": 3601,
+      "question": {
+        "arm": "Mens E-Mail",
+        "feature": "mens",
+        "outcome": "spend",
+        "value": "1"
+      },
+      "se": 0.38338016242627865
+    },
+    {
+      "ci95": [
+        -0.2642866007883937,
+        1.0299917234611027
+      ],
+      "effect": 0.3828525613363545,
+      "n_c": 2873,
+      "n_t": 2936,
+      "question": {
+        "arm": "Mens E-Mail",
+        "feature": "womens",
+        "outcome": "spend",
+        "value": "0"
+      },
+      "se": 0.3301730419003817
+    },
+    {
+      "ci95": [
+        -0.557156798138902,
+        1.0038395105600513
+      ],
+      "effect": 0.2233413562105746,
+      "n_c": 3113,
+      "n_t": 3228,
+      "question": {
+        "arm": "Mens E-Mail",
+        "feature": "newbie",
+        "outcome": "spend",
+        "value": "0"
+      },
+      "se": 0.3982133440558554
+    },
+    {
+      "ci95": [
+        -0.07806895829538052,
+        1.9612844210124822
+      ],
+      "effect": 0.9416077313585508,
+      "n_c": 2236,
+      "n_t": 2263,
+      "question": {
+        "arm": "Mens E-Mail",
+        "feature": "recency_bucket",
+        "outcome": "spend",
+        "value": "0"
+      },
+      "se": 0.5202432090071079
+    },
+    {
+      "ci95": [
+        0.23129320460893144,
+        1.874369429251502
+      ],
+      "effect": 1.0528313169302168,
+      "n_c": 2769,
+      "n_t": 2877,
+      "question": {
+        "arm": "Mens E-Mail",
+        "feature": "channel",
+        "outcome": "spend",
+        "value": "Web"
+      },
+      "se": 0.4191520981231048
+    }
+  ],
+  "selected_experiments": [
+    {
+      "arm": "Mens E-Mail",
+      "effect": 0.9256242686455451,
+      "feature": "mens",
+      "n_c": 2331,
+      "n_t": 2350,
+      "outcome": "spend",
+      "replay": {
+        "active_allocation": {
+          "control": 299,
+          "treatment": 501
+        },
+        "active_rmse": 1.0849586336645736,
+        "budget": 800,
+        "reservoir_counts": {
+          "control": 5961,
+          "treatment": 5788
+        },
+        "reservoir_truth_effect": 0.7430893343011539,
+        "rmse_improvement": 0.03785748141123359,
+        "uniform_allocation": {
+          "control": 400,
+          "treatment": 400
+        },
+        "uniform_rmse": 1.1276485683804403
+      },
+      "score": 0.8369731503768822,
+      "sd_c": 14.516949232841508,
+      "sd_t": 24.294479555360844,
+      "se": 0.5844369212807197,
+      "value": "1"
+    },
+    {
+      "arm": "Mens E-Mail",
+      "effect": 0.934773214660944,
+      "feature": "womens",
+      "n_c": 1913,
+      "n_t": 1923,
+      "outcome": "spend",
+      "replay": {
+        "active_allocation": {
+          "control": 300,
+          "treatment": 500
+        },
+        "active_rmse": 0.9526823477185153,
+        "budget": 800,
+        "reservoir_counts": {
+          "control": 4852,
+          "treatment": 4699
+        },
+        "reservoir_truth_effect": 0.7606154600082422,
+        "rmse_improvement": -0.052337724581583846,
+        "uniform_allocation": {
+          "control": 400,
+          "treatment": 400
+        },
+        "uniform_rmse": 0.9053009556388448
+      },
+      "score": 0.8185202886678091,
+      "sd_c": 15.735253149076966,
+      "sd_t": 26.201828407826508,
+      "se": 0.6974540642556978,
+      "value": "0"
+    },
+    {
+      "arm": "Mens E-Mail",
+      "effect": 0.3450555838399896,
+      "feature": "newbie",
+      "n_c": 2129,
+      "n_t": 2145,
+      "outcome": "spend",
+      "replay": {
+        "active_allocation": {
+          "control": 356,
+          "treatment": 444
+        },
+        "active_rmse": 1.002415353713429,
+        "budget": 800,
+        "reservoir_counts": {
+          "control": 5369,
+          "treatment": 5248
+        },
+        "reservoir_truth_effect": 0.8820553523445344,
+        "rmse_improvement": -0.031017931239314685,
+        "uniform_allocation": {
+          "control": 400,
+          "treatment": 400
+        },
+        "uniform_rmse": 0.9722579242714969
+      },
+      "score": 0.7452121494531292,
+      "sd_c": 16.462647918359004,
+      "sd_t": 20.58269584998138,
+      "se": 0.5699151055111916,
+      "value": "0"
+    },
+    {
+      "arm": "Mens E-Mail",
+      "effect": 1.0979169631046068,
+      "feature": "recency_bucket",
+      "n_c": 1439,
+      "n_t": 1514,
+      "outcome": "spend",
+      "replay": {
+        "active_allocation": {
+          "control": 286,
+          "treatment": 514
+        },
+        "active_rmse": 1.1338192139967829,
+        "budget": 800,
+        "reservoir_counts": {
+          "control": 3763,
+          "treatment": 3692
+        },
+        "reservoir_truth_effect": 1.0856587931069726,
+        "rmse_improvement": 0.05635246396725229,
+        "uniform_allocation": {
+          "control": 400,
+          "treatment": 400
+        },
+        "uniform_rmse": 1.2015282938834861
+      },
+      "score": 0.7340775584786066,
+      "sd_c": 15.267599055175971,
+      "sd_t": 27.464877469602232,
+      "se": 0.8125372119659,
+      "value": "0"
+    },
+    {
+      "arm": "Mens E-Mail",
+      "effect": 0.8515099700380803,
+      "feature": "channel",
+      "n_c": 1859,
+      "n_t": 1895,
+      "outcome": "spend",
+      "replay": {
+        "active_allocation": {
+          "control": 325,
+          "treatment": 475
+        },
+        "active_rmse": 0.9444314943235113,
+        "budget": 800,
+        "reservoir_counts": {
+          "control": 4745,
+          "treatment": 4718
+        },
+        "reservoir_truth_effect": 0.7244140218547356,
+        "rmse_improvement": 0.05502100352219768,
+        "uniform_allocation": {
+          "control": 400,
+          "treatment": 400
+        },
+        "uniform_rmse": 0.999420619763686
+      },
+      "score": 0.7317414328770634,
+      "sd_c": 15.58649843041496,
+      "sd_t": 22.83862786266698,
+      "se": 0.6371301210310236,
+      "value": "Web"
+    }
+  ],
+  "split": {
+    "audit": 19134,
+    "initial": 12813,
+    "replay_reservoir": 32053
+  }
+}
