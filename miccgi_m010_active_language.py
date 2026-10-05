@@ -11,4 +11,10 @@ def sg(x): x=max(-30.0,min(30.0,x)); return 1.0/(1.0+math.exp(-x))
 def pi_216373a3407d(a,b):
     return float(math.tanh(sg(((sg(a))*(sg(b))))))
 
-def active_controller(a,b): return pi_216373a3407d(a,b)
+import math
+def sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))
+def sg(x): x=max(-30.0,min(30.0,x)); return 1.0/(1.0+math.exp(-x))
+def pi_6975f0eaf7d9(a,b):
+    return float(abs(((a+b)/2.0)))
+
+def active_controller(a,b): return pi_6975f0eaf7d9(a,b)
