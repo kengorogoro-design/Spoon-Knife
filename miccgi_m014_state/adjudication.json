@@ -1,0 +1,148 @@
+{
+  "admitted": true,
+  "claim_boundary": {
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "MICCGI": "UNPROVEN",
+    "PERSONALIZED_CAUSAL_POLICY": "NOT_ESTABLISHED",
+    "RANDOMIZED_CAUSAL_EFFECT_ESTIMATION": "ESTABLISHED_FOR_RECORDED_HILLSTROM_RCT",
+    "REAL_PRODUCTION_INTERVENTION": "NOT_ESTABLISHED",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "dataset": {
+    "bytes": 3900976,
+    "rows": 64000,
+    "sha256": "27bab8c5d3669f26ec08ebb50a0a78317542f29501156f2e2af6781fab4cd7e2",
+    "url": "https://raw.githubusercontent.com/W-Tran/uplift-modelling/refs/heads/master/data/hillstrom/Kevin_Hillstrom_MineThatData_E-MailAnalytics_DataMiningChallenge_2008.03.20.csv"
+  },
+  "randomization": {
+    "arm_proportions": {
+      "Mens E-Mail": 0.332921875,
+      "No E-Mail": 0.33290625,
+      "Womens E-Mail": 0.334171875
+    },
+    "max_numeric_smd": 0.008630731202832915,
+    "numeric_smd": {
+      "history|Mens E-Mail|Womens E-Mail": 0.0011607131531366143,
+      "history|No E-Mail|Mens E-Mail": 0.007612868321542611,
+      "history|No E-Mail|Womens E-Mail": 0.006510722458553891,
+      "mens|Mens E-Mail|Womens E-Mail": 0.004048365969302671,
+      "mens|No E-Mail|Mens E-Mail": 0.0045823256374879625,
+      "mens|No E-Mail|Womens E-Mail": 0.008630731202832915,
+      "newbie|Mens E-Mail|Womens E-Mail": 0.0034485982907791336,
+      "newbie|No E-Mail|Mens E-Mail": 0.0008918953696535328,
+      "newbie|No E-Mail|Womens E-Mail": 0.0025567009140795606,
+      "recency|Mens E-Mail|Womens E-Mail": 0.0016491266166754931,
+      "recency|No E-Mail|Mens E-Mail": 0.006831532454259954,
+      "recency|No E-Mail|Womens E-Mail": 0.005180013205688683,
+      "womens|Mens E-Mail|Womens E-Mail": 0.0026425916051716755,
+      "womens|No E-Mail|Mens E-Mail": 0.007588929691887142,
+      "womens|No E-Mail|Womens E-Mail": 0.004946313992582152
+    }
+  },
+  "rows": 64000,
+  "selected_policy": {
+    "baseline_arm": "Mens E-Mail",
+    "distinct_actions": [
+      "Mens E-Mail"
+    ],
+    "features": [
+      "history_segment"
+    ],
+    "groups": 7,
+    "outcome": "visit",
+    "prior": 30.0,
+    "test": {
+      "baseline_value": 0.17582588418188885,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "difference": 0.0,
+      "policy_value": 0.17582588418188885,
+      "se": 0.0
+    },
+    "validation": {
+      "baseline_value": 0.17929961089494165,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "difference": 0.0,
+      "policy_value": 0.17929961089494165,
+      "se": 0.0
+    }
+  },
+  "split": {
+    "test": 12865,
+    "train": 38285,
+    "validation": 12850
+  },
+  "test_randomized_effects": {
+    "conversion": {
+      "Mens E-Mail": {
+        "ci95": [
+          0.0017436717385075906,
+          0.01000522751039166
+        ],
+        "effect": 0.005874449624449625,
+        "n_control": 4320,
+        "n_treat": 4290,
+        "se": 0.002107539737725528
+      },
+      "Womens E-Mail": {
+        "ci95": [
+          -0.001513745086463915,
+          0.0059491587610080235
+        ],
+        "effect": 0.0022177068372720545,
+        "n_control": 4320,
+        "n_treat": 4255,
+        "se": 0.0019038020019061068
+      }
+    },
+    "spend": {
+      "Mens E-Mail": {
+        "ci95": [
+          0.08071884851799993,
+          1.2054827184335672
+        ],
+        "effect": 0.6431007834757836,
+        "n_control": 4320,
+        "n_treat": 4290,
+        "se": 0.2869295586519304
+      },
+      "Womens E-Mail": {
+        "ci95": [
+          -0.04101100392653223,
+          1.006662448849716
+        ],
+        "effect": 0.48282572246159194,
+        "n_control": 4320,
+        "n_treat": 4255,
+        "se": 0.2672636359123083
+      }
+    },
+    "visit": {
+      "Mens E-Mail": {
+        "ci95": [
+          0.056530603309330546,
+          0.0857252889465617
+        ],
+        "effect": 0.07112794612794612,
+        "n_control": 4320,
+        "n_treat": 4290,
+        "se": 0.007447623887048763
+      },
+      "Womens E-Mail": {
+        "ci95": [
+          0.02456489590336708,
+          0.05242731369753817
+        ],
+        "effect": 0.038496104800452624,
+        "n_control": 4320,
+        "n_treat": 4255,
+        "se": 0.007107759641370177
+      }
+    }
+  }
+}
