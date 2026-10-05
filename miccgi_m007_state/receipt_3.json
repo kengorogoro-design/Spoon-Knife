@@ -1,0 +1,14 @@
+{
+  "epoch": 3,
+  "fingerprints": {
+    "candidates": "51dd11d05a03c0c8cc371c796a8e6c40d800538ed922b5ac3a06e0fa3a628ed0",
+    "evaluators": "fc79fd9dd5a2d6ea7a83cf8506b3ec4f100d4964925c83457e68e839973427f0",
+    "search": "110f7d789c8a3b3a31e59623691d2f970d3d8cefd6d573d291af81925813dbb0",
+    "worlds": "979dfb9b5f15c1ee0337ba4b6b9fad6ffdb5f784f5ba5c47253c86db1f5e82cc"
+  },
+  "leader": "C1023",
+  "parent": "d05cdc0d553c20407d8a261f04b4885c55d6dd5bce8340d6012cd8257220018d",
+  "reason": "MAX_EPOCHS_REACHED",
+  "state": "a799884cb4434bfb6b864c2eaa5e66e3b39d20440ef1767198a3a087529ee844",
+  "stop": true
+}
