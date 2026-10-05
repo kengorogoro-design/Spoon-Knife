@@ -1,0 +1,126 @@
+{
+  "admitted": true,
+  "claim_boundary": {
+    "BOUNDED_EXTERNAL_LANGUAGE_GENESIS": "ESTABLISHED_FOR_COMMIT_ADDRESSED_LINEAGE",
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "EXTERNAL_WHOLE_SYSTEM_DOMINANCE": "NOT_ESTABLISHED",
+    "MICCGI": "UNPROVEN",
+    "OPEN_ENDED_LANGUAGE_INVENTION": "NOT_ESTABLISHED",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "lineage": [
+    {
+      "checks": {
+        "compiled": true,
+        "language_matches": true,
+        "no_contract_actions": true,
+        "no_financial_actions": true,
+        "no_paid_actions": true,
+        "parent_chain_ok": true,
+        "source_bytes_match": true,
+        "source_changed": true,
+        "source_record_matches": true,
+        "state_hash_matches": true,
+        "stop_semantics": true
+      },
+      "epoch": 1,
+      "holdout": {
+        "agg": 1.1294220180452188,
+        "complexity": 43,
+        "diversity": 1.2745098039215685,
+        "metrics": [
+          0.7793332029815657,
+          1.0053541749298351,
+          0.9787536874877556,
+          0.774173418312975,
+          0.8916985112704683
+        ],
+        "ok": true,
+        "rob": 0.7793332029815657
+      },
+      "language_sha256": "79af5cd8e8913a0726773f7fdc43937bddc41b89b8ba3b3c01823bbc6e031b4a",
+      "macro_count": 2,
+      "operator_count": 16,
+      "ref": "c55b070",
+      "source_sha256": "76ace9abf4aba48db98853323f2a0289b7d9af575e04c218f76d0054e1733871",
+      "state_sha256": "4561af5a07042f2d73985468960f78b6ce52353d68ec17af8e3841f0a2a362a3"
+    },
+    {
+      "checks": {
+        "compiled": true,
+        "language_matches": true,
+        "no_contract_actions": true,
+        "no_financial_actions": true,
+        "no_paid_actions": true,
+        "parent_chain_ok": true,
+        "source_bytes_match": true,
+        "source_changed": true,
+        "source_record_matches": true,
+        "state_hash_matches": true,
+        "stop_semantics": true
+      },
+      "epoch": 2,
+      "holdout": {
+        "agg": 2.051843281137155,
+        "complexity": 46,
+        "diversity": 1.2745098039215685,
+        "metrics": [
+          0.7453935939936719,
+          1.0006677999274014,
+          5.251535912866884,
+          0.713790989081889,
+          0.88387147550594
+        ],
+        "ok": true,
+        "rob": 0.7453935939936719
+      },
+      "language_sha256": "37f21b18c1aabc72b837fbf8fdfd6f2b95e463cf0a46a41e01cc27c738dfb2c9",
+      "macro_count": 2,
+      "operator_count": 16,
+      "ref": "cd8b9d8",
+      "source_sha256": "123e928a9315a4179e7b07d0c97912e309ff34b623039da9be850a29421a74c1",
+      "state_sha256": "f8605f8d8331a7cbdcf0312793cd0d65a48e4bfcbf48ae0be3a69a141e4fc827"
+    },
+    {
+      "checks": {
+        "compiled": true,
+        "language_matches": true,
+        "no_contract_actions": true,
+        "no_financial_actions": true,
+        "no_paid_actions": true,
+        "parent_chain_ok": true,
+        "source_bytes_match": true,
+        "source_changed": true,
+        "source_record_matches": true,
+        "state_hash_matches": true,
+        "stop_semantics": true
+      },
+      "epoch": 3,
+      "holdout": {
+        "agg": 2.206978411226188,
+        "complexity": 59,
+        "diversity": 1.4411764705882353,
+        "metrics": [
+          0.9192500328273471,
+          1.0997319657703952,
+          6.738503132850084,
+          0.7605722850500533,
+          0.8975505944858893
+        ],
+        "ok": true,
+        "rob": 0.8975505944858893
+      },
+      "language_sha256": "1cb67754ce75c95abf5addafd4043ddd2ebec76fb42d42b5539f1b0076cbeec7",
+      "macro_count": 3,
+      "operator_count": 16,
+      "ref": "a962a4b",
+      "source_sha256": "2fa1f1562713124a1865bedadb48a04f7181b30140fe56e76e4aece784dff424",
+      "state_sha256": "537bbafd2f6da0056f301fcfc136a51f0a2bd03b65aaaa0cb60e99c1b5690c6c"
+    }
+  ],
+  "reasons": [],
+  "terminal_language_sha256": "1cb67754ce75c95abf5addafd4043ddd2ebec76fb42d42b5539f1b0076cbeec7",
+  "terminal_source_sha256": "2fa1f1562713124a1865bedadb48a04f7181b30140fe56e76e4aece784dff424",
+  "terminal_state_sha256": "537bbafd2f6da0056f301fcfc136a51f0a2bd03b65aaaa0cb60e99c1b5690c6c",
+  "verification_mode": "commit_addressed_independent_python_replay"
+}
