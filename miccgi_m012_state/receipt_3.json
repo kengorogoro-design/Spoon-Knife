@@ -1,0 +1,10 @@
+{
+  "compiled": true,
+  "epoch": 3,
+  "holdout_survived": true,
+  "parent_state_sha256": "2c35d4581471dce927fe66b518933137f778c15a13c53f71b156592c9c8afd31",
+  "reason": "MAX_EPOCHS_REACHED",
+  "state_sha256": "2463b78a5482159596071e5dc50dec9c8a0a40340f679e527adb28bf3f846064",
+  "stop": true,
+  "validation_survived": true
+}
