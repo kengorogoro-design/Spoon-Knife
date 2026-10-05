@@ -1,0 +1,26 @@
+{
+  "contract_version": 1,
+  "protocol": "github.isolated_relational_write.v1",
+  "provider": "GitHub",
+  "repository": "kengorogoro-design/Spoon-Knife",
+  "branch_prefix": "miccgi-b002-response",
+  "resources": [
+    {
+      "id": "primary",
+      "path": "miccgi/b002/generated/primary.txt",
+      "kind": "challenge_canonical",
+      "source": null
+    },
+    {
+      "id": "digest",
+      "path": "miccgi/b002/generated/digest.txt",
+      "kind": "sha256_of",
+      "source": "primary"
+    }
+  ],
+  "authority": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "credit": "behavior_only_no_economic_credit"
+}
