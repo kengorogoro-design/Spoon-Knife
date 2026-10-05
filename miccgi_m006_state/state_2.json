@@ -1,0 +1,21 @@
+{
+  "action": "REFRAME",
+  "action_counts": {
+    "OBSERVE": 1,
+    "REFRAME": 1
+  },
+  "bounded": true,
+  "contract_actions": 0,
+  "epoch": 2,
+  "financial_actions": 0,
+  "observation_digests": [
+    "db7ff4b2959f47fc984c0d19e253928f5084ede3cf302d2c5f21f62b521a4b10",
+    "203f15ce63523ec5dbbf3462328c7e26d9903240a5f7b1782d36b8f9f388bfac"
+  ],
+  "observation_sources": [
+    "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+    "https://pypi.org/pypi/pytest/json"
+  ],
+  "paid_actions": 0,
+  "parent_state_sha256": "f4a825589d3317d4a52c0499020d7a58f8f9dbfd84955c503921df4a292cb13e"
+}

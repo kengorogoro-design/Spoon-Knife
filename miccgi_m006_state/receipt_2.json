@@ -1,0 +1,22 @@
+{
+  "action": "REFRAME",
+  "epoch": 2,
+  "observations": [
+    {
+      "digest": "db7ff4b2959f47fc984c0d19e253928f5084ede3cf302d2c5f21f62b521a4b10",
+      "size_bytes": 15832,
+      "source": "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+      "status": 200
+    },
+    {
+      "digest": "203f15ce63523ec5dbbf3462328c7e26d9903240a5f7b1782d36b8f9f388bfac",
+      "size_bytes": 282699,
+      "source": "https://pypi.org/pypi/pytest/json",
+      "status": 200
+    }
+  ],
+  "parent_state_sha256": "f4a825589d3317d4a52c0499020d7a58f8f9dbfd84955c503921df4a292cb13e",
+  "reason": "CONTINUE_WITHIN_BOUND",
+  "state_sha256": "f57ec377d7952eae70a398a883db56099260dbfb8a03a9a273233790d7756045",
+  "stop": false
+}
