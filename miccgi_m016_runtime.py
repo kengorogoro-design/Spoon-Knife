@@ -17,7 +17,7 @@ def fetch():
     rows=list(csv.DictReader(io.StringIO(raw.decode("utf-8-sig"))))
     if len(rows)!=10000: raise RuntimeError(f"BAD_ROW_COUNT:{len(rows)}")
     fields=list(rows[0].keys())
-    required={"timestamp","item_id","position","click","action_prob"}
+    required={"timestamp","item_id","position","click","propensity_score"}
     if not required.issubset(fields): raise RuntimeError("BAD_SCHEMA:"+repr(fields))
     return rows,{"url":DATA_URL,"sha256":H(raw),"bytes":len(raw),"rows":len(rows),"fields":fields}
 
@@ -29,11 +29,11 @@ def prep(rows):
         x["item_id"]=int(x["item_id"])
         x["position"]=int(x["position"])
         x["click"]=int(float(x["click"]))
-        x["action_prob"]=float(x["action_prob"])
+        x["action_prob"]=float(x["propensity_score"])
         if not (0 < x["action_prob"] <= 1): raise RuntimeError("BAD_PSCORE")
         x["timestamp"]=str(x["timestamp"])
         # Keep user context only as anonymized strings; no identity inference.
-        dyn=[k for k in r if k not in {"timestamp","item_id","position","click","action_prob"}]
+        dyn=[k for k in r if k not in {"timestamp","item_id","position","click","propensity_score"}]
         x["context_key"]="|".join(str(r[k]) for k in dyn[:2]) if dyn else "GLOBAL"
         out.append(x)
     out.sort(key=lambda z:(z["timestamp"],z["row_id"]))
