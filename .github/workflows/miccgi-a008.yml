@@ -1,0 +1,181 @@
+name: MICCGI A008 cold-recoverable successor
+
+on:
+  push:
+    branches:
+      - miccgi-cold-recovery-a008-84032dd
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  build-cold-recoverable-successor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recover A006 parent from persisted external artifact
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/a008
+          cd /tmp/a008
+          gh api             -H "Accept: application/vnd.github+json"             /repos/kengorogoro-design/Spoon-Knife/actions/artifacts/11326954132/zip             > parent_wrapper.zip
+          echo "A008_PARENT_WRAPPER_SHA256=$(sha256sum parent_wrapper.zip | awk '{print $1}')"
+          test "$(sha256sum parent_wrapper.zip | awk '{print $1}')" = "0ceb568d97167013cb7375110735e71c73d889901d7ee4d8b8780a2d05e53a2d"
+          unzip -q parent_wrapper.zip
+          test -f MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip
+          echo "A008_PARENT_INNER_SHA256=$(sha256sum MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip | awk '{print $1}')"
+          test "$(sha256sum MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip | awk '{print $1}')" = "84032dd13d332f315b7f02cb8684affece9c641c3bd67de81b34fb4214ac6d59"
+          mkdir src
+          unzip -q MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip -d src
+          mv src/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006 src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+
+      - name: Install cold recovery contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/a008/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+          cat > RECOVERY_CONTRACT.json <<'JSON'
+          {
+            "artifact": "MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008",
+            "parent_inner_sha256": "84032dd13d332f315b7f02cb8684affece9c641c3bd67de81b34fb4214ac6d59",
+            "parent_cross_provider_lineage_artifact_sha256": "e3cd93f0f797f14e31742548af5491dac2837617a9ef6be2cfb33fcb13c661ad",
+            "required_runtime": "python>=3.11",
+            "recovery_entrypoint": "python RECOVER.py",
+            "network_required_for_recovery": false,
+            "claim_boundary": {
+              "micgi": "UNPROVEN",
+              "economic_t0": "NOT_OBSERVED",
+              "verified_realized_profit": "NOT_PROVEN",
+              "economic_credit": 0
+            }
+          }
+          JSON
+
+          cat > RECOVER.py <<'PY'
+          from __future__ import annotations
+          import compileall, hashlib, json, pathlib, sys, tempfile
+
+          ROOT = pathlib.Path(__file__).resolve().parent
+
+          def fail(msg: str) -> None:
+              raise SystemExit("RECOVERY_FAIL:" + msg)
+
+          manifest_path = ROOT / "MANIFEST.json"
+          if not manifest_path.exists():
+              fail("missing_manifest")
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          mismatches = []
+          for entry in manifest["files"]:
+              p = ROOT / entry["path"]
+              if not p.is_file():
+                  mismatches.append(entry["path"] + ":missing")
+                  continue
+              data = p.read_bytes()
+              if len(data) != entry["bytes"]:
+                  mismatches.append(entry["path"] + ":bytes")
+              if hashlib.sha256(data).hexdigest() != entry["sha256"]:
+                  mismatches.append(entry["path"] + ":sha256")
+          if mismatches:
+              fail("manifest_mismatch:" + ",".join(mismatches))
+          if not compileall.compile_dir(str(ROOT / "micgi"), quiet=1):
+              fail("compileall")
+          sys.path.insert(0, str(ROOT))
+          from micgi.runtime import RecursiveCapabilityKernel
+          with tempfile.TemporaryDirectory(prefix="miccgi_a008_recovery_") as td:
+              k = RecursiveCapabilityKernel(pathlib.Path(td))
+              s0 = k.bootstrap()
+              if s0.generation != 0 or s0.status != "ACTIVE_UNPROVEN":
+                  fail("bootstrap")
+              result = k.cycle()
+              current = k.state_store.load()
+              if current is None or current.status != "ACTIVE_UNPROVEN":
+                  fail("post_cycle_state")
+          print("MICCGI_A008_COLD_RECOVERY_OK=1")
+          print("MICCGI_A008_MANIFEST_FILES=" + str(len(manifest["files"])))
+          PY
+
+          python - <<'PY'
+          import json, hashlib, pathlib
+          root=pathlib.Path(".")
+          att=json.loads((root/"SUCCESSOR_ATTESTATION.json").read_text())
+          att["artifact"]="MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008"
+          att["parent_a006_inner_sha256"]="84032dd13d332f315b7f02cb8684affece9c641c3bd67de81b34fb4214ac6d59"
+          att["parent_a007_cross_provider_lineage_sha256"]="e3cd93f0f797f14e31742548af5491dac2837617a9ef6be2cfb33fcb13c661ad"
+          att["construction_scope"]="remote cold-recoverable successor capsule; no economic credit"
+          att["recovery_entrypoint"]="python RECOVER.py"
+          (root/"SUCCESSOR_ATTESTATION.json").write_text(json.dumps(att,sort_keys=True,indent=2)+"\n")
+
+          files=[]
+          for p in sorted(root.rglob("*")):
+              if not p.is_file():
+                  continue
+              rel=p.relative_to(root).as_posix()
+              if rel=="MANIFEST.json" or "__pycache__" in rel or ".pytest_cache" in rel:
+                  continue
+              data=p.read_bytes()
+              files.append({"path":rel,"bytes":len(data),"sha256":hashlib.sha256(data).hexdigest()})
+          manifest={"artifact":"MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008","files":files}
+          (root/"MANIFEST.json").write_text(json.dumps(manifest,sort_keys=True,indent=2)+"\n")
+          PY
+
+      - name: Prove clean cold recovery
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC=/tmp/a008/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+          cd "$SRC"
+          python RECOVER.py
+          python -m pytest -q
+          python -m compileall -q micgi
+
+      - name: Deterministic double-build
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd /tmp/a008
+          python - <<'PY'
+          import pathlib, zipfile, hashlib
+          src=pathlib.Path("src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008")
+          def build(out):
+              with zipfile.ZipFile(out,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+                  for p in sorted(src.rglob("*")):
+                      if not p.is_file():
+                          continue
+                      rel=pathlib.Path("MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008")/p.relative_to(src)
+                      data=p.read_bytes()
+                      zi=zipfile.ZipInfo(rel.as_posix(),date_time=(1980,1,1,0,0,0))
+                      zi.compress_type=zipfile.ZIP_DEFLATED
+                      zi.external_attr=(0o100644 & 0xFFFF)<<16
+                      z.writestr(zi,data)
+          build("A008_A.zip")
+          build("A008_B.zip")
+          a=pathlib.Path("A008_A.zip").read_bytes()
+          b=pathlib.Path("A008_B.zip").read_bytes()
+          if a != b:
+              raise SystemExit("NON_DETERMINISTIC_BUILD")
+          print("MICCGI_A008_SUCCESSOR_SHA256="+hashlib.sha256(a).hexdigest())
+          print("MICCGI_A008_SUCCESSOR_BYTES="+str(len(a)))
+          PY
+
+      - name: Rehydrate built successor from zero source state
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/a008/rehydrated
+          mkdir /tmp/a008/rehydrated
+          unzip -q /tmp/a008/A008_A.zip -d /tmp/a008/rehydrated
+          cd /tmp/a008/rehydrated/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+          python RECOVER.py
+          python -m pytest -q
+          echo "MICCGI_A008_REHYDRATED_OK=1"
+
+      - name: Publish successor
+        uses: actions/upload-artifact@v4
+        with:
+          name: MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+          path: /tmp/a008/A008_A.zip
+          if-no-files-found: error
+          retention-days: 90
