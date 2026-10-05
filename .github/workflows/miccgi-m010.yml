@@ -1,0 +1,20 @@
+name: MICCGI M010 bounded external primitive invention
+on:
+  push:
+    branches:
+      - miccgi-m010-primitivegenesis-816ab569
+    paths:
+      - .github/workflows/miccgi-m010.yml
+      - miccgi_m010_external.py
+permissions:
+  contents: write
+jobs:
+  primitive-invention:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m010-primitivegenesis-816ab569
+          fetch-depth: 0
+      - name: Run bounded external primitive invention
+        run: python3 miccgi_m010_external.py
