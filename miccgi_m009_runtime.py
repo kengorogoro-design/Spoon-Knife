@@ -135,7 +135,7 @@ def load(g):
 
 def score(g,seeds):
     try:src,ns=load(g)
-    except Exception:return {"ok":False,"agg":-1e12,"rob":-1e12}
+    except Exception as ex:return {"ok":False,"agg":-1e12,"rob":-1e12,"error":type(ex).__name__+":"+str(ex)}
     vals=[]
     try:
         for z in seeds:
@@ -215,7 +215,9 @@ def main():
             donor_ev=score(donor,hold)
             child=refactor(donor,serial);serial+=1
             e=score(child,hold)
-            same_metrics=e["ok"] and semantically_equivalent(donor,child)
+            same_semantics=semantically_equivalent(donor,child)
+            same_metrics=e["ok"] and same_semantics
+            print("MICCGI_M009B_FALLBACK_DIAGNOSTIC="+json.dumps({"epoch":ep,"donor_id":donor["id"],"child_id":child["id"],"donor_score":donor_ev,"child_score":e,"semantic_equivalent":same_semantics,"donor_macros":len(donor["macros"]),"child_macros":len(child["macros"])},sort_keys=True))
             if not same_metrics:
                 raise RuntimeError("NO_SUCCESSOR_WITHIN_BUDGET")
             pool.append((e["agg"]+.03*e["diversity"],child,e))
