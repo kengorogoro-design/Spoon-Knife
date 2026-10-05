@@ -1,0 +1,20 @@
+name: MICCGI M007 independent metagenesis
+on:
+  push:
+    branches:
+      - miccgi-m007-metagenesis-53f0947d
+    paths:
+      - .github/workflows/miccgi-m007.yml
+      - miccgi_m007_runtime.py
+permissions:
+  contents: write
+jobs:
+  external-metagenesis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m007-metagenesis-53f0947d
+          fetch-depth: 0
+      - name: Run bounded external metagenesis
+        run: python3 miccgi_m007_runtime.py
