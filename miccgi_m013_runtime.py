@@ -25,10 +25,18 @@ def H(x):
     else: b=J(x).encode()
     return hashlib.sha256(b).hexdigest()
 
-def get_json(url):
-    req=urllib.request.Request(url,headers={"User-Agent":"MICCGI-M013-Dynamics/1.0"})
-    with urllib.request.urlopen(req,timeout=45) as r: body=r.read()
-    return json.loads(body.decode()),H(body),len(body)
+def get_json(url,retries=3):
+    last=None
+    for attempt in range(retries):
+        try:
+            req=urllib.request.Request(url,headers={"User-Agent":"MICCGI-M013-Dynamics/1.1"})
+            with urllib.request.urlopen(req,timeout=25) as r: body=r.read()
+            return json.loads(body.decode()),H(body),len(body)
+        except Exception as e:
+            last=e
+            if attempt+1<retries:
+                import time; time.sleep(1.5*(attempt+1))
+    raise last
 
 def fetch_panel():
     meta_url=f"{BASE}/country?format=json&per_page=400"
@@ -39,17 +47,22 @@ def fetch_panel():
         if iso and len(iso)==3 and region and region!="NA": actual.add(iso)
     rows={}
     receipts=[{"kind":"country_metadata","url":meta_url,"sha256":msha,"bytes":mbytes}]
+    chunks=((2010,2013),(2014,2017),(2018,2020),(2021,2022))
     for field,code in INDICATORS.items():
-        url=f"{BASE}/country/all/indicator/{code}?date={START_YEAR}:{END_YEAR}&format=json&per_page=5000"
-        obj,sha,n=get_json(url);count=0
-        for x in (obj[1] if isinstance(obj,list) and len(obj)>1 else []):
-            iso=x.get("countryiso3code");v=x.get("value");year=x.get("date")
-            if iso not in actual or v is None: continue
-            try: yy=int(year); vv=float(v)
-            except Exception: continue
-            if not math.isfinite(vv): continue
-            r=rows.setdefault((iso,yy),{"__id__":iso,"year":yy});r[field]=vv;count+=1
-        receipts.append({"kind":"indicator","field":field,"code":code,"url":url,"sha256":sha,"bytes":n,"non_null":count})
+        total=0
+        for y0,y1 in chunks:
+            url=f"{BASE}/country/all/indicator/{code}?date={y0}:{y1}&format=json&per_page=1400"
+            obj,sha,n=get_json(url);count=0
+            for x in (obj[1] if isinstance(obj,list) and len(obj)>1 else []):
+                iso=x.get("countryiso3code");v=x.get("value");year=x.get("date")
+                if iso not in actual or v is None: continue
+                try: yy=int(year); vv=float(v)
+                except Exception: continue
+                if not math.isfinite(vv): continue
+                r=rows.setdefault((iso,yy),{"__id__":iso,"year":yy});r[field]=vv;count+=1
+            total+=count
+            receipts.append({"kind":"indicator_chunk","field":field,"code":code,"years":[y0,y1],"url":url,"sha256":sha,"bytes":n,"non_null":count})
+        if total<200: raise RuntimeError(f"INSUFFICIENT_INDICATOR_COVERAGE:{field}:{total}")
     panel=list(rows.values())
     if len(panel)<700: raise RuntimeError(f"INSUFFICIENT_PANEL_ROWS:{len(panel)}")
     return panel,receipts
