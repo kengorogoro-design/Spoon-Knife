@@ -1,0 +1,20 @@
+name: MICCGI M009B bounded deterministic language genesis
+on:
+  push:
+    branches:
+      - miccgi-m009b-languagegenesis-fixed
+    paths:
+      - .github/workflows/miccgi-m009b.yml
+      - miccgi_m009_runtime.py
+permissions:
+  contents: write
+jobs:
+  bounded-language-genesis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m009b-languagegenesis-fixed
+          fetch-depth: 0
+      - name: Run bounded deterministic language genesis
+        run: python3 miccgi_m009_runtime.py
