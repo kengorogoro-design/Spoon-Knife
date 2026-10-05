@@ -144,7 +144,7 @@ def score(g,seeds):
             rep=[abs(float(ns["represent"](x))) for x in base];gen=[max(1e-9,float(ns["generate"](x,r.gauss(0,1)))) for x in rep]
             floor=min(gen);gm=math.exp(sum(math.log(x) for x in gen)/len(gen));mean=sum(gen)/len(gen);spread=max(gen)-min(gen);nov=abs(gen[-1]-gen[0])
             ev=float(ns["evaluate"]([floor,gm,mean,spread,nov]));sp=float(ns["search_pressure"](r.randint(0,4),r.random(),r.random(),r.random()))
-            stab=1/(1+spread*.18+max(0,size(g["eval"])-22)*.004+len(g["macros"])*.012);vals.append((floor,gm,ev,sp,stab))
+            used={n["n"] for root in (g["rep"],g["gen"],g["eval"],g["search"]) for n in nodes(root) if n.get("t")=="m" and n.get("n")}; unused=sum(1 for m in g["macros"] if m["n"] not in used); stab=1/(1+spread*.18+max(0,size(g["eval"])-22)*.004+unused*.012);vals.append((floor,gm,ev,sp,stab))
         cols=list(zip(*vals));m=[sum(c)/len(c) for c in cols];rob=min(m[0],m[1],m[4]);complexity=sum(size(g[k]) for k in ("rep","gen","eval","search"))+sum(size(x["e"]) for x in g["macros"])
         div=len(set(g["ops"]))/len(OPS)+min(1,len(g["macros"])/6);agg=rob+.24*max(-5,min(5,m[2]))+.1*m[3]+.06*div-.0009*complexity
         return {"ok":math.isfinite(agg),"agg":agg,"rob":rob,"metrics":m,"complexity":complexity,"diversity":div}
