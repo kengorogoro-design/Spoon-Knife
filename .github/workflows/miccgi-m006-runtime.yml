@@ -1,0 +1,82 @@
+name: MICCGI M006 standalone bounded runtime
+
+on:
+  push:
+    branches:
+      - miccgi-m006-054b1dd9
+    paths:
+      - .github/workflows/miccgi-m006-runtime.yml
+
+permissions:
+  contents: write
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute bounded standalone runtime
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          REPO="${{ github.repository }}"
+          BRANCH="${{ github.ref_name }}"
+          API="https://api.github.com/repos/$REPO"
+          RAW="https://raw.githubusercontent.com/$REPO/$BRANCH"
+          curl -fsSL "$RAW/miccgi/m006/seed.json" -o /tmp/seed.json
+          python3 - <<'PY2'
+import hashlib,json,os,urllib.request,urllib.error
+from pathlib import Path
+seed=json.loads(Path('/tmp/seed.json').read_text())
+base=dict(seed); claimed=base.pop('seed_sha256')
+canon=json.dumps(base,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+assert hashlib.sha256(canon).hexdigest()==claimed
+assert seed['charging_allowed'] is False
+assert seed['financial_actions_allowed'] is False
+assert seed['account_creation_allowed'] is False
+url=seed['reality_url']
+req=urllib.request.Request(url,headers={'User-Agent':'MICCGI-M006-bounded-runtime/1'})
+try:
+    with urllib.request.urlopen(req,timeout=20) as r:
+        body=r.read(512*1024); status=r.status; final_url=r.geturl()
+except urllib.error.HTTPError as e:
+    body=e.read(512*1024); status=e.code; final_url=e.geturl()
+obs_sha=hashlib.sha256(body).hexdigest()
+nonce_sha=hashlib.sha256(seed['nonce'].encode()).hexdigest()
+result={
+ 'schema':'MICCGI-M006-RESULT-1',
+ 'nonce':seed['nonce'],
+ 'seed_sha256':seed['seed_sha256'],
+ 'run_id':os.environ['GITHUB_RUN_ID'],
+ 'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],
+ 'branch':os.environ['GITHUB_REF_NAME'],
+ 'head_sha':os.environ['GITHUB_SHA'],
+ 'observation':{'url':url,'final_url':final_url,'http_status':status,'body_sha256':obs_sha,'body_bytes':len(body)},
+ 'compute':{'nonce_sha256':nonce_sha},
+ 'bounds':{'charging_used':False,'financial_action_used':False,'account_creation_used':False},
+}
+rc=dict(result)
+result['result_sha256']=hashlib.sha256(json.dumps(rc,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+Path('/tmp/result.json').write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
+print('MICCGI_M006_RESULT_SHA256='+result['result_sha256'])
+print('MICCGI_M006_OBSERVATION_SHA256='+obs_sha)
+print('MICCGI_M006_NONCE_SHA256='+nonce_sha)
+PY2
+          python3 - <<'PY3'
+import base64,json,os
+content=base64.b64encode(open('/tmp/result.json','rb').read()).decode()
+payload={'message':'MICCGI M006 autonomous result '+os.environ['GITHUB_RUN_ID'],'content':content,'branch':os.environ['GITHUB_REF_NAME']}
+open('/tmp/payload.json','w').write(json.dumps(payload))
+PY3
+          curl -fsS -X PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$API/contents/miccgi/m006/result.json" \
+            --data-binary @/tmp/payload.json >/tmp/github-write.json
+          python3 - <<'PY4'
+import json
+obj=json.load(open('/tmp/github-write.json'))
+print('MICCGI_M006_RESULT_COMMIT='+obj['commit']['sha'])
+PY4
