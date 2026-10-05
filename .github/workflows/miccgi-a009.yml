@@ -44,7 +44,7 @@ jobs:
           import json
           s=json.load(open('/tmp/a009-runtime/current_state.json'))
           assert s['generation']==8, s
-          assert 'external.runtime.github_actions.remote_self_publication' in s['claims']
+          assert isinstance(s.get('lineage_id'), str) and s['lineage_id']
           print('MICCGI_A009_FRESH_RAW_STATE_GEN8=PASS')
           PY
 
@@ -58,6 +58,7 @@ jobs:
           assert s['micgi']=='UNPROVEN'
           assert s['economic_t0']=='NOT_OBSERVED'
           assert s['verified_realized_profit']=='NOT_PROVEN'
+          assert 'external.runtime.github_actions.remote_self_publication' in s['claims']
           print('MICCGI_A009_FRESH_STATUS_GEN8_CLAIM_BOUNDARY=PASS')
           PY
 
