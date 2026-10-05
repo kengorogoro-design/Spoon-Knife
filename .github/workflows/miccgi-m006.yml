@@ -1,0 +1,21 @@
+name: MICCGI M006 bounded independent epoch
+on:
+  push:
+    branches:
+      - miccgi-m006-bounded-efc24738
+    paths:
+      - .github/workflows/miccgi-m006.yml
+      - miccgi_m006_runtime.py
+      - miccgi_mg/autonomous_epoch.py
+permissions:
+  contents: write
+jobs:
+  bounded-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m006-bounded-efc24738
+          fetch-depth: 0
+      - name: Run finite independent epochs
+        run: python3 miccgi_m006_runtime.py --epochs 3 --repo-root . --push
