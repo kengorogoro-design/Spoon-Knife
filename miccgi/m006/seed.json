@@ -1,0 +1,12 @@
+{
+  "account_creation_allowed": false,
+  "branch": "miccgi-m006-aa36b680",
+  "charging_allowed": false,
+  "financial_actions_allowed": false,
+  "max_network_calls": 4,
+  "nonce": "aa36b680ba728f06e60811d9293d8c520ac8c26a1062a5540341a0d1d1e69718",
+  "reality_url": "https://api.worldbank.org/v2/country/WLD/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=5",
+  "schema": "MICCGI-M006-SEED-1",
+  "seed_sha256": "867757aa635d7dcda6a5d1afbf4aba486d6c69439c94dc487148f7ca55477724",
+  "source_m005_sha256": "efc2473855f34f688c2f094b520b72647d32dcfe8a434eb2f670e609f7207e07"
+}
