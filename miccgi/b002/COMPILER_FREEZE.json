@@ -1,0 +1,7 @@
+{
+  "artifact_sha256": "904639ed7fd8c329624fdac8357ab9f8d9f6b745efede6316aed3da4f7e5d593",
+  "compiler_sha256": "7e326d672b46bad6b3a96c246b659c6459db13f5824aea5d2d307fc12557dd88",
+  "actor_sha256": "939eb934df1d9ef837d3999012542b73688c8f4b9b3e15561a1512beead8e640",
+  "local_tests_pass": 12,
+  "claim": "compiler freeze only; no external capability credit"
+}
