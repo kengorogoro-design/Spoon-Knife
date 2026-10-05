@@ -1,0 +1,25 @@
+{
+  "bounds": {
+    "account_creation_used": false,
+    "charging_used": false,
+    "financial_action_used": false
+  },
+  "branch": "miccgi-m006-054b1dd9",
+  "compute": {
+    "nonce_sha256": "38f9ee294d08721b7d6bc52914e1cd8e95d2000a4e0f8a9ba5ca5a52e68a176e"
+  },
+  "head_sha": "c58bf81e0cab51a3cf8a4d4aae6b9017fb268ddc",
+  "nonce": "054b1dd972873f42087039fe2e29fd5fe53917cf11f6fba34bd2678094f70371",
+  "observation": {
+    "body_bytes": 365,
+    "body_sha256": "63b902662c7745cba9ae07aab83b6fdeffc35014a85d07f53e70333820093034",
+    "final_url": "https://www.imf.org/",
+    "http_status": 403,
+    "url": "https://www.imf.org/"
+  },
+  "result_sha256": "fa9ef235beab8ebd7be3aeb702863f9196d579aab14be8275e33b75775e6e1ed",
+  "run_attempt": "1",
+  "run_id": "37291243831",
+  "schema": "MICCGI-M006-RESULT-1",
+  "seed_sha256": "05302726a639af5b21709f9e9636f657650493430545f62bf921e2ef1939e475"
+}
