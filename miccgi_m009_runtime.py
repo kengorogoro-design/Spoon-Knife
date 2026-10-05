@@ -164,13 +164,17 @@ def main():
         train=[rng.randrange(1,20_000_000) for _ in range(26)];hold=[rng.randrange(20_000_001,200_000_000) for _ in range(30)]
         donors=current+(archive[:8] if archive else [])
         base=max((score(g,hold) for g in donors),key=lambda x:x["agg"]);pool=[]
-        while len(pool)<34:
+        attempts=0
+        while len(pool)<16 and attempts<180:
+            attempts+=1
             if len(donors)>1 and rng.random()<.33:child=fuse(rng.choice(donors),rng.choice(donors),rng,serial);serial+=1
             else:child=mutate(rng.choice(donors),rng,serial);serial+=1
             if parent and H(child)==parent:continue
             e=score(child,hold)
             if e["ok"] and e["rob"]>=base["rob"]*.90 and e["agg"]>=base["agg"]*.87:pool.append((e["agg"]+.03*e["diversity"],child,e))
-        if not pool:\n            raise RuntimeError("NO_SUCCESSOR_WITHIN_BUDGET")\n        pool.sort(reverse=True,key=lambda x:x[0]);_,win,ev=pool[0]
+        if not pool:
+            raise RuntimeError("NO_SUCCESSOR_WITHIN_BUDGET")
+        pool.sort(reverse=True,key=lambda x:x[0]);_,win,ev=pool[0]
         src=emit(win);compile(src,f"<m009_{ep}>","exec");active.write_text(src);srcsha=H(src.encode());langsha=H(win)
         st={"epoch":ep,"language":win,"language_sha256":langsha,"source_sha256":srcsha,"parent_language_sha256":parent,"observations":ob,"holdout":ev,"operator_count":len(win["ops"]),"macro_count":len(win["macros"]),"paid_actions":0,"contract_actions":0,"financial_actions":0}
         rc={"epoch":ep,"state_sha256":H(st),"language_sha256":langsha,"source_sha256":srcsha,"source_changed":langsha!=parent,"compiled":True,"stop":ep==3,"reason":"MAX_EPOCHS_REACHED" if ep==3 else "CONTINUE_LANGUAGE_GENESIS"}
