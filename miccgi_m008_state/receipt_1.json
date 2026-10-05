@@ -1,0 +1,11 @@
+{
+  "compiled": true,
+  "epoch": 1,
+  "parent_source_sha256": "d24d87008d53ebab4fd33264b887a950d602c3f667e66d57a2dcc94248437ca7",
+  "parent_state_sha256": "118e511617a5894f34c4aedfb280cfe99fab92d11454a7a6321f57fc3abe26b8",
+  "reason": "CONTINUE_SELF_REWRITE",
+  "source_changed": true,
+  "source_sha256": "be2578e396b85bf24a480b27ba83ae872a5590cfd64a9ef8bb7e31ab4b77fcc6",
+  "state_sha256": "dcf666f6f88acb467647f1c356502c283460a749a7c28a106a23403b0473f32e",
+  "stop": false
+}

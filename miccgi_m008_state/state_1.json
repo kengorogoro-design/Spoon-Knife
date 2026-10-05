@@ -1,0 +1,42 @@
+{
+  "contract_actions": 0,
+  "epoch": 1,
+  "financial_actions": 0,
+  "holdout_evidence": {
+    "aggregate": 1.2410799781543143,
+    "metrics": [
+      0.6787630183779148,
+      0.928412908796132,
+      1.4874927067741563,
+      0.34745427004537416,
+      0.8525008915448996
+    ],
+    "robust": 0.6787630183779148
+  },
+  "observations": [
+    {
+      "digest": "501629e8c2106e71114d586b2f92eaba251ea29369db3ecdc63a3d4d902be8b7",
+      "size": 15832,
+      "source": "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+      "status": 200
+    },
+    {
+      "digest": "203f15ce63523ec5dbbf3462328c7e26d9903240a5f7b1782d36b8f9f388bfac",
+      "size": 282699,
+      "source": "https://pypi.org/pypi/pytest/json",
+      "status": 200
+    }
+  ],
+  "paid_actions": 0,
+  "parent_source_sha256": "d24d87008d53ebab4fd33264b887a950d602c3f667e66d57a2dcc94248437ca7",
+  "parent_state_sha256": "118e511617a5894f34c4aedfb280cfe99fab92d11454a7a6321f57fc3abe26b8",
+  "source_sha256": "be2578e396b85bf24a480b27ba83ae872a5590cfd64a9ef8bb7e31ab4b77fcc6",
+  "spec": {
+    "evaluator_balance": 0.667069407084763,
+    "evaluator_floor": 0.9480105391068397,
+    "generator_scale": 0.1402797482382716,
+    "representation_power": 0.7116042532433206,
+    "search_memory": 0.6212464760257587,
+    "search_radical": 0.11466215838460422
+  }
+}

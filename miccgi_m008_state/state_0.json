@@ -1,0 +1,15 @@
+{
+  "contract_actions": 0,
+  "epoch": 0,
+  "financial_actions": 0,
+  "paid_actions": 0,
+  "source_sha256": "d24d87008d53ebab4fd33264b887a950d602c3f667e66d57a2dcc94248437ca7",
+  "spec": {
+    "evaluator_balance": 0.55,
+    "evaluator_floor": 1.0,
+    "generator_scale": 0.18,
+    "representation_power": 1.0,
+    "search_memory": 0.65,
+    "search_radical": 0.18
+  }
+}
