@@ -1,0 +1,102 @@
+{
+  "admitted": true,
+  "claim_boundary": {
+    "ADVERSARIAL_SOURCE_EQUIVALENCE_EXTERNALIZED": "NOT_ESTABLISHED_FOR_THIS_OLDER_EXTERNAL_LINEAGE",
+    "BOUNDED_EXTERNAL_COMPOSITE_PRIMITIVE_INVENTION": "ESTABLISHED_FOR_COMMIT_ADDRESSED_LINEAGE",
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "FUNDAMENTALLY_NEW_PRIMITIVE_SEMANTICS": "NOT_ESTABLISHED",
+    "MICCGI": "UNPROVEN",
+    "OPEN_ENDED_LANGUAGE_INVENTION": "NOT_ESTABLISHED",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "lineage": [
+    {
+      "active_language_source_sha256": "0a031ca0daf705c7923e0e385b75e00b0edd66dfd5996554843f67a57bceee46",
+      "behavior_sha256": "3ddaaf82769d9e5546149078eb9841967d894dc54b0991000723184f65a8194e",
+      "checks": {
+        "active_language_hash_matches": true,
+        "active_language_references_new_primitive": true,
+        "active_source_compiles": true,
+        "active_use_verified": true,
+        "behavior_unique": true,
+        "compiled": true,
+        "new_primitive_in_registry": true,
+        "no_contract_actions": true,
+        "no_financial_actions": true,
+        "no_paid_actions": true,
+        "parent_state_chain_ok": true,
+        "primitive_source_compiles": true,
+        "registry_hash_matches_receipt": true,
+        "registry_monotonic": true,
+        "state_hash_matches": true,
+        "stop_semantics": true
+      },
+      "epoch": 1,
+      "primitive_name": "pi_dcf6dcbf4b46",
+      "ref": "1a44401",
+      "registry_sha256": "4cef6ea3284078274c7ab2de7bfacd8c168d4ec2c69b897755e811ddd8586f69",
+      "registry_size": 1,
+      "state_sha256": "f19fe5cd9acebcc593cf6792fc78cd31edf6d65ef1cd65296a01ec88829ec627"
+    },
+    {
+      "active_language_source_sha256": "00804b8780d4d50c4d95cbf67d5026378bba548a2bb7a06c8bd256f80335a876",
+      "behavior_sha256": "e2699236796d47b9099f7c68a9f45fa1cc16f62cf24a3be2a1ba9b0303de1b03",
+      "checks": {
+        "active_language_hash_matches": true,
+        "active_language_references_new_primitive": true,
+        "active_source_compiles": true,
+        "active_use_verified": true,
+        "behavior_unique": true,
+        "compiled": true,
+        "new_primitive_in_registry": true,
+        "no_contract_actions": true,
+        "no_financial_actions": true,
+        "no_paid_actions": true,
+        "parent_state_chain_ok": true,
+        "primitive_source_compiles": true,
+        "registry_hash_matches_receipt": true,
+        "registry_monotonic": true,
+        "state_hash_matches": true,
+        "stop_semantics": true
+      },
+      "epoch": 2,
+      "primitive_name": "pi_216373a3407d",
+      "ref": "7fca2d3",
+      "registry_sha256": "fdad822ff90d68a8c5009333ca23cb172d5fbde3a88d3ea624b571c0539678cc",
+      "registry_size": 2,
+      "state_sha256": "f4abb0a0a69dba7e049af5c374cb86fbe106371578965004a800f13b1222d207"
+    },
+    {
+      "active_language_source_sha256": "d154e313b02a765e5183fba8c8cadee74b2eeca0a8279d8ca0c8adcb4ea04cf8",
+      "behavior_sha256": "eaf4010a0951c9380dbc5eb965b85d5a72ff50be205536dab7fd583ec8f19ac4",
+      "checks": {
+        "active_language_hash_matches": true,
+        "active_language_references_new_primitive": true,
+        "active_source_compiles": true,
+        "active_use_verified": true,
+        "behavior_unique": true,
+        "compiled": true,
+        "new_primitive_in_registry": true,
+        "no_contract_actions": true,
+        "no_financial_actions": true,
+        "no_paid_actions": true,
+        "parent_state_chain_ok": true,
+        "primitive_source_compiles": true,
+        "registry_hash_matches_receipt": true,
+        "registry_monotonic": true,
+        "state_hash_matches": true,
+        "stop_semantics": true
+      },
+      "epoch": 3,
+      "primitive_name": "pi_6975f0eaf7d9",
+      "ref": "de50630",
+      "registry_sha256": "bf6dcd8afccdca9c40eb9acf69bd8e610f6a8d0dadc80200f3b2363dfb35df96",
+      "registry_size": 3,
+      "state_sha256": "194bc6e4fc876c943fb0302d328016574d2020b624b67fca62972753b1efde40"
+    }
+  ],
+  "reasons": [],
+  "terminal_registry_sha256": "bf6dcd8afccdca9c40eb9acf69bd8e610f6a8d0dadc80200f3b2363dfb35df96",
+  "terminal_state_sha256": "194bc6e4fc876c943fb0302d328016574d2020b624b67fca62972753b1efde40",
+  "verification_mode": "commit_addressed_independent_python_replay"
+}
