@@ -1,10 +1,10 @@
 {
   "compiled": true,
   "epoch": 2,
-  "language_sha256": "37f21b18c1aabc72b837fbf8fdfd6f2b95e463cf0a46a41e01cc27c738dfb2c9",
+  "language_sha256": "a70e00b5419ccc9bd3d3176e16f43084eeada04e1787de98cab46f655e4a64df",
   "reason": "CONTINUE_LANGUAGE_GENESIS",
   "source_changed": true,
-  "source_sha256": "123e928a9315a4179e7b07d0c97912e309ff34b623039da9be850a29421a74c1",
-  "state_sha256": "f8605f8d8331a7cbdcf0312793cd0d65a48e4bfcbf48ae0be3a69a141e4fc827",
+  "source_sha256": "45001065f5a538b2d48104e31c3c15ae5edfacc382a9a29bf740ec4d0678e262",
+  "state_sha256": "0503055334290f776f45a447f953a37b88a6de22c41c7aa613242d96b858a999",
   "stop": false
 }
