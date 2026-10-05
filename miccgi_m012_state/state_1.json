@@ -1,0 +1,90 @@
+{
+  "alpha": -0.4514306439493735,
+  "beta": -1.8347952139844332e-16,
+  "contract_actions": 0,
+  "dataset_sha256": "2e4ba7cbd926cf20bfa72ee69724eae72358d41a9f763d511f304eee7de9fea8",
+  "epoch": 1,
+  "expr": "add",
+  "feature_a": "internet_pct",
+  "feature_b": "life_expectancy",
+  "financial_actions": 0,
+  "paid_actions": 0,
+  "parent_state_sha256": "ROOT",
+  "relation_id": "rr_04f7d4e2904d",
+  "row_count": 180,
+  "semantic_sha256": "04f7d4e2904d75faa22e97e6939bdfa08977c1c3a1c0a5ed299327431daed183",
+  "source": "import math\ndef sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))\ndef sg(x): x=max(-30.0,min(30.0,x)); return 1/(1+math.exp(-x))\ndef rr_04f7d4e2904d(a,b):\n    x=float((a+b))\n    return (-0.4514306439493735)*x+(-1.8347952139844332e-16)\n",
+  "source_receipts": [
+    {
+      "bytes": 113590,
+      "kind": "country_metadata",
+      "sha256": "d29d57f8adf954c5e2a1520a02fb2c7b45575d8db3bd327a9dff47d66914231c",
+      "url": "https://api.worldbank.org/v2/country?format=json&per_page=400"
+    },
+    {
+      "bytes": 60535,
+      "code": "SP.DYN.LE00.IN",
+      "field": "life_expectancy",
+      "kind": "indicator",
+      "non_null": 217,
+      "sha256": "dd3dc66e1c58ca06217d3cba64230ac86ed6b9509ad9deff7fbf9672d628cf62",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?date=2022&format=json&per_page=400"
+    },
+    {
+      "bytes": 60032,
+      "code": "SP.DYN.TFRT.IN",
+      "field": "fertility",
+      "kind": "indicator",
+      "non_null": 217,
+      "sha256": "797a0a46ef25410e72902341fb73404d23e28f04ec218c4f69321746f9c4a451",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.TFRT.IN?date=2022&format=json&per_page=400"
+    },
+    {
+      "bytes": 62605,
+      "code": "IT.NET.USER.ZS",
+      "field": "internet_pct",
+      "kind": "indicator",
+      "non_null": 182,
+      "sha256": "ed4f887b03bfad38ea9d14671f5fd02a424fe1d6c5caed71200aa4120bb4fdfd",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/IT.NET.USER.ZS?date=2022&format=json&per_page=400"
+    },
+    {
+      "bytes": 63089,
+      "code": "SP.URB.TOTL.IN.ZS",
+      "field": "urban_pct",
+      "kind": "indicator",
+      "non_null": 217,
+      "sha256": "1ae282d176d67ddcb567400336782ba922a71e90823a76bccf1d0bdc2df0b194",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.URB.TOTL.IN.ZS?date=2022&format=json&per_page=400"
+    },
+    {
+      "bytes": 59181,
+      "code": "NY.GDP.PCAP.CD",
+      "field": "gdp_per_capita",
+      "kind": "indicator",
+      "non_null": 209,
+      "sha256": "4622b7865bf3ab74141f895e0007d0398f996444b1a62889ff42791d21504502",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD?date=2022&format=json&per_page=400"
+    },
+    {
+      "bytes": 58662,
+      "code": "SP.POP.GROW",
+      "field": "population_growth",
+      "kind": "indicator",
+      "non_null": 216,
+      "sha256": "514c8ef24f4c187f2282c55b7066cf335f7578e6c723f8732ec64f55fe587bbd",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.GROW?date=2022&format=json&per_page=400"
+    }
+  ],
+  "source_sha256": "e0f710008fa259f1a90a9cfa57fe4b58770bb8819485411cf6da25106fbc4b2f",
+  "target": "fertility",
+  "test_error": 0.5134276215325211,
+  "test_improvement": 0.5494584163536435,
+  "test_rows": 26,
+  "train_error": 0.5291530336979534,
+  "train_rows": 109,
+  "validation_error": 0.5340940761672596,
+  "validation_improvement": 0.5545532090635678,
+  "validation_rows": 45,
+  "year": 2022
+}

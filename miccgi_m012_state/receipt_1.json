@@ -1,0 +1,10 @@
+{
+  "compiled": true,
+  "epoch": 1,
+  "holdout_survived": true,
+  "parent_state_sha256": "ROOT",
+  "reason": "CONTINUE_REALITY_RELATION_INDUCTION",
+  "state_sha256": "5849d24cc8fb37c38204713dffd2053d014a16e02bc5876ea17c9fb98b3b70a9",
+  "stop": false,
+  "validation_survived": true
+}
