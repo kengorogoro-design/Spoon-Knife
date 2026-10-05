@@ -1,0 +1,372 @@
+{
+  "basis": "trend_tanh_exo",
+  "coefficients": [
+    0.00185036627711732,
+    0.9989975213718487,
+    0.841564423075374,
+    0.0012177001683013006
+  ],
+  "contract_actions": 0,
+  "epoch": 3,
+  "exogenous": "population_growth",
+  "financial_actions": 0,
+  "model_test_error": 0.005547564798298294,
+  "model_validation_error": 0.010685700156060914,
+  "paid_actions": 0,
+  "panel_rows": 2821,
+  "panel_sha256": "814a31875f3f3feadadb1bd3fab18737f0faa8506c11bab62bd6d580e3fe0b99",
+  "parent_state_sha256": "7f5a5464d39764b5a951636c671f75b77126528c50446318156bbee64a2875af",
+  "persistence_test_error": 0.01863049806432149,
+  "persistence_validation_error": 0.02180601824663477,
+  "relation_id": "dr_928ddb1f9f42",
+  "sample_counts": [
+    1302,
+    651,
+    434
+  ],
+  "semantic_sha256": "928ddb1f9f425b0185166d7b9c8818c09567df8533d6f839b0f3322f2702dc66",
+  "source": "import math\ndef dr_928ddb1f9f42(previous_target,current_target,current_exogenous):\n    cur=(float(current_target)-(59.97388765467834))/(23.986428736813075)\n    prev=(float(previous_target)-(59.97388765467834))/(23.986428736813075)\n    exo=(float(current_exogenous)-(1.321192342723848))/(1.6505378857090678)\n    trend=cur-prev\n    name='trend_tanh_exo'\n    if name=='trend': x=[1.0,cur,trend]\n    elif name=='exo': x=[1.0,cur,exo]\n    elif name=='trend_exo': x=[1.0,cur,trend,exo]\n    elif name=='trend_tanh_exo': x=[1.0,cur,trend,math.tanh(exo)]\n    elif name=='trend_interaction': x=[1.0,cur,trend,exo,trend*exo]\n    else: raise ValueError(name)\n    c=[0.00185036627711732, 0.9989975213718487, 0.841564423075374, 0.0012177001683013006]\n    z=sum(a*b for a,b in zip(c,x))\n    return z*(23.986428736813075)+(59.97388765467834)\n",
+  "source_receipts": [
+    {
+      "bytes": 113590,
+      "kind": "country_metadata",
+      "sha256": "d29d57f8adf954c5e2a1520a02fb2c7b45575d8db3bd327a9dff47d66914231c",
+      "url": "https://api.worldbank.org/v2/country?format=json&per_page=400"
+    },
+    {
+      "bytes": 241910,
+      "code": "SP.DYN.LE00.IN",
+      "field": "life_expectancy",
+      "kind": "indicator_chunk",
+      "non_null": 868,
+      "sha256": "12df214c13e19088c19c544d2d313f73099ddd3cbd5678c7eb7081915f811874",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?date=2010:2013&format=json&per_page=1400",
+      "years": [
+        2010,
+        2013
+      ]
+    },
+    {
+      "bytes": 241902,
+      "code": "SP.DYN.LE00.IN",
+      "field": "life_expectancy",
+      "kind": "indicator_chunk",
+      "non_null": 868,
+      "sha256": "aa9640f3e11e2d6b4fa7bd3ee0dd0da8e22d15f5cca0b83d8b23325112735510",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?date=2014:2017&format=json&per_page=1400",
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "bytes": 181439,
+      "code": "SP.DYN.LE00.IN",
+      "field": "life_expectancy",
+      "kind": "indicator_chunk",
+      "non_null": 651,
+      "sha256": "02b521a98692b3418247946325b955d3df1a73a64037ac29904ffd798b70b897",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?date=2018:2020&format=json&per_page=1400",
+      "years": [
+        2018,
+        2020
+      ]
+    },
+    {
+      "bytes": 120975,
+      "code": "SP.DYN.LE00.IN",
+      "field": "life_expectancy",
+      "kind": "indicator_chunk",
+      "non_null": 434,
+      "sha256": "1c9e856f35d7bdb13ecc2d42bdf7724e285bbd8368863fc5cfdce0db68a004d0",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.LE00.IN?date=2021:2022&format=json&per_page=1400",
+      "years": [
+        2021,
+        2022
+      ]
+    },
+    {
+      "bytes": 239822,
+      "code": "SP.DYN.TFRT.IN",
+      "field": "fertility",
+      "kind": "indicator_chunk",
+      "non_null": 868,
+      "sha256": "3839982fd4f3581451415f0ff2d011d8aba0547a40c1488d4101775aa011ecb0",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.TFRT.IN?date=2010:2013&format=json&per_page=1400",
+      "years": [
+        2010,
+        2013
+      ]
+    },
+    {
+      "bytes": 239795,
+      "code": "SP.DYN.TFRT.IN",
+      "field": "fertility",
+      "kind": "indicator_chunk",
+      "non_null": 868,
+      "sha256": "f2e7799499125ccde315bfb68e780582663697939fc34951b4407b82dc6debab",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.TFRT.IN?date=2014:2017&format=json&per_page=1400",
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "bytes": 179856,
+      "code": "SP.DYN.TFRT.IN",
+      "field": "fertility",
+      "kind": "indicator_chunk",
+      "non_null": 651,
+      "sha256": "b5903768c28e61019d0109ea3393f52aee339a1d814ad4ccd3516420f70505b5",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.TFRT.IN?date=2018:2020&format=json&per_page=1400",
+      "years": [
+        2018,
+        2020
+      ]
+    },
+    {
+      "bytes": 119958,
+      "code": "SP.DYN.TFRT.IN",
+      "field": "fertility",
+      "kind": "indicator_chunk",
+      "non_null": 434,
+      "sha256": "051669946652d35af7b19767308b9fac19ffff5eb59a270e896eb75610d97812",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.DYN.TFRT.IN?date=2021:2022&format=json&per_page=1400",
+      "years": [
+        2021,
+        2022
+      ]
+    },
+    {
+      "bytes": 248017,
+      "code": "IT.NET.USER.ZS",
+      "field": "internet_pct",
+      "kind": "indicator_chunk",
+      "non_null": 809,
+      "sha256": "6b1c71868256c6d779314db79de8c628fd70ffeef4074bc31581982d41c331b9",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/IT.NET.USER.ZS?date=2010:2013&format=json&per_page=1400",
+      "years": [
+        2010,
+        2013
+      ]
+    },
+    {
+      "bytes": 251867,
+      "code": "IT.NET.USER.ZS",
+      "field": "internet_pct",
+      "kind": "indicator_chunk",
+      "non_null": 805,
+      "sha256": "714fbb6d0a67e4001f74cf0c1c1e5875c0819ba3432b1697ef6b2b83ff9b8bb6",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/IT.NET.USER.ZS?date=2014:2017&format=json&per_page=1400",
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "bytes": 188612,
+      "code": "IT.NET.USER.ZS",
+      "field": "internet_pct",
+      "kind": "indicator_chunk",
+      "non_null": 555,
+      "sha256": "b8b73a0125d543df7fb1ec3033565b9e450795fd40b9d95d73774524479225f4",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/IT.NET.USER.ZS?date=2018:2020&format=json&per_page=1400",
+      "years": [
+        2018,
+        2020
+      ]
+    },
+    {
+      "bytes": 125115,
+      "code": "IT.NET.USER.ZS",
+      "field": "internet_pct",
+      "kind": "indicator_chunk",
+      "non_null": 362,
+      "sha256": "336c99e82f7d33a9daeb9ef1615f25c3fa88c335ee6be44ec5b63f281253ccac",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/IT.NET.USER.ZS?date=2021:2022&format=json&per_page=1400",
+      "years": [
+        2021,
+        2022
+      ]
+    },
+    {
+      "bytes": 252135,
+      "code": "SP.URB.TOTL.IN.ZS",
+      "field": "urban_pct",
+      "kind": "indicator_chunk",
+      "non_null": 868,
+      "sha256": "fba1d7c36bf8e8942bf052cd3245a0dab7c9e8f695c2f8c56fe7426ae8b6f9a3",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.URB.TOTL.IN.ZS?date=2010:2013&format=json&per_page=1400",
+      "years": [
+        2010,
+        2013
+      ]
+    },
+    {
+      "bytes": 252083,
+      "code": "SP.URB.TOTL.IN.ZS",
+      "field": "urban_pct",
+      "kind": "indicator_chunk",
+      "non_null": 868,
+      "sha256": "b1efbde2ab3e7cf76256affa9a6495eb0cd98e6c97878d7d783c9e206c038cce",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.URB.TOTL.IN.ZS?date=2014:2017&format=json&per_page=1400",
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "bytes": 189129,
+      "code": "SP.URB.TOTL.IN.ZS",
+      "field": "urban_pct",
+      "kind": "indicator_chunk",
+      "non_null": 651,
+      "sha256": "38c275ccd2a2921feb0ce0441fb245e48a5b367601dce0789a608013632fdaf4",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.URB.TOTL.IN.ZS?date=2018:2020&format=json&per_page=1400",
+      "years": [
+        2018,
+        2020
+      ]
+    },
+    {
+      "bytes": 126097,
+      "code": "SP.URB.TOTL.IN.ZS",
+      "field": "urban_pct",
+      "kind": "indicator_chunk",
+      "non_null": 434,
+      "sha256": "bf6766f906ede331944a57be3b12426e45310db1d57b03ba446ed5153432f73f",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.URB.TOTL.IN.ZS?date=2021:2022&format=json&per_page=1400",
+      "years": [
+        2021,
+        2022
+      ]
+    },
+    {
+      "bytes": 236629,
+      "code": "NY.GDP.PCAP.CD",
+      "field": "gdp_per_capita",
+      "kind": "indicator_chunk",
+      "non_null": 851,
+      "sha256": "b0f933cdd389bdd178ed779895bac5af4225cf7b1c65e0d2ad5229deddf05d84",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD?date=2010:2013&format=json&per_page=1400",
+      "years": [
+        2010,
+        2013
+      ]
+    },
+    {
+      "bytes": 236596,
+      "code": "NY.GDP.PCAP.CD",
+      "field": "gdp_per_capita",
+      "kind": "indicator_chunk",
+      "non_null": 847,
+      "sha256": "84ac1b2eb04c5281f3868f0ed048ee1e4c511a85c6ff9cd2e3df9692ae9f3b04",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD?date=2014:2017&format=json&per_page=1400",
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "bytes": 177426,
+      "code": "NY.GDP.PCAP.CD",
+      "field": "gdp_per_capita",
+      "kind": "indicator_chunk",
+      "non_null": 632,
+      "sha256": "0a742bf51269527a0d41ca5a11ec67fe44b7dab88dd299462e90adc254450de2",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD?date=2018:2020&format=json&per_page=1400",
+      "years": [
+        2018,
+        2020
+      ]
+    },
+    {
+      "bytes": 118289,
+      "code": "NY.GDP.PCAP.CD",
+      "field": "gdp_per_capita",
+      "kind": "indicator_chunk",
+      "non_null": 419,
+      "sha256": "631c8de1b181471cffa9fc88068900b28079a98c611b63640aab33524e045de2",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.CD?date=2021:2022&format=json&per_page=1400",
+      "years": [
+        2021,
+        2022
+      ]
+    },
+    {
+      "bytes": 234267,
+      "code": "SP.POP.GROW",
+      "field": "population_growth",
+      "kind": "indicator_chunk",
+      "non_null": 868,
+      "sha256": "cb7211a82aef5237f2752b4fc2b5404754c8a53f48b32fcf35a32838093831ea",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.GROW?date=2010:2013&format=json&per_page=1400",
+      "years": [
+        2010,
+        2013
+      ]
+    },
+    {
+      "bytes": 234312,
+      "code": "SP.POP.GROW",
+      "field": "population_growth",
+      "kind": "indicator_chunk",
+      "non_null": 868,
+      "sha256": "8eaeaf903e335db2d859e9f364b51c7e191505234817407478f7d15197db35f1",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.GROW?date=2014:2017&format=json&per_page=1400",
+      "years": [
+        2014,
+        2017
+      ]
+    },
+    {
+      "bytes": 175777,
+      "code": "SP.POP.GROW",
+      "field": "population_growth",
+      "kind": "indicator_chunk",
+      "non_null": 651,
+      "sha256": "2c6f9f7b374df46533ce3bc7e15a4f4d39f087ebc127eb6ebc51640ea5ce2788",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.GROW?date=2018:2020&format=json&per_page=1400",
+      "years": [
+        2018,
+        2020
+      ]
+    },
+    {
+      "bytes": 117246,
+      "code": "SP.POP.GROW",
+      "field": "population_growth",
+      "kind": "indicator_chunk",
+      "non_null": 433,
+      "sha256": "0af611fb18d4189c12e8ec3eaba9b78a2ee61c894525d65267c128c3f9f1d501",
+      "url": "https://api.worldbank.org/v2/country/all/indicator/SP.POP.GROW?date=2021:2022&format=json&per_page=1400",
+      "years": [
+        2021,
+        2022
+      ]
+    }
+  ],
+  "source_sha256": "667e71af53627a1a2e698e981f205aee5b2abbc91e573ddef7f7d488d2b2a9a2",
+  "target": "urban_pct",
+  "test_improvement": 0.7022320724252559,
+  "test_years": [
+    2020,
+    2021,
+    2022
+  ],
+  "train_years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016
+  ],
+  "validation_improvement": 0.5099655500971623,
+  "validation_years": [
+    2017,
+    2018,
+    2019
+  ]
+}
