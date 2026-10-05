@@ -1,0 +1,22 @@
+name: MICCGI M011 commit-addressed verifier
+on:
+  push:
+    branches: [miccgi-m011-semantic-coevolution]
+    paths:
+      - .github/workflows/miccgi-m011-verify.yml
+      - miccgi_m011_verify.py
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: miccgi-m011-semantic-coevolution, fetch-depth: 0}
+      - run: python3 miccgi_m011_verify.py
+      - run: |
+          git config user.name "MICCGI M011 Verifier"
+          git config user.email "miccgi-runtime@users.noreply.github.com"
+          git add miccgi_m011_state/adjudication_commit_addressed.json
+          git commit -m "MICCGI M011 commit-addressed adjudication" || exit 0
+          git push origin HEAD
