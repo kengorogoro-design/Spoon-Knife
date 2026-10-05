@@ -1,0 +1,10 @@
+{
+  "compiled": true,
+  "epoch": 3,
+  "language_sha256": "1cb67754ce75c95abf5addafd4043ddd2ebec76fb42d42b5539f1b0076cbeec7",
+  "reason": "MAX_EPOCHS_REACHED",
+  "source_changed": true,
+  "source_sha256": "2fa1f1562713124a1865bedadb48a04f7181b30140fe56e76e4aece784dff424",
+  "state_sha256": "537bbafd2f6da0056f301fcfc136a51f0a2bd03b65aaaa0cb60e99c1b5690c6c",
+  "stop": true
+}
