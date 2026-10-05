@@ -1,0 +1,229 @@
+{
+  "active_source_sha256": "374d5a9dd761aa05c29a1be1e5983fde8b2d870fdda2d669a50188935ab89fdb",
+  "challenge_archive": [
+    {
+      "behavior_sha256": "02d9d63d2c0b0c8f3847ad619879834efdfe54413d5604eaaab8130666d56b2b",
+      "expr": [
+        "b",
+        "sub",
+        [
+          "u",
+          "neg",
+          [
+            "b",
+            "min",
+            [
+              "v",
+              "b"
+            ],
+            [
+              "c",
+              0.24675351315042615
+            ]
+          ]
+        ],
+        [
+          "u",
+          "neg",
+          [
+            "u",
+            "abs",
+            [
+              "c",
+              -0.5647305614130238
+            ]
+          ]
+        ]
+      ],
+      "gap": 0.4496986112945423,
+      "id": "ch_9b7b932aead5",
+      "novelty": 1.0,
+      "semantic_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+      "source_epoch": 1,
+      "variance": 2.10132566219778
+    }
+  ],
+  "challenge_archive_sha256": "90bd531acc797b0d4d99382ae96fcfd1fb9b9b921128635310c448a9dee06b4c",
+  "contract_actions": 0,
+  "epoch": 1,
+  "evaluator_sha256": "2e384295abb7be2d426ab2fc7bb5fde15b4b13d1ef7d060c23f378571c9b0d5e",
+  "evaluators": [
+    {
+      "id": "EV-NOVEL",
+      "w": [
+        0.25,
+        0.48,
+        0.19,
+        0.08
+      ]
+    },
+    {
+      "id": "EV-LEARN",
+      "w": [
+        0.3,
+        0.2,
+        0.43,
+        0.07
+      ]
+    },
+    {
+      "id": "EV1-2",
+      "parent": "EV-LEARN",
+      "w": [
+        0.27081956731406115,
+        0.19375533125988204,
+        0.4701677651180887,
+        0.06525733630796812
+      ]
+    },
+    {
+      "id": "EV1-3",
+      "parent": "EV-LEARN",
+      "w": [
+        0.29665079680566736,
+        0.2513271252348494,
+        0.3912495409688809,
+        0.06077253699060225
+      ]
+    }
+  ],
+  "financial_actions": 0,
+  "new_primitive": {
+    "behavior_sha256": "02d9d63d2c0b0c8f3847ad619879834efdfe54413d5604eaaab8130666d56b2b",
+    "challenge_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+    "expr": [
+      "b",
+      "sub",
+      [
+        "u",
+        "neg",
+        [
+          "b",
+          "min",
+          [
+            "v",
+            "b"
+          ],
+          [
+            "c",
+            0.24675351315042615
+          ]
+        ]
+      ],
+      [
+        "u",
+        "neg",
+        [
+          "u",
+          "abs",
+          [
+            "c",
+            -0.5647305614130238
+          ]
+        ]
+      ]
+    ],
+    "name": "spi_9b7b932aead5",
+    "semantic_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+    "source": "import math\ndef sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))\ndef sg(x): x=max(-30.0,min(30.0,x)); return 1/(1+math.exp(-x))\ndef spi_9b7b932aead5(a,b):\n    return float((((-(min(b,0.24675351315042615))))-((-(abs(-0.5647305614130238))))))\n"
+  },
+  "observations": [
+    {
+      "digest": "ab3cc7efc95acf851c288c7f6d8eeea8d4ab721b5e873cb64cadabbac4015a35",
+      "size": 15832,
+      "source": "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+      "status": 200
+    },
+    {
+      "digest": "203f15ce63523ec5dbbf3462328c7e26d9903240a5f7b1782d36b8f9f388bfac",
+      "size": 282699,
+      "source": "https://pypi.org/pypi/pytest/json",
+      "status": 200
+    }
+  ],
+  "paid_actions": 0,
+  "parent_state_sha256": null,
+  "registry": [
+    {
+      "behavior_sha256": "02d9d63d2c0b0c8f3847ad619879834efdfe54413d5604eaaab8130666d56b2b",
+      "challenge_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+      "expr": [
+        "b",
+        "sub",
+        [
+          "u",
+          "neg",
+          [
+            "b",
+            "min",
+            [
+              "v",
+              "b"
+            ],
+            [
+              "c",
+              0.24675351315042615
+            ]
+          ]
+        ],
+        [
+          "u",
+          "neg",
+          [
+            "u",
+            "abs",
+            [
+              "c",
+              -0.5647305614130238
+            ]
+          ]
+        ]
+      ],
+      "name": "spi_9b7b932aead5",
+      "semantic_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+      "source": "import math\ndef sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))\ndef sg(x): x=max(-30.0,min(30.0,x)); return 1/(1+math.exp(-x))\ndef spi_9b7b932aead5(a,b):\n    return float((((-(min(b,0.24675351315042615))))-((-(abs(-0.5647305614130238))))))\n"
+    }
+  ],
+  "registry_sha256": "278dfadf67fa4ebabd88ad6dcd91cca8dd09daeba7bed2ea0c1f1b5747b48632",
+  "selected_challenge": {
+    "behavior_sha256": "02d9d63d2c0b0c8f3847ad619879834efdfe54413d5604eaaab8130666d56b2b",
+    "expr": [
+      "b",
+      "sub",
+      [
+        "u",
+        "neg",
+        [
+          "b",
+          "min",
+          [
+            "v",
+            "b"
+          ],
+          [
+            "c",
+            0.24675351315042615
+          ]
+        ]
+      ],
+      [
+        "u",
+        "neg",
+        [
+          "u",
+          "abs",
+          [
+            "c",
+            -0.5647305614130238
+          ]
+        ]
+      ]
+    ],
+    "gap": 0.4496986112945423,
+    "id": "ch_9b7b932aead5",
+    "novelty": 1.0,
+    "semantic_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+    "source_epoch": 1,
+    "variance": 2.10132566219778
+  }
+}

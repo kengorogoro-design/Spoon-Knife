@@ -1,0 +1,12 @@
+{
+  "active_use_verified": true,
+  "challenge_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+  "compiled": true,
+  "epoch": 1,
+  "evaluator_sha256": "2e384295abb7be2d426ab2fc7bb5fde15b4b13d1ef7d060c23f378571c9b0d5e",
+  "primitive_name": "spi_9b7b932aead5",
+  "reason": "CONTINUE_SEMANTIC_COEVOLUTION",
+  "registry_sha256": "278dfadf67fa4ebabd88ad6dcd91cca8dd09daeba7bed2ea0c1f1b5747b48632",
+  "state_sha256": "fc4536ace818e3ff7a3fb3c236c682c1499c5144e06b78e518e4332dd37380fb",
+  "stop": false
+}
