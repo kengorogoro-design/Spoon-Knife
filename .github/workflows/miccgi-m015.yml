@@ -1,0 +1,26 @@
+name: MICCGI M015 adaptive causal experiment design
+on:
+  push:
+    branches:
+      - miccgi-m015-active-experiment
+    paths:
+      - .github/workflows/miccgi-m015.yml
+      - miccgi_m015_runtime.py
+permissions:
+  contents: write
+jobs:
+  active-experiment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m015-active-experiment
+          fetch-depth: 0
+      - name: Run adaptive causal experiment design replay
+        run: |
+          python3 miccgi_m015_runtime.py
+          git config user.name "MICCGI M015 Runtime"
+          git config user.email "miccgi-runtime@users.noreply.github.com"
+          git add miccgi_m015_state
+          git commit -m "MICCGI M015 final adjudication" || true
+          git push origin HEAD
