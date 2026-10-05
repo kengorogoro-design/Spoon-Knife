@@ -1,0 +1,20 @@
+{
+  "admitted": true,
+  "claim_boundary": {
+    "BOUNDED_EXTERNAL_EPOCH_LOGIC": "ESTABLISHED",
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "INDEPENDENT_EXTERNAL_RUNTIME": "ESTABLISHED_BY_THIS_RUN",
+    "MICCGI": "UNPROVEN",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "epochs": 3,
+  "external_runtime": {
+    "git_push_enabled": true,
+    "sources": [
+      "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+      "https://pypi.org/pypi/pytest/json"
+    ]
+  },
+  "reasons": [],
+  "terminal_state_sha256": "31e8a0047cc15b5b92570ea6e47d5f63ff257c8b4a696f1eed33e6bf2bef7dee"
+}
