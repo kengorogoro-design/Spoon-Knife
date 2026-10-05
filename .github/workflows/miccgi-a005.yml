@@ -1,0 +1,83 @@
+name: MICCGI A005 remote kernel self-verification
+
+on:
+  push:
+    branches:
+      - miccgi-selfverify-a005-016a16e
+
+permissions:
+  contents: read
+
+jobs:
+  remote-self-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout isolated successor branch
+        uses: actions/checkout@v4
+
+      - name: Reconstruct and verify MICCGI kernel
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PARENT_A004_SHA256="016a16e2943ef384fbf9cc82fe34d6470117aba7983c5af67f6a362cbcc9b02b"
+          SOURCE_BUNDLE_SHA256="5fe145c2b0be4674a291050d46202898d629efdb8d91da2aef8f3b7783bb5a05"
+          SOURCE_TREE_SHA256="0c8853e5f7fe5ce50bdba696d6a6a330f5ee961ce6a1d4ed4e9f741ff6bbba9d"
+
+          echo "MICCGI_A005_PARENT_A004_SHA256=$PARENT_A004_SHA256"
+
+          base64 -d miccgi/a005/A004_KERNEL_SOURCE.tar.gz.b64 > /tmp/a005-kernel.tar.gz
+          ACTUAL_BUNDLE_SHA="$(sha256sum /tmp/a005-kernel.tar.gz | awk '{print $1}')"
+          echo "MICCGI_A005_SOURCE_BUNDLE_SHA256=$ACTUAL_BUNDLE_SHA"
+          test "$ACTUAL_BUNDLE_SHA" = "$SOURCE_BUNDLE_SHA256"
+
+          rm -rf /tmp/a005-src
+          mkdir -p /tmp/a005-src
+          tar -xzf /tmp/a005-kernel.tar.gz -C /tmp/a005-src
+          cd /tmp/a005-src
+
+          ACTUAL_TREE_SHA="$(python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          root=Path('.')
+          paths=[root/'pyproject.toml', root/'tests/test_kernel.py']+sorted((root/'micgi').rglob('*.py'))
+          h=hashlib.sha256()
+          for p in sorted(paths,key=lambda x:x.as_posix()):
+              rel=p.as_posix().encode()
+              data=p.read_bytes()
+              h.update(len(rel).to_bytes(8,'big')); h.update(rel)
+              h.update(len(data).to_bytes(8,'big')); h.update(data)
+          print(h.hexdigest())
+          PY
+          )"
+          echo "MICCGI_A005_SOURCE_TREE_SHA256=$ACTUAL_TREE_SHA"
+          test "$ACTUAL_TREE_SHA" = "$SOURCE_TREE_SHA256"
+
+          python3 -m venv /tmp/a005-venv
+          /tmp/a005-venv/bin/python -m pip install --disable-pip-version-check -q pytest
+
+          /tmp/a005-venv/bin/python -m pytest -q | tee /tmp/a005-pytest.txt
+          grep -q "11 passed" /tmp/a005-pytest.txt
+          echo "MICCGI_A005_REMOTE_TESTS=11_PASS"
+
+          /tmp/a005-venv/bin/python -m compileall -q micgi tests
+          echo "MICCGI_A005_REMOTE_COMPILEALL=PASS"
+
+          rm -rf /tmp/a005-runtime
+          /tmp/a005-venv/bin/python -m micgi --state-dir /tmp/a005-runtime status > /tmp/a005-status0.json
+          /tmp/a005-venv/bin/python -m micgi --state-dir /tmp/a005-runtime cycle | tee /tmp/a005-cycle.json
+          /tmp/a005-venv/bin/python -m micgi --state-dir /tmp/a005-runtime status > /tmp/a005-status1.json
+
+          /tmp/a005-venv/bin/python - <<'PY'
+          import json
+          s0=json.load(open('/tmp/a005-status0.json'))
+          s1=json.load(open('/tmp/a005-status1.json'))
+          assert s0['generation'] == 0, s0
+          assert s1['generation'] == 1, s1
+          assert s1['status'] == 'ACTIVE_UNPROVEN', s1
+          assert s1['economic_t0'] == 'NOT_OBSERVED'
+          assert s1['verified_realized_profit'] == 'NOT_PROVEN'
+          assert s1['micgi'] == 'UNPROVEN'
+          print('MICCGI_A005_REMOTE_FRESH_BOOTSTRAP=GEN0_TO_GEN1_PASS')
+          print('MICCGI_A005_REMOTE_CLAIM_BOUNDARY=PRESERVED')
+          PY
