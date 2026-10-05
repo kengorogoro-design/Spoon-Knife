@@ -1,0 +1,9 @@
+{
+  "compiled": true,
+  "epoch": 2,
+  "future_holdout_beats_persistence": true,
+  "parent_state_sha256": "5944a023e5b8156464d82b0638a73f28c97aac90dd29ed3221a2128891e9c986",
+  "reason": "CONTINUE_DYNAMICAL_INDUCTION",
+  "state_sha256": "7f5a5464d39764b5a951636c671f75b77126528c50446318156bbee64a2875af",
+  "stop": false
+}
