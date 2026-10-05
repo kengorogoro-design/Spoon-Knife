@@ -1,0 +1,77 @@
+{
+  "active_language_source_sha256": "0a031ca0daf705c7923e0e385b75e00b0edd66dfd5996554843f67a57bceee46",
+  "contract_actions": 0,
+  "epoch": 1,
+  "financial_actions": 0,
+  "new_primitive": {
+    "baseline_error": 0.5204200700116686,
+    "behavior_sha256": "3ddaaf82769d9e5546149078eb9841967d894dc54b0991000723184f65a8194e",
+    "expr": [
+      "u",
+      "abs",
+      [
+        "b",
+        "sub",
+        [
+          "v",
+          "a"
+        ],
+        [
+          "v",
+          "b"
+        ]
+      ]
+    ],
+    "improvement_ratio": 1.0,
+    "name": "pi_dcf6dcbf4b46",
+    "primitive_error": 0.0,
+    "semantic_sha256": "dcf6dcbf4b46728600763e400410bafb9d149b4b8ea9784b5492665d1702e28b",
+    "size": 4,
+    "target_epoch": 1
+  },
+  "observations": [
+    {
+      "digest": "f91929893de7be1e66efa231615098f95f6bced383d4422cb8abef5da93c9f08",
+      "size": 15832,
+      "source": "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+      "status": 200
+    },
+    {
+      "digest": "203f15ce63523ec5dbbf3462328c7e26d9903240a5f7b1782d36b8f9f388bfac",
+      "size": 282699,
+      "source": "https://pypi.org/pypi/pytest/json",
+      "status": 200
+    }
+  ],
+  "paid_actions": 0,
+  "parent_state_sha256": null,
+  "registry": [
+    {
+      "baseline_error": 0.5204200700116686,
+      "behavior_sha256": "3ddaaf82769d9e5546149078eb9841967d894dc54b0991000723184f65a8194e",
+      "expr": [
+        "u",
+        "abs",
+        [
+          "b",
+          "sub",
+          [
+            "v",
+            "a"
+          ],
+          [
+            "v",
+            "b"
+          ]
+        ]
+      ],
+      "improvement_ratio": 1.0,
+      "name": "pi_dcf6dcbf4b46",
+      "primitive_error": 0.0,
+      "semantic_sha256": "dcf6dcbf4b46728600763e400410bafb9d149b4b8ea9784b5492665d1702e28b",
+      "size": 4,
+      "target_epoch": 1
+    }
+  ],
+  "registry_sha256": "4cef6ea3284078274c7ab2de7bfacd8c168d4ec2c69b897755e811ddd8586f69"
+}

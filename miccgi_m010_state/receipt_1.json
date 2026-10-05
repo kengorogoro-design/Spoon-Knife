@@ -1,0 +1,10 @@
+{
+  "active_use_verified": true,
+  "compiled": true,
+  "epoch": 1,
+  "improvement_ratio": 1.0,
+  "primitive_name": "pi_dcf6dcbf4b46",
+  "registry_sha256": "4cef6ea3284078274c7ab2de7bfacd8c168d4ec2c69b897755e811ddd8586f69",
+  "state_sha256": "f19fe5cd9acebcc593cf6792fc78cd31edf6d65ef1cd65296a01ec88829ec627",
+  "stop": false
+}
