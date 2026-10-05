@@ -1,0 +1,11 @@
+{
+  "compiled": true,
+  "epoch": 3,
+  "parent_source_sha256": "ca3ccf7465c5e1b7ba3b2463d829595c7796ef6b1f8ca959080a38017cbe3630",
+  "parent_state_sha256": "c4c535df8541a5169690d7868e844a0c0dc3ddde3b9780d20039a3fcb70b3ff9",
+  "reason": "MAX_EPOCHS_REACHED",
+  "source_changed": true,
+  "source_sha256": "7adca90f87d411faa34104e87f566169bfa4fbd5a7a413c732f834e34c0e2a77",
+  "state_sha256": "977e234922bbca18311abb428c18dce422ac8828f6b3d2afa665994141da8b20",
+  "stop": true
+}
