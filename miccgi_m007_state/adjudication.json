@@ -1,0 +1,20 @@
+{
+  "admitted": true,
+  "changed": {
+    "candidates": true,
+    "evaluators": true,
+    "search": true,
+    "worlds": true
+  },
+  "claim_boundary": {
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "EXTERNAL_WHOLE_SYSTEM_DOMINANCE": "NOT_ESTABLISHED",
+    "INDEPENDENT_EXTERNAL_METAGENESIS": "ESTABLISHED_FOR_BOUNDED_LINEAGE",
+    "MICCGI": "UNPROVEN",
+    "OPEN_ENDED_SELF_IMPROVEMENT": "NOT_ESTABLISHED",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "epochs": 3,
+  "reasons": [],
+  "terminal_state_sha256": "a799884cb4434bfb6b864c2eaa5e66e3b39d20440ef1767198a3a087529ee844"
+}
