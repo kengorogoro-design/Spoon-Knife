@@ -1,0 +1,12 @@
+{
+  "active_use_verified": true,
+  "challenge_sha256": "caa245f71218ba54d95405058a6012506232b423bbadac599489eb3b997c1bae",
+  "compiled": true,
+  "epoch": 3,
+  "evaluator_sha256": "15f375c4835da3e4821b863c5ff44d17ebc79e6a2af3499bebf4b52003b74243",
+  "primitive_name": "spi_caa245f71218",
+  "reason": "MAX_EPOCHS_REACHED",
+  "registry_sha256": "15b99aff77d2474be751bd69c505c01d62aadbabc7c5c72dd9148b2e3eb88b78",
+  "state_sha256": "4df60f946304b6afeac29fc0812b5458b1d21dd0383308abb05a3603a302b7e5",
+  "stop": true
+}

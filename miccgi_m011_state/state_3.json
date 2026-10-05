@@ -1,0 +1,422 @@
+{
+  "active_source_sha256": "3fb62984a364d29d0c827ae51ff683aaa2978426acdebdc20602a0e7867eb1d7",
+  "challenge_archive": [
+    {
+      "behavior_sha256": "02d9d63d2c0b0c8f3847ad619879834efdfe54413d5604eaaab8130666d56b2b",
+      "expr": [
+        "b",
+        "sub",
+        [
+          "u",
+          "neg",
+          [
+            "b",
+            "min",
+            [
+              "v",
+              "b"
+            ],
+            [
+              "c",
+              0.24675351315042615
+            ]
+          ]
+        ],
+        [
+          "u",
+          "neg",
+          [
+            "u",
+            "abs",
+            [
+              "c",
+              -0.5647305614130238
+            ]
+          ]
+        ]
+      ],
+      "gap": 0.4496986112945423,
+      "id": "ch_9b7b932aead5",
+      "novelty": 1.0,
+      "semantic_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+      "source_epoch": 1,
+      "variance": 2.10132566219778
+    },
+    {
+      "behavior_sha256": "f291d1b071d79e47dc2cbdfa49ac65fd2b0b877c0dfd3b2fa9b9c6e7c3422720",
+      "expr": [
+        "b",
+        "add",
+        [
+          "b",
+          "mul",
+          [
+            "u",
+            "sqrt",
+            [
+              "u",
+              "log",
+              [
+                "v",
+                "a"
+              ]
+            ]
+          ],
+          [
+            "u",
+            "tanh",
+            [
+              "v",
+              "a"
+            ]
+          ]
+        ],
+        [
+          "b",
+          "add",
+          [
+            "b",
+            "mul",
+            [
+              "b",
+              "min",
+              [
+                "v",
+                "b"
+              ],
+              [
+                "c",
+                0.5041938480312045
+              ]
+            ],
+            [
+              "b",
+              "sub",
+              [
+                "v",
+                "b"
+              ],
+              [
+                "c",
+                -0.6533705026017482
+              ]
+            ]
+          ],
+          [
+            "u",
+            "abs",
+            [
+              "u",
+              "tanh",
+              [
+                "v",
+                "a"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "gap": 0.47301253598619936,
+      "id": "ch_d66a822cf7eb",
+      "novelty": 0.47301253598619936,
+      "semantic_sha256": "d66a822cf7eb379d35410109c2c6add1458a759aa95383f2afcf6bd5470c347b",
+      "source_epoch": 2,
+      "variance": 4.0
+    },
+    {
+      "behavior_sha256": "900282bc0a98d724872b2daf02801b0301dd8744ced9f5f7576fc10bda488e6c",
+      "expr": [
+        "b",
+        "add",
+        [
+          "b",
+          "div",
+          [
+            "c",
+            0.4203816955031401
+          ],
+          [
+            "c",
+            0.21977400496403043
+          ]
+        ],
+        [
+          "v",
+          "a"
+        ]
+      ],
+      "gap": 0.46609789300606913,
+      "id": "ch_caa245f71218",
+      "novelty": 0.46609789300606913,
+      "semantic_sha256": "caa245f71218ba54d95405058a6012506232b423bbadac599489eb3b997c1bae",
+      "source_epoch": 3,
+      "variance": 4.0
+    }
+  ],
+  "challenge_archive_sha256": "0b6cbcaa0a9a748eadeaa85b7acdabb8ca2f227521c98b91210481d6674184ca",
+  "contract_actions": 0,
+  "epoch": 3,
+  "evaluator_sha256": "15f375c4835da3e4821b863c5ff44d17ebc79e6a2af3499bebf4b52003b74243",
+  "evaluators": [
+    {
+      "id": "EV1-2",
+      "parent": "EV-LEARN",
+      "w": [
+        0.27081956731406115,
+        0.19375533125988204,
+        0.4701677651180887,
+        0.06525733630796812
+      ]
+    },
+    {
+      "id": "EV-LEARN",
+      "w": [
+        0.3,
+        0.2,
+        0.43,
+        0.07
+      ]
+    },
+    {
+      "id": "EV3-2",
+      "parent": "EV-LEARN",
+      "w": [
+        0.33115339128561355,
+        0.1652314130450633,
+        0.4277396622173879,
+        0.07587553345193519
+      ]
+    },
+    {
+      "id": "EV3-3",
+      "parent": "EV1-2",
+      "w": [
+        0.2426763158138696,
+        0.21561856137523533,
+        0.46875782606233535,
+        0.07294729674855975
+      ]
+    }
+  ],
+  "financial_actions": 0,
+  "new_primitive": {
+    "behavior_sha256": "900282bc0a98d724872b2daf02801b0301dd8744ced9f5f7576fc10bda488e6c",
+    "challenge_sha256": "caa245f71218ba54d95405058a6012506232b423bbadac599489eb3b997c1bae",
+    "expr": [
+      "b",
+      "add",
+      [
+        "b",
+        "div",
+        [
+          "c",
+          0.4203816955031401
+        ],
+        [
+          "c",
+          0.21977400496403043
+        ]
+      ],
+      [
+        "v",
+        "a"
+      ]
+    ],
+    "name": "spi_caa245f71218",
+    "semantic_sha256": "caa245f71218ba54d95405058a6012506232b423bbadac599489eb3b997c1bae",
+    "source": "import math\ndef sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))\ndef sg(x): x=max(-30.0,min(30.0,x)); return 1/(1+math.exp(-x))\ndef spi_caa245f71218(a,b):\n    return float(((sd(0.4203816955031401,0.21977400496403043))+(a)))\n"
+  },
+  "observations": [
+    {
+      "digest": "ab3cc7efc95acf851c288c7f6d8eeea8d4ab721b5e873cb64cadabbac4015a35",
+      "size": 15832,
+      "source": "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+      "status": 200
+    },
+    {
+      "digest": "203f15ce63523ec5dbbf3462328c7e26d9903240a5f7b1782d36b8f9f388bfac",
+      "size": 282699,
+      "source": "https://pypi.org/pypi/pytest/json",
+      "status": 200
+    }
+  ],
+  "paid_actions": 0,
+  "parent_state_sha256": "64a566d2b8167e7d5281636c8c769790fcbe66503eb7e67400f62eeeb6940ec1",
+  "registry": [
+    {
+      "behavior_sha256": "02d9d63d2c0b0c8f3847ad619879834efdfe54413d5604eaaab8130666d56b2b",
+      "challenge_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+      "expr": [
+        "b",
+        "sub",
+        [
+          "u",
+          "neg",
+          [
+            "b",
+            "min",
+            [
+              "v",
+              "b"
+            ],
+            [
+              "c",
+              0.24675351315042615
+            ]
+          ]
+        ],
+        [
+          "u",
+          "neg",
+          [
+            "u",
+            "abs",
+            [
+              "c",
+              -0.5647305614130238
+            ]
+          ]
+        ]
+      ],
+      "name": "spi_9b7b932aead5",
+      "semantic_sha256": "9b7b932aead55df627bcb7a00f964d48e2d05ee6a86ad8febc1f2504a9f605ad",
+      "source": "import math\ndef sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))\ndef sg(x): x=max(-30.0,min(30.0,x)); return 1/(1+math.exp(-x))\ndef spi_9b7b932aead5(a,b):\n    return float((((-(min(b,0.24675351315042615))))-((-(abs(-0.5647305614130238))))))\n"
+    },
+    {
+      "behavior_sha256": "f291d1b071d79e47dc2cbdfa49ac65fd2b0b877c0dfd3b2fa9b9c6e7c3422720",
+      "challenge_sha256": "d66a822cf7eb379d35410109c2c6add1458a759aa95383f2afcf6bd5470c347b",
+      "expr": [
+        "b",
+        "add",
+        [
+          "b",
+          "mul",
+          [
+            "u",
+            "sqrt",
+            [
+              "u",
+              "log",
+              [
+                "v",
+                "a"
+              ]
+            ]
+          ],
+          [
+            "u",
+            "tanh",
+            [
+              "v",
+              "a"
+            ]
+          ]
+        ],
+        [
+          "b",
+          "add",
+          [
+            "b",
+            "mul",
+            [
+              "b",
+              "min",
+              [
+                "v",
+                "b"
+              ],
+              [
+                "c",
+                0.5041938480312045
+              ]
+            ],
+            [
+              "b",
+              "sub",
+              [
+                "v",
+                "b"
+              ],
+              [
+                "c",
+                -0.6533705026017482
+              ]
+            ]
+          ],
+          [
+            "u",
+            "abs",
+            [
+              "u",
+              "tanh",
+              [
+                "v",
+                "a"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "name": "spi_d66a822cf7eb",
+      "semantic_sha256": "d66a822cf7eb379d35410109c2c6add1458a759aa95383f2afcf6bd5470c347b",
+      "source": "import math\ndef sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))\ndef sg(x): x=max(-30.0,min(30.0,x)); return 1/(1+math.exp(-x))\ndef spi_d66a822cf7eb(a,b):\n    return float(((((math.sqrt(abs(math.log1p(abs(a)))))*(math.tanh(a))))+(((((min(b,0.5041938480312045))*(((b)-(-0.6533705026017482)))))+(abs(math.tanh(a)))))))\n"
+    },
+    {
+      "behavior_sha256": "900282bc0a98d724872b2daf02801b0301dd8744ced9f5f7576fc10bda488e6c",
+      "challenge_sha256": "caa245f71218ba54d95405058a6012506232b423bbadac599489eb3b997c1bae",
+      "expr": [
+        "b",
+        "add",
+        [
+          "b",
+          "div",
+          [
+            "c",
+            0.4203816955031401
+          ],
+          [
+            "c",
+            0.21977400496403043
+          ]
+        ],
+        [
+          "v",
+          "a"
+        ]
+      ],
+      "name": "spi_caa245f71218",
+      "semantic_sha256": "caa245f71218ba54d95405058a6012506232b423bbadac599489eb3b997c1bae",
+      "source": "import math\ndef sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))\ndef sg(x): x=max(-30.0,min(30.0,x)); return 1/(1+math.exp(-x))\ndef spi_caa245f71218(a,b):\n    return float(((sd(0.4203816955031401,0.21977400496403043))+(a)))\n"
+    }
+  ],
+  "registry_sha256": "15b99aff77d2474be751bd69c505c01d62aadbabc7c5c72dd9148b2e3eb88b78",
+  "selected_challenge": {
+    "behavior_sha256": "900282bc0a98d724872b2daf02801b0301dd8744ced9f5f7576fc10bda488e6c",
+    "expr": [
+      "b",
+      "add",
+      [
+        "b",
+        "div",
+        [
+          "c",
+          0.4203816955031401
+        ],
+        [
+          "c",
+          0.21977400496403043
+        ]
+      ],
+      [
+        "v",
+        "a"
+      ]
+    ],
+    "gap": 0.46609789300606913,
+    "id": "ch_caa245f71218",
+    "novelty": 0.46609789300606913,
+    "semantic_sha256": "caa245f71218ba54d95405058a6012506232b423bbadac599489eb3b997c1bae",
+    "source_epoch": 3,
+    "variance": 4.0
+  }
+}
