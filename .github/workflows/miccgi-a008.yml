@@ -1,0 +1,294 @@
+name: MICCGI A008 remote self-publication
+
+on:
+  push:
+    branches:
+      - miccgi-selfpublish-a008-e3cd93f
+    paths:
+      - .github/workflows/miccgi-a008.yml
+
+permissions:
+  contents: write
+
+jobs:
+  remote-self-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout isolated A008 branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reconstruct lineage, self-actuate, self-admit, and publish successor
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          REPO="kengorogoro-design/Spoon-Knife"
+          BRANCH="miccgi-selfpublish-a008-e3cd93f"
+          PARENT_A007_SHA256="e3cd93f0f797f14e31742548af5491dac2837617a9ef6be2cfb33fcb13c661ad"
+          SOURCE_BUNDLE_SHA256="5fe145c2b0be4674a291050d46202898d629efdb8d91da2aef8f3b7783bb5a05"
+          RECEIPTS_BUNDLE_SHA256="c51d9ae522ea8d8bb7dcfb7e691a37eee3951ee10f314374112733bf9d2066b3"
+          A008_NONCE="30782ed7df55f9761e4cc0aa2bfe64a6f198e0c9bf08068d51b35c1558ebb3c2"
+
+          base64 -d miccgi/a005/A004_KERNEL_SOURCE.tar.gz.b64 > /tmp/a008-kernel.tar.gz
+          test "$(sha256sum /tmp/a008-kernel.tar.gz | awk '{print $1}')" = "$SOURCE_BUNDLE_SHA256"
+          rm -rf /tmp/a008-src
+          mkdir -p /tmp/a008-src
+          tar -xzf /tmp/a008-kernel.tar.gz -C /tmp/a008-src
+
+          base64 -d miccgi/a008/A007_RECEIPTS.tar.gz.b64 > /tmp/a008-receipts.tar.gz
+          test "$(sha256sum /tmp/a008-receipts.tar.gz | awk '{print $1}')" = "$RECEIPTS_BUNDLE_SHA256"
+          rm -rf /tmp/a008-receipts
+          mkdir -p /tmp/a008-receipts
+          tar -xzf /tmp/a008-receipts.tar.gz -C /tmp/a008-receipts
+
+          cd /tmp/a008-src
+          python3 -m venv /tmp/a008-venv
+          /tmp/a008-venv/bin/python -m pip install --disable-pip-version-check -q pytest
+          /tmp/a008-venv/bin/python -m pytest -q | tee /tmp/a008-pytest.txt
+          grep -q "11 passed" /tmp/a008-pytest.txt
+          /tmp/a008-venv/bin/python -m compileall -q micgi tests
+
+          rm -rf /tmp/a008-runtime
+          /tmp/a008-venv/bin/python -m micgi --state-dir /tmp/a008-runtime status > /tmp/a008-status0.json
+          /tmp/a008-venv/bin/python -m micgi --state-dir /tmp/a008-runtime cycle > /tmp/a008-cycle1.json
+          /tmp/a008-venv/bin/python - <<'PY'
+          import json
+          s=json.load(open('/tmp/a008-runtime/current_state.json'))
+          assert s['generation']==1, s['generation']
+          PY
+
+          mkdir -p /tmp/a008-runtime/external_receipts
+          apply_receipt () {
+            local f="$1"
+            local expected="$2"
+            cp "/tmp/a008-receipts/$f" "/tmp/a008-runtime/external_receipts/$f"
+            /tmp/a008-venv/bin/python -m micgi --state-dir /tmp/a008-runtime cycle > "/tmp/a008-cycle-$expected.json"
+            /tmp/a008-venv/bin/python - "$expected" <<'PY'
+          import json,sys
+          expected=int(sys.argv[1])
+          s=json.load(open('/tmp/a008-runtime/current_state.json'))
+          assert s['generation']==expected, (s['generation'],expected)
+          PY
+          }
+
+          apply_receipt google_drive_roundtrip.json 2
+          apply_receipt github_branch_roundtrip.json 3
+          apply_receipt github_actions_remote_compute.json 4
+          apply_receipt github_actions_remote_kernel_self_verification.json 5
+          apply_receipt github_actions_remote_successor_construction.json 6
+          apply_receipt cross_provider_successor_custody.json 7
+
+          cd "$GITHUB_WORKSPACE"
+          mkdir -p miccgi/a008-output
+          cat > miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json <<EOF
+          {
+            "artifact_parent_sha256": "$PARENT_A007_SHA256",
+            "branch": "$BRANCH",
+            "nonce_sha256": "$A008_NONCE",
+            "scope": "branch-isolated remote self-publication probe; no economic credit"
+          }
+          EOF
+          PROBE_FILE_SHA="$(sha256sum miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json | awk '{print $1}')"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json
+          git commit -m "MICCGI A008 remote self-publication probe $A008_NONCE"
+          PROBE_COMMIT="$(git rev-parse HEAD)"
+          git push origin "HEAD:$BRANCH"
+
+          git fetch origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH" --force
+          GIT_REMOTE_COMMIT="$(git rev-parse "refs/remotes/origin/$BRANCH")"
+          test "$GIT_REMOTE_COMMIT" = "$PROBE_COMMIT"
+          git show "refs/remotes/origin/$BRANCH:miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json" > /tmp/a008-probe-git.json
+          GIT_PROBE_SHA="$(sha256sum /tmp/a008-probe-git.json | awk '{print $1}')"
+          test "$GIT_PROBE_SHA" = "$PROBE_FILE_SHA"
+          grep -q "$A008_NONCE" /tmp/a008-probe-git.json
+
+          curl -fsSL -H "Accept: application/vnd.github+json" "https://api.github.com/repos/$REPO/contents/miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json?ref=$PROBE_COMMIT" > /tmp/a008-probe-rest-meta.json
+          python3 - <<'PY'
+          import json,base64
+          meta=json.load(open('/tmp/a008-probe-rest-meta.json'))
+          raw=base64.b64decode(meta['content'])
+          open('/tmp/a008-probe-rest.json','wb').write(raw)
+          PY
+          REST_PROBE_SHA="$(sha256sum /tmp/a008-probe-rest.json | awk '{print $1}')"
+          test "$REST_PROBE_SHA" = "$PROBE_FILE_SHA"
+          grep -q "$A008_NONCE" /tmp/a008-probe-rest.json
+
+          CANONICAL_OBS_SHA="$(python3 - <<PY
+          import json,hashlib
+          obj={
+            'repository':'$REPO',
+            'branch':'$BRANCH',
+            'commit_sha':'$PROBE_COMMIT',
+            'probe_file_sha256':'$PROBE_FILE_SHA',
+            'nonce_sha256':'$A008_NONCE',
+          }
+          print(hashlib.sha256(json.dumps(obj,sort_keys=True,separators=(',',':')).encode()).hexdigest())
+          PY
+          )"
+          RESOURCE_ID="$REPO@$PROBE_COMMIT:miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json"
+
+          python3 - <<PY
+          import json,hashlib
+          r={
+            'receipt_version':1,
+            'capability_id':'external.runtime.github_actions.remote_self_publication',
+            'provider':'GitHub_Actions_SelfActuation',
+            'resource_id':'$RESOURCE_ID',
+            'resource_url':'https://github.com/$REPO/commit/$PROBE_COMMIT',
+            'expected_nonce_sha256':'$A008_NONCE',
+            'source_artifact_sha256':'$PARENT_A007_SHA256',
+            'write':{
+              'action':'remote runner committed and pushed its own capability probe',
+              'resource_id':'$RESOURCE_ID',
+              'canonical_observation_sha256':'$CANONICAL_OBS_SHA',
+              'branch':'$BRANCH',
+              'commit_sha':'$PROBE_COMMIT',
+              'probe_file_sha256':'$PROBE_FILE_SHA'
+            },
+            'readbacks':[
+              {
+                'method':'git_remote_object_readback',
+                'resource_id':'$RESOURCE_ID',
+                'nonce_sha256':'$A008_NONCE',
+                'canonical_observation_sha256':'$CANONICAL_OBS_SHA',
+                'branch':'$BRANCH',
+                'commit_sha':'$PROBE_COMMIT',
+                'probe_file_sha256':'$GIT_PROBE_SHA'
+              },
+              {
+                'method':'github_rest_contents_readback',
+                'resource_id':'$RESOURCE_ID',
+                'nonce_sha256':'$A008_NONCE',
+                'canonical_observation_sha256':'$CANONICAL_OBS_SHA',
+                'branch':'$BRANCH',
+                'commit_sha':'$PROBE_COMMIT',
+                'probe_file_sha256':'$REST_PROBE_SHA'
+              }
+            ],
+            'claims':[
+              {'name':'external.runtime.github_actions.remote_self_publication','value':1,'unit':'bool','direction':'true','durability':'external_persistent','objective_relevance':'direct'},
+              {'name':'external.runtime.github_actions.self_actuation_read_paths','value':2,'unit':'count','direction':'higher','durability':'external_persistent','objective_relevance':'direct'},
+              {'name':'external.runtime.github_actions.remote_generation_transition','value':1,'unit':'bool','direction':'true','durability':'run','objective_relevance':'direct'}
+            ],
+            'executable_spec':{
+              'type':'orchestrated_connector',
+              'provider':'GitHub_Actions_SelfActuation',
+              'actions':['remote_git_commit','remote_git_push','git_remote_readback','github_rest_readback','self_ingest_external_receipt','construct_successor'],
+              'authority':'github_actions_contents_write_isolated_branch',
+              'repository_full_name':'$REPO',
+              'branch_scope':'$BRANCH'
+            },
+            'claim_boundary':{
+              'micgi_credit':0,
+              'economic_credit':0,
+              'meaning':'establishes one bounded remote self-publication and self-admission transition on an isolated branch'
+            }
+          }
+          raw=json.dumps(r,sort_keys=True,separators=(',',':')).encode()
+          r['receipt_sha256']=hashlib.sha256(raw).hexdigest()
+          p='/tmp/a008-runtime/external_receipts/github_actions_remote_self_publication.json'
+          open(p,'w').write(json.dumps(r,indent=2,sort_keys=True)+'\n')
+          print('MICCGI_A008_RECEIPT_SHA256='+r['receipt_sha256'])
+          PY
+
+          cd /tmp/a008-src
+          /tmp/a008-venv/bin/python -m micgi --state-dir /tmp/a008-runtime cycle > /tmp/a008-cycle8.json
+          /tmp/a008-venv/bin/python -m micgi --state-dir /tmp/a008-runtime status > /tmp/a008-status8.json
+          /tmp/a008-venv/bin/python - <<'PY'
+          import json
+          s=json.load(open('/tmp/a008-status8.json'))
+          assert s['generation']==8, s
+          assert s['micgi']=='UNPROVEN'
+          assert s['economic_t0']=='NOT_OBSERVED'
+          assert s['verified_realized_profit']=='NOT_PROVEN'
+          assert 'external.runtime.github_actions.remote_self_publication' in s['claims']
+          PY
+
+          set +e
+          /tmp/a008-venv/bin/python -m micgi --state-dir /tmp/a008-runtime cycle > /tmp/a008-replay.json
+          REPLAY_RC="$?"
+          set -e
+          test "$REPLAY_RC" = "2"
+          python3 - <<'PY'
+          import json
+          r=json.load(open('/tmp/a008-replay.json'))
+          assert r['admitted'] is False
+          assert r['improvements']==[]
+          PY
+
+          cat > /tmp/a008-src/REMOTE_SELF_PUBLICATION_ATTESTATION.json <<EOF
+          {
+            "artifact": "MICCGI_REMOTE_SUCCESSOR_CAPSULE_A008",
+            "parent_a007_artifact_sha256": "$PARENT_A007_SHA256",
+            "remote_probe_commit_sha": "$PROBE_COMMIT",
+            "remote_probe_file_sha256": "$PROBE_FILE_SHA",
+            "remote_generation": 8,
+            "claim_boundary": {
+              "micgi": "UNPROVEN",
+              "economic_t0": "NOT_OBSERVED",
+              "verified_realized_profit": "NOT_PROVEN"
+            }
+          }
+          EOF
+          cp /tmp/a008-status8.json /tmp/a008-src/A008_STATUS_AFTER.json
+
+          cat > /tmp/a008-build.py <<'PY'
+          from pathlib import Path
+          import hashlib,json,zipfile,sys
+          src=Path('/tmp/a008-src')
+          runtime=Path('/tmp/a008-runtime')
+          out=Path(sys.argv[1])
+          entries=[]
+          selected=[src/'pyproject.toml',src/'tests/test_kernel.py',src/'REMOTE_SELF_PUBLICATION_ATTESTATION.json',src/'A008_STATUS_AFTER.json']+sorted((src/'micgi').rglob('*.py'))
+          selected += [runtime/'current_state.json',runtime/'evidence.jsonl',runtime/'history.jsonl']
+          selected += sorted((runtime/'external_receipts').glob('*.json'))
+          for p in selected:
+              if not p.exists():
+                  continue
+              try:
+                  rel_runtime=p.relative_to(runtime)
+                  rel='runtime_state/'+rel_runtime.as_posix()
+              except ValueError:
+                  rel=p.relative_to(src).as_posix()
+              entries.append((rel,p.read_bytes()))
+          manifest=[{'path':rel,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest()} for rel,data in entries]
+          entries.append(('MANIFEST.json',(json.dumps({'artifact':'MICCGI_REMOTE_SUCCESSOR_CAPSULE_A008','files':manifest},sort_keys=True,indent=2)+'\n').encode()))
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for rel,data in sorted(entries):
+                  info=zipfile.ZipInfo('MICCGI_REMOTE_SUCCESSOR_CAPSULE_A008/'+rel,date_time=(1980,1,1,0,0,0))
+                  info.compress_type=zipfile.ZIP_DEFLATED
+                  info.external_attr=(0o100644 & 0xffff)<<16
+                  info.create_system=3
+                  z.writestr(info,data,compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
+          PY
+
+          /tmp/a008-venv/bin/python /tmp/a008-build.py /tmp/A008_1.zip
+          /tmp/a008-venv/bin/python /tmp/a008-build.py /tmp/A008_2.zip
+          cmp /tmp/A008_1.zip /tmp/A008_2.zip
+          FINAL_SHA="$(sha256sum /tmp/A008_1.zip | awk '{print $1}')"
+          FINAL_BYTES="$(stat -c '%s' /tmp/A008_1.zip)"
+
+          cd "$GITHUB_WORKSPACE"
+          cp /tmp/A008_1.zip miccgi/a008-output/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A008.zip
+          cp /tmp/a008-status8.json miccgi/a008-output/A008_STATUS_AFTER.json
+          cp /tmp/a008-src/REMOTE_SELF_PUBLICATION_ATTESTATION.json miccgi/a008-output/REMOTE_SELF_PUBLICATION_ATTESTATION.json
+          git add miccgi/a008-output/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A008.zip miccgi/a008-output/A008_STATUS_AFTER.json miccgi/a008-output/REMOTE_SELF_PUBLICATION_ATTESTATION.json
+          git commit -m "MICCGI A008 publish Gen8 successor $FINAL_SHA"
+          FINAL_COMMIT="$(git rev-parse HEAD)"
+          git push origin "HEAD:$BRANCH"
+
+          git fetch origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH" --force
+          test "$(git rev-parse "refs/remotes/origin/$BRANCH")" = "$FINAL_COMMIT"
+
+          echo "MICCGI_A008_PARENT_A007_SHA256=$PARENT_A007_SHA256"
+          echo "MICCGI_A008_REMOTE_PROBE_COMMIT=$PROBE_COMMIT"
+          echo "MICCGI_A008_REMOTE_GENERATION=8"
+          echo "MICCGI_A008_FINAL_SUCCESSOR_SHA256=$FINAL_SHA"
+          echo "MICCGI_A008_FINAL_SUCCESSOR_BYTES=$FINAL_BYTES"
+          echo "MICCGI_A008_FINAL_COMMIT=$FINAL_COMMIT"
+          echo "MICCGI_A008_REPLAY=REJECTED"
