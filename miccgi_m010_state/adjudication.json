@@ -1,0 +1,16 @@
+{
+  "admitted": true,
+  "claim_boundary": {
+    "BOUNDED_EXTERNAL_COMPOSITE_PRIMITIVE_INVENTION": "ESTABLISHED_FOR_RECORDED_LINEAGE",
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "FUNDAMENTALLY_NEW_PRIMITIVE_SEMANTICS": "NOT_ESTABLISHED",
+    "MICCGI": "UNPROVEN",
+    "OPEN_ENDED_LANGUAGE_INVENTION": "NOT_ESTABLISHED",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "epochs": 3,
+  "reasons": [],
+  "terminal_language_source_sha256": "d154e313b02a765e5183fba8c8cadee74b2eeca0a8279d8ca0c8adcb4ea04cf8",
+  "terminal_primitive_count": 3,
+  "terminal_registry_sha256": "bf6dcd8afccdca9c40eb9acf69bd8e610f6a8d0dadc80200f3b2363dfb35df96"
+}
