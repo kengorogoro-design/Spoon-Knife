@@ -1,0 +1,20 @@
+name: MICCGI M011 endogenous semantic coevolution
+on:
+  push:
+    branches:
+      - miccgi-m011-semantic-coevolution
+    paths:
+      - .github/workflows/miccgi-m011.yml
+      - miccgi_m011_external.py
+permissions:
+  contents: write
+jobs:
+  bounded-semantic-coevolution:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m011-semantic-coevolution
+          fetch-depth: 0
+      - name: Run bounded endogenous semantic coevolution
+        run: python3 miccgi_m011_external.py
