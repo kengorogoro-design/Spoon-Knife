@@ -1,0 +1,105 @@
+{
+  "admitted": true,
+  "claim_boundary": {
+    "CAUSAL_INTERVENTION": "NOT_ESTABLISHED",
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "LIVE_EXTERNAL_DYNAMICAL_RELATION_INDUCTION": "ESTABLISHED_FOR_RECORDED_WORLD_BANK_PANEL",
+    "MICCGI": "UNPROVEN",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "epochs": 3,
+  "lineage": [
+    {
+      "basis": "trend_interaction",
+      "epoch": 1,
+      "exogenous": "internet_pct",
+      "relation_id": "dr_11cc2e9370e6",
+      "semantic_sha256": "11cc2e9370e68767514eb82130568a39e824cf4349cc403d07166ce1ef3ac5be",
+      "source_sha256": "22465ae31597786cce3a98daafd993d33b090b97fceeb97d7d19be084f7607d3",
+      "target": "urban_pct",
+      "test_improvement": 0.6980980933168369,
+      "test_years": [
+        2020,
+        2021,
+        2022
+      ],
+      "train_years": [
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "validation_improvement": 0.5144893392346774,
+      "validation_years": [
+        2017,
+        2018,
+        2019
+      ]
+    },
+    {
+      "basis": "trend_interaction",
+      "epoch": 2,
+      "exogenous": "fertility",
+      "relation_id": "dr_ae397fb044d3",
+      "semantic_sha256": "ae397fb044d3ae50f3504a3ea2dbfacfeea60a64fb178c4206010a4148ca016a",
+      "source_sha256": "fb2aac5118295d3ea3008ce35302f88bcf0b127f0396fbee7e13e10036d46f8c",
+      "target": "urban_pct",
+      "test_improvement": 0.701400404930668,
+      "test_years": [
+        2020,
+        2021,
+        2022
+      ],
+      "train_years": [
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "validation_improvement": 0.5130018620490949,
+      "validation_years": [
+        2017,
+        2018,
+        2019
+      ]
+    },
+    {
+      "basis": "trend_tanh_exo",
+      "epoch": 3,
+      "exogenous": "population_growth",
+      "relation_id": "dr_928ddb1f9f42",
+      "semantic_sha256": "928ddb1f9f425b0185166d7b9c8818c09567df8533d6f839b0f3322f2702dc66",
+      "source_sha256": "667e71af53627a1a2e698e981f205aee5b2abbc91e573ddef7f7d488d2b2a9a2",
+      "target": "urban_pct",
+      "test_improvement": 0.7022320724252559,
+      "test_years": [
+        2020,
+        2021,
+        2022
+      ],
+      "train_years": [
+        2010,
+        2011,
+        2012,
+        2013,
+        2014,
+        2015,
+        2016
+      ],
+      "validation_improvement": 0.5099655500971623,
+      "validation_years": [
+        2017,
+        2018,
+        2019
+      ]
+    }
+  ],
+  "panel_rows": 2821,
+  "panel_sha256": "814a31875f3f3feadadb1bd3fab18737f0faa8506c11bab62bd6d580e3fe0b99"
+}
