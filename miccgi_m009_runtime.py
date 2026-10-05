@@ -122,13 +122,13 @@ def emit(g):
     z=["import math","# MICCGI M009 generated evolvable language",
        "def sd(a,b): return a/(b if abs(b)>1e-9 else (1e-9 if b>=0 else -1e-9))",
        "def sg(x): x=max(-30,min(30,x)); return 1/(1+math.exp(-x))"]
-    for m in g["macros"]:z.append(f'def {m["n"]}('+",".join(m["p"])+f'):\\n    return {es(m["e"])}')
-    z += [f'def represent(x):\\n    return {es(g["rep"])}',
-          f'def generate(v,noise):\\n    return max(1e-6,{es(g["gen"])})',
-          'def evaluate(metrics):\\n    xs=[max(1e-9,float(x)) for x in metrics]; floor=min(xs); gm=math.exp(sum(math.log(x) for x in xs)/len(xs)); mean=sum(xs)/len(xs); spread=max(xs)-min(xs); novelty=abs(xs[-1]-xs[0])\\n    return float('+es(g["eval"])+')',
-          'def search_pressure(stagnation,novelty,uncertainty=0,archive_diversity=0):\\n    return max(0,min(1,float('+es(g["search"])+')))',
+    for m in g["macros"]:z.append(f'def {m["n"]}('+",".join(m["p"])+f'):\n    return {es(m["e"])}')
+    z += [f'def represent(x):\n    return {es(g["rep"])}',
+          f'def generate(v,noise):\n    return max(1e-6,{es(g["gen"])})',
+          'def evaluate(metrics):\n    xs=[max(1e-9,float(x)) for x in metrics]; floor=min(xs); gm=math.exp(sum(math.log(x) for x in xs)/len(xs)); mean=sum(xs)/len(xs); spread=max(xs)-min(xs); novelty=abs(xs[-1]-xs[0])\n    return float('+es(g["eval"])+')',
+          'def search_pressure(stagnation,novelty,uncertainty=0,archive_diversity=0):\n    return max(0,min(1,float('+es(g["search"])+')))',
           f'LANGUAGE_ID={g["id"]!r}',f'LANGUAGE_SHA={H(g)!r}',f'OPS={tuple(g["ops"])!r}',f'MACROS={tuple(m["n"] for m in g["macros"])!r}']
-    return "\\n\\n".join(z)+"\\n"
+    return "\n\n".join(z)+"\n"
 
 def load(g):
     src=emit(g);ns={};compile(src,"<m009>","exec");exec(src,ns,ns);return src,ns
