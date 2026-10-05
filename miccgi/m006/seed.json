@@ -1,0 +1,12 @@
+{
+  "account_creation_allowed": false,
+  "branch": "miccgi-m006-1d95de65",
+  "charging_allowed": false,
+  "financial_actions_allowed": false,
+  "max_network_calls": 4,
+  "nonce": "1d95de65829f1229913160b476fd962091992ffee530683f3b6d3f6aa0afac05",
+  "reality_url": "https://www.imf.org/external/datamapper/api/v1/NGDP_RPCH/WEOWORLD",
+  "schema": "MICCGI-M006-SEED-1",
+  "seed_sha256": "903ed70a7442b321c6780a34f78b502e5f540f85bd7cb490606fb8520ba18161",
+  "source_m005_sha256": "efc2473855f34f688c2f094b520b72647d32dcfe8a434eb2f670e609f7207e07"
+}
