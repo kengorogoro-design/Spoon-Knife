@@ -1,0 +1,14 @@
+{
+  "epoch": 2,
+  "fingerprints": {
+    "candidates": "32a31092d81daf1afcf45d92d9af1395aea0c5827d3a6f9c92804f8c3cd5c486",
+    "evaluators": "b0e576dfa26286c87a31f4cd78e4642899634e9aa2d56844a2d0238ecbc11504",
+    "search": "8564efec650d2470b3d8dd9f8d8e90ece12c7af6faf30f0284b8bd195cc4dd70",
+    "worlds": "8575271ab4f6647f0bedc06690e00c68cfe32f5fa6dfd62892bd6f56df4937c8"
+  },
+  "leader": "C4",
+  "parent": "e185de07088dcb7672ca40183cdcd7a4fce81db544d26a0fbdade510445705f6",
+  "reason": "CONTINUE_METAGENESIS",
+  "state": "d05cdc0d553c20407d8a261f04b4885c55d6dd5bce8340d6012cd8257220018d",
+  "stop": false
+}
