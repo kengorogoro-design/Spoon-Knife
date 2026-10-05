@@ -1,0 +1,28 @@
+{
+  "bounds": {
+    "account_creation_used": false,
+    "charging_used": false,
+    "financial_action_used": false
+  },
+  "branch": "miccgi-m006-aa36b680",
+  "compute": {
+    "nonce_sha256": "2320e98d0718b62f9439416a7411729693dc7e5956add648c37488437a1936fa"
+  },
+  "head_sha": "3f1964062ffd0f0473248a4ff2d285a80777f277",
+  "nonce": "aa36b680ba728f06e60811d9293d8c520ac8c26a1062a5540341a0d1d1e69718",
+  "observation": {
+    "body_bytes": 1151,
+    "body_sha256": "77321f1e33076eaf054d06972066029166b0335a4b9e05577270606cc41f7f80",
+    "final_url": "https://api.worldbank.org/v2/country/WLD/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=5",
+    "http_status": 200,
+    "json_parse_ok": true,
+    "json_type": "list",
+    "top_level_keys": [],
+    "url": "https://api.worldbank.org/v2/country/WLD/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=5"
+  },
+  "result_sha256": "9df9c5aa18ed2107f5dad71d7b91d198c17ce2191966a7f1cc5affadfd523081",
+  "run_attempt": "1",
+  "run_id": "37291610074",
+  "schema": "MICCGI-M006-RESULT-1",
+  "seed_sha256": "867757aa635d7dcda6a5d1afbf4aba486d6c69439c94dc487148f7ca55477724"
+}
