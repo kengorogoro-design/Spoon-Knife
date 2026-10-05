@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib,json,subprocess
 from pathlib import Path
 
-LINEAGE=(("c55b070",1),("cd8b9d8",2),("a962a4b",3))
+LINEAGE=(("360cc5b",1),("eb28071",2),("3d1e124",3))
 
 def H(x):
     if isinstance(x,(bytes,bytearray)):
