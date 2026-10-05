@@ -1,0 +1,17 @@
+{
+  "admitted": true,
+  "claim_boundary": {
+    "BOUNDED_EXTERNAL_LANGUAGE_GENESIS": "ESTABLISHED_FOR_RECORDED_LINEAGE",
+    "ECONOMIC_T0": "NOT_OBSERVED",
+    "EXTERNAL_WHOLE_SYSTEM_DOMINANCE": "NOT_ESTABLISHED",
+    "MICCGI": "UNPROVEN",
+    "OPEN_ENDED_LANGUAGE_INVENTION": "NOT_ESTABLISHED",
+    "VERIFIED_REALIZED_PROFIT": "NOT_PROVEN"
+  },
+  "epochs": 3,
+  "reasons": [],
+  "terminal_language_sha256": "816ab5699e4aef32c36eb95845d1424040b53b349cebe514c4063096526e4b1e",
+  "terminal_macro_count": 5,
+  "terminal_operator_count": 17,
+  "terminal_source_sha256": "587a6640a76839947ab4d4ee67e771c0f9c91b5644317bb0d1bd8ea920a32335"
+}
