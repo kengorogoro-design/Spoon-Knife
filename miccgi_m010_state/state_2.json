@@ -1,0 +1,127 @@
+{
+  "active_language_source_sha256": "00804b8780d4d50c4d95cbf67d5026378bba548a2bb7a06c8bd256f80335a876",
+  "contract_actions": 0,
+  "epoch": 2,
+  "financial_actions": 0,
+  "new_primitive": {
+    "baseline_error": 0.4008419176242599,
+    "behavior_sha256": "e2699236796d47b9099f7c68a9f45fa1cc16f62cf24a3be2a1ba9b0303de1b03",
+    "expr": [
+      "u",
+      "tanh",
+      [
+        "u",
+        "sigmoid",
+        [
+          "b",
+          "mul",
+          [
+            "u",
+            "sigmoid",
+            [
+              "v",
+              "a"
+            ]
+          ],
+          [
+            "u",
+            "sigmoid",
+            [
+              "v",
+              "b"
+            ]
+          ]
+        ]
+      ]
+    ],
+    "improvement_ratio": 0.23097540439864875,
+    "name": "pi_216373a3407d",
+    "primitive_error": 0.30825729360106663,
+    "semantic_sha256": "216373a3407d0b2af4f3049042e2c42aa785201582250a8681b3c093c03af35f",
+    "size": 7,
+    "target_epoch": 2
+  },
+  "observations": [
+    {
+      "digest": "f91929893de7be1e66efa231615098f95f6bced383d4422cb8abef5da93c9f08",
+      "size": 15832,
+      "source": "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+      "status": 200
+    },
+    {
+      "digest": "203f15ce63523ec5dbbf3462328c7e26d9903240a5f7b1782d36b8f9f388bfac",
+      "size": 282699,
+      "source": "https://pypi.org/pypi/pytest/json",
+      "status": 200
+    }
+  ],
+  "paid_actions": 0,
+  "parent_state_sha256": "f19fe5cd9acebcc593cf6792fc78cd31edf6d65ef1cd65296a01ec88829ec627",
+  "registry": [
+    {
+      "baseline_error": 0.5204200700116686,
+      "behavior_sha256": "3ddaaf82769d9e5546149078eb9841967d894dc54b0991000723184f65a8194e",
+      "expr": [
+        "u",
+        "abs",
+        [
+          "b",
+          "sub",
+          [
+            "v",
+            "a"
+          ],
+          [
+            "v",
+            "b"
+          ]
+        ]
+      ],
+      "improvement_ratio": 1.0,
+      "name": "pi_dcf6dcbf4b46",
+      "primitive_error": 0.0,
+      "semantic_sha256": "dcf6dcbf4b46728600763e400410bafb9d149b4b8ea9784b5492665d1702e28b",
+      "size": 4,
+      "target_epoch": 1
+    },
+    {
+      "baseline_error": 0.4008419176242599,
+      "behavior_sha256": "e2699236796d47b9099f7c68a9f45fa1cc16f62cf24a3be2a1ba9b0303de1b03",
+      "expr": [
+        "u",
+        "tanh",
+        [
+          "u",
+          "sigmoid",
+          [
+            "b",
+            "mul",
+            [
+              "u",
+              "sigmoid",
+              [
+                "v",
+                "a"
+              ]
+            ],
+            [
+              "u",
+              "sigmoid",
+              [
+                "v",
+                "b"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "improvement_ratio": 0.23097540439864875,
+      "name": "pi_216373a3407d",
+      "primitive_error": 0.30825729360106663,
+      "semantic_sha256": "216373a3407d0b2af4f3049042e2c42aa785201582250a8681b3c093c03af35f",
+      "size": 7,
+      "target_epoch": 2
+    }
+  ],
+  "registry_sha256": "fdad822ff90d68a8c5009333ca23cb172d5fbde3a88d3ea624b571c0539678cc"
+}
