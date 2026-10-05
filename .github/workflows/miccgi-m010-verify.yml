@@ -1,0 +1,27 @@
+name: MICCGI M010 commit-addressed verifier
+on:
+  push:
+    branches:
+      - miccgi-m010-primitivegenesis-816ab569
+    paths:
+      - .github/workflows/miccgi-m010-verify.yml
+      - miccgi_m010_verify.py
+permissions:
+  contents: write
+jobs:
+  verify-fixed-lineage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m010-primitivegenesis-816ab569
+          fetch-depth: 0
+      - name: Verify fixed lineage
+        run: python3 miccgi_m010_verify.py
+      - name: Commit adjudication
+        run: |
+          git config user.name "MICCGI M010 Verifier"
+          git config user.email "miccgi-runtime@users.noreply.github.com"
+          git add miccgi_m010_state/adjudication_commit_addressed.json
+          git commit -m "MICCGI M010 commit-addressed adjudication" || exit 0
+          git push origin HEAD
