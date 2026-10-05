@@ -1,0 +1,785 @@
+{
+  "claims": {
+    "compute.cpu.logical_count": {
+      "direction": "higher",
+      "durability": "session",
+      "evidence_ids": [
+        "361cd294b21f36d9e175d6a7"
+      ],
+      "metadata": {},
+      "name": "compute.cpu.logical_count",
+      "objective_relevance": "supporting",
+      "unit": "count",
+      "value": 4.0
+    },
+    "executable.git.available": {
+      "direction": "true",
+      "durability": "host",
+      "evidence_ids": [
+        "4e5b6c8779a6127671cece8e"
+      ],
+      "metadata": {
+        "path": "/usr/bin/git",
+        "probe": [
+          "--version"
+        ]
+      },
+      "name": "executable.git.available",
+      "objective_relevance": "supporting",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "executable.python.available": {
+      "direction": "true",
+      "durability": "host",
+      "evidence_ids": [
+        "00f3f175d004abcb9e6b0f71"
+      ],
+      "metadata": {
+        "path": "/usr/bin/python",
+        "probe": [
+          "-V"
+        ]
+      },
+      "name": "executable.python.available",
+      "objective_relevance": "supporting",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.code.github.addressable_commit": {
+      "direction": "true",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "f9604d024ea234d5666adaf4"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub",
+        "receipt_sha256": "78ac4bb6effb3e7ddddad427bdd1469dbd695a8645de6f2f9a777b2a34bfe7a8",
+        "resource_id": "kengorogoro-design/Spoon-Knife@miccgi-capability-probe-a003-9d57efd:miccgi/MICCGI_CAPABILITY_PROBE_A003.txt"
+      },
+      "name": "external.code.github.addressable_commit",
+      "objective_relevance": "supporting",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.code.github.branch_isolated_write_read": {
+      "direction": "true",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "f9604d024ea234d5666adaf4"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub",
+        "receipt_sha256": "78ac4bb6effb3e7ddddad427bdd1469dbd695a8645de6f2f9a777b2a34bfe7a8",
+        "resource_id": "kengorogoro-design/Spoon-Knife@miccgi-capability-probe-a003-9d57efd:miccgi/MICCGI_CAPABILITY_PROBE_A003.txt"
+      },
+      "name": "external.code.github.branch_isolated_write_read",
+      "objective_relevance": "supporting",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.code.github.independent_read_paths": {
+      "direction": "higher",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "f9604d024ea234d5666adaf4"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub",
+        "receipt_sha256": "78ac4bb6effb3e7ddddad427bdd1469dbd695a8645de6f2f9a777b2a34bfe7a8",
+        "resource_id": "kengorogoro-design/Spoon-Knife@miccgi-capability-probe-a003-9d57efd:miccgi/MICCGI_CAPABILITY_PROBE_A003.txt"
+      },
+      "name": "external.code.github.independent_read_paths",
+      "objective_relevance": "supporting",
+      "unit": "count",
+      "value": 2.0
+    },
+    "external.compute.github_actions.observed_cpu_count": {
+      "direction": "higher",
+      "durability": "run",
+      "evidence_ids": [
+        "916a74e450a2b8f8ec944053"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "1e79edd669475b78f441d8dfb25f04fd710798ad6fc4fe011a9b43c70c55d1d5",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37267526646"
+      },
+      "name": "external.compute.github_actions.observed_cpu_count",
+      "objective_relevance": "supporting",
+      "unit": "count",
+      "value": 4.0
+    },
+    "external.compute.github_actions.remote_execution": {
+      "direction": "true",
+      "durability": "external_service",
+      "evidence_ids": [
+        "916a74e450a2b8f8ec944053"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "1e79edd669475b78f441d8dfb25f04fd710798ad6fc4fe011a9b43c70c55d1d5",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37267526646"
+      },
+      "name": "external.compute.github_actions.remote_execution",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.compute.github_actions.remote_python": {
+      "direction": "true",
+      "durability": "external_service",
+      "evidence_ids": [
+        "916a74e450a2b8f8ec944053"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "1e79edd669475b78f441d8dfb25f04fd710798ad6fc4fe011a9b43c70c55d1d5",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37267526646"
+      },
+      "name": "external.compute.github_actions.remote_python",
+      "objective_relevance": "supporting",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.compute.github_actions.result_readback": {
+      "direction": "true",
+      "durability": "external_service",
+      "evidence_ids": [
+        "916a74e450a2b8f8ec944053"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "1e79edd669475b78f441d8dfb25f04fd710798ad6fc4fe011a9b43c70c55d1d5",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37267526646"
+      },
+      "name": "external.compute.github_actions.result_readback",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.custody.successor.cross_provider_exact_byte_replication": {
+      "direction": "true",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "caed77e23f34cafd77c44a16"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "CrossProvider_GitHub_GoogleDrive",
+        "receipt_sha256": "90971f9ee578967176339704b17a469b14d9d0a1e15c7144e867ea8c829c1962",
+        "resource_id": "github:11326954132|gdrive:1dese2ugCwFWlk1FCjizMwwSDDMORWrXg"
+      },
+      "name": "external.custody.successor.cross_provider_exact_byte_replication",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.custody.successor.drive_raw_read_paths": {
+      "direction": "higher",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "caed77e23f34cafd77c44a16"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "CrossProvider_GitHub_GoogleDrive",
+        "receipt_sha256": "90971f9ee578967176339704b17a469b14d9d0a1e15c7144e867ea8c829c1962",
+        "resource_id": "github:11326954132|gdrive:1dese2ugCwFWlk1FCjizMwwSDDMORWrXg"
+      },
+      "name": "external.custody.successor.drive_raw_read_paths",
+      "objective_relevance": "supporting",
+      "unit": "count",
+      "value": 2.0
+    },
+    "external.custody.successor.independent_provider_count": {
+      "direction": "higher",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "caed77e23f34cafd77c44a16"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "CrossProvider_GitHub_GoogleDrive",
+        "receipt_sha256": "90971f9ee578967176339704b17a469b14d9d0a1e15c7144e867ea8c829c1962",
+        "resource_id": "github:11326954132|gdrive:1dese2ugCwFWlk1FCjizMwwSDDMORWrXg"
+      },
+      "name": "external.custody.successor.independent_provider_count",
+      "objective_relevance": "direct",
+      "unit": "count",
+      "value": 2.0
+    },
+    "external.custody.successor.inner_manifest_verified": {
+      "direction": "true",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "caed77e23f34cafd77c44a16"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "CrossProvider_GitHub_GoogleDrive",
+        "receipt_sha256": "90971f9ee578967176339704b17a469b14d9d0a1e15c7144e867ea8c829c1962",
+        "resource_id": "github:11326954132|gdrive:1dese2ugCwFWlk1FCjizMwwSDDMORWrXg"
+      },
+      "name": "external.custody.successor.inner_manifest_verified",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.persistence.google_drive.independent_read_paths": {
+      "direction": "higher",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "8dc0efd468ff17ccaae495fd"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "Google_Drive",
+        "receipt_sha256": "7d7fca4b84504aff40e9597a1310a26b8139bcc64f55981ce69bbfb6901602d3",
+        "resource_id": "1b1aHgifgoaLVc5GqrAqHCSjAqI7ODRYJM0fN7IbUm6A"
+      },
+      "name": "external.persistence.google_drive.independent_read_paths",
+      "objective_relevance": "supporting",
+      "unit": "count",
+      "value": 2.0
+    },
+    "external.persistence.google_drive.write_read_roundtrip": {
+      "direction": "true",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "8dc0efd468ff17ccaae495fd"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "Google_Drive",
+        "receipt_sha256": "7d7fca4b84504aff40e9597a1310a26b8139bcc64f55981ce69bbfb6901602d3",
+        "resource_id": "1b1aHgifgoaLVc5GqrAqHCSjAqI7ODRYJM0fN7IbUm6A"
+      },
+      "name": "external.persistence.google_drive.write_read_roundtrip",
+      "objective_relevance": "supporting",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.runtime.github_actions.cross_run_state_continuity": {
+      "direction": "true",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "1843db7ede6d89ab5add48bb"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions_FreshResume",
+        "receipt_sha256": "78c29a5815fd614ea678569052cffe1c83ad640f203754077317c99a8d1c1ddc",
+        "resource_id": "kengorogoro-design/Spoon-Knife@a2beedf2c57004a0f27b01086793432ac1853764:miccgi/a009-output/FRESH_RESUME_PROBE.json"
+      },
+      "name": "external.runtime.github_actions.cross_run_state_continuity",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.runtime.github_actions.fresh_resume_read_paths": {
+      "direction": "higher",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "1843db7ede6d89ab5add48bb"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions_FreshResume",
+        "receipt_sha256": "78c29a5815fd614ea678569052cffe1c83ad640f203754077317c99a8d1c1ddc",
+        "resource_id": "kengorogoro-design/Spoon-Knife@a2beedf2c57004a0f27b01086793432ac1853764:miccgi/a009-output/FRESH_RESUME_PROBE.json"
+      },
+      "name": "external.runtime.github_actions.fresh_resume_read_paths",
+      "objective_relevance": "direct",
+      "unit": "count",
+      "value": 2.0
+    },
+    "external.runtime.github_actions.fresh_successor_resume": {
+      "direction": "true",
+      "durability": "external_service",
+      "evidence_ids": [
+        "1843db7ede6d89ab5add48bb"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions_FreshResume",
+        "receipt_sha256": "78c29a5815fd614ea678569052cffe1c83ad640f203754077317c99a8d1c1ddc",
+        "resource_id": "kengorogoro-design/Spoon-Knife@a2beedf2c57004a0f27b01086793432ac1853764:miccgi/a009-output/FRESH_RESUME_PROBE.json"
+      },
+      "name": "external.runtime.github_actions.fresh_successor_resume",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.runtime.github_actions.remote_generation_transition": {
+      "direction": "true",
+      "durability": "run",
+      "evidence_ids": [
+        "7fdfdf6331d40569fa1a4855"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions_SelfActuation",
+        "receipt_sha256": "1e5997ebeb7a006aa27f6da726199584e96a873f523118f1192aa327aadfbc72",
+        "resource_id": "kengorogoro-design/Spoon-Knife@4a4c110289cc9f01550925a9154055a061aa1447:miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json"
+      },
+      "name": "external.runtime.github_actions.remote_generation_transition",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.runtime.github_actions.remote_self_publication": {
+      "direction": "true",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "7fdfdf6331d40569fa1a4855"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions_SelfActuation",
+        "receipt_sha256": "1e5997ebeb7a006aa27f6da726199584e96a873f523118f1192aa327aadfbc72",
+        "resource_id": "kengorogoro-design/Spoon-Knife@4a4c110289cc9f01550925a9154055a061aa1447:miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json"
+      },
+      "name": "external.runtime.github_actions.remote_self_publication",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.runtime.github_actions.restored_parent_generation": {
+      "direction": "higher",
+      "durability": "evidence_snapshot",
+      "evidence_ids": [
+        "1843db7ede6d89ab5add48bb"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions_FreshResume",
+        "receipt_sha256": "78c29a5815fd614ea678569052cffe1c83ad640f203754077317c99a8d1c1ddc",
+        "resource_id": "kengorogoro-design/Spoon-Knife@a2beedf2c57004a0f27b01086793432ac1853764:miccgi/a009-output/FRESH_RESUME_PROBE.json"
+      },
+      "name": "external.runtime.github_actions.restored_parent_generation",
+      "objective_relevance": "direct",
+      "unit": "generation",
+      "value": 8.0
+    },
+    "external.runtime.github_actions.self_actuation_read_paths": {
+      "direction": "higher",
+      "durability": "external_persistent",
+      "evidence_ids": [
+        "7fdfdf6331d40569fa1a4855"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions_SelfActuation",
+        "receipt_sha256": "1e5997ebeb7a006aa27f6da726199584e96a873f523118f1192aa327aadfbc72",
+        "resource_id": "kengorogoro-design/Spoon-Knife@4a4c110289cc9f01550925a9154055a061aa1447:miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json"
+      },
+      "name": "external.runtime.github_actions.self_actuation_read_paths",
+      "objective_relevance": "direct",
+      "unit": "count",
+      "value": 2.0
+    },
+    "external.self_verification.github_actions.claim_boundary_preserved": {
+      "direction": "true",
+      "durability": "run",
+      "evidence_ids": [
+        "dbf6b038ae673c3ffbf83a9f"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "864065ba66b2e61320f60b44247b79256344220586720301fb63f1531b227d3d",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268189795"
+      },
+      "name": "external.self_verification.github_actions.claim_boundary_preserved",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.self_verification.github_actions.fresh_bootstrap": {
+      "direction": "true",
+      "durability": "run",
+      "evidence_ids": [
+        "dbf6b038ae673c3ffbf83a9f"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "864065ba66b2e61320f60b44247b79256344220586720301fb63f1531b227d3d",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268189795"
+      },
+      "name": "external.self_verification.github_actions.fresh_bootstrap",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.self_verification.github_actions.parent_source_integrity": {
+      "direction": "true",
+      "durability": "external_service",
+      "evidence_ids": [
+        "dbf6b038ae673c3ffbf83a9f"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "864065ba66b2e61320f60b44247b79256344220586720301fb63f1531b227d3d",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268189795"
+      },
+      "name": "external.self_verification.github_actions.parent_source_integrity",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.self_verification.github_actions.remote_compileall": {
+      "direction": "true",
+      "durability": "run",
+      "evidence_ids": [
+        "dbf6b038ae673c3ffbf83a9f"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "864065ba66b2e61320f60b44247b79256344220586720301fb63f1531b227d3d",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268189795"
+      },
+      "name": "external.self_verification.github_actions.remote_compileall",
+      "objective_relevance": "supporting",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.self_verification.github_actions.remote_tests_passed": {
+      "direction": "higher",
+      "durability": "run",
+      "evidence_ids": [
+        "dbf6b038ae673c3ffbf83a9f"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "864065ba66b2e61320f60b44247b79256344220586720301fb63f1531b227d3d",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268189795"
+      },
+      "name": "external.self_verification.github_actions.remote_tests_passed",
+      "objective_relevance": "direct",
+      "unit": "count",
+      "value": 11.0
+    },
+    "external.successor.github_actions.deterministic_double_build": {
+      "direction": "true",
+      "durability": "run",
+      "evidence_ids": [
+        "d73d1978ed22064117c9e8bf"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "869d8fb7e0f9d5b248abf82db530ccf3121d8d0f3c0c03eeb42e5775b1f174d8",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268552860/artifacts/11326954132"
+      },
+      "name": "external.successor.github_actions.deterministic_double_build",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.successor.github_actions.downloaded_byte_verification": {
+      "direction": "true",
+      "durability": "evidence_snapshot",
+      "evidence_ids": [
+        "d73d1978ed22064117c9e8bf"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "869d8fb7e0f9d5b248abf82db530ccf3121d8d0f3c0c03eeb42e5775b1f174d8",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268552860/artifacts/11326954132"
+      },
+      "name": "external.successor.github_actions.downloaded_byte_verification",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.successor.github_actions.external_artifact_persistence": {
+      "direction": "true",
+      "durability": "external_persistent_until_expiry",
+      "evidence_ids": [
+        "d73d1978ed22064117c9e8bf"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "869d8fb7e0f9d5b248abf82db530ccf3121d8d0f3c0c03eeb42e5775b1f174d8",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268552860/artifacts/11326954132"
+      },
+      "name": "external.successor.github_actions.external_artifact_persistence",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.successor.github_actions.remote_construction": {
+      "direction": "true",
+      "durability": "external_service",
+      "evidence_ids": [
+        "d73d1978ed22064117c9e8bf"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "869d8fb7e0f9d5b248abf82db530ccf3121d8d0f3c0c03eeb42e5775b1f174d8",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268552860/artifacts/11326954132"
+      },
+      "name": "external.successor.github_actions.remote_construction",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "external.successor.github_actions.remote_tests_passed": {
+      "direction": "higher",
+      "durability": "run",
+      "evidence_ids": [
+        "d73d1978ed22064117c9e8bf"
+      ],
+      "metadata": {
+        "attestation_scope": "session_orchestrated",
+        "provider": "GitHub_Actions",
+        "receipt_sha256": "869d8fb7e0f9d5b248abf82db530ccf3121d8d0f3c0c03eeb42e5775b1f174d8",
+        "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268552860/artifacts/11326954132"
+      },
+      "name": "external.successor.github_actions.remote_tests_passed",
+      "objective_relevance": "supporting",
+      "unit": "count",
+      "value": 11.0
+    },
+    "runtime.python.available": {
+      "direction": "true",
+      "durability": "session",
+      "evidence_ids": [
+        "361cd294b21f36d9e175d6a7"
+      ],
+      "metadata": {},
+      "name": "runtime.python.available",
+      "objective_relevance": "direct",
+      "unit": "bool",
+      "value": 1.0
+    },
+    "storage.free_bytes": {
+      "direction": "higher",
+      "durability": "session",
+      "evidence_ids": [
+        "361cd294b21f36d9e175d6a7"
+      ],
+      "metadata": {},
+      "name": "storage.free_bytes",
+      "objective_relevance": "supporting",
+      "unit": "bytes",
+      "value": 92388528128.0
+    }
+  },
+  "economic_t0": "NOT_OBSERVED",
+  "executable_capabilities": {
+    "external.custody.cross_provider.successor_exact_bytes": {
+      "actions": [
+        "fetch_github_actions_artifact",
+        "persist_raw_bytes_to_google_drive",
+        "google_drive_fetch_raw",
+        "files_materialize_external_gdrive",
+        "verify_wrapper_and_inner_hashes",
+        "verify_inner_manifest"
+      ],
+      "authority": "authenticated_github_read_and_connected_google_drive_write",
+      "evidence_ids": [
+        "caed77e23f34cafd77c44a16"
+      ],
+      "github_repository": "kengorogoro-design/Spoon-Knife",
+      "google_drive_file_id": "1dese2ugCwFWlk1FCjizMwwSDDMORWrXg",
+      "provider": "CrossProvider_GitHub_GoogleDrive",
+      "receipt_sha256": "90971f9ee578967176339704b17a469b14d9d0a1e15c7144e867ea8c829c1962",
+      "required_evidence_class": "external_measured",
+      "resource_id": "github:11326954132|gdrive:1dese2ugCwFWlk1FCjizMwwSDDMORWrXg",
+      "resource_url": "https://drive.google.com/file/d/1dese2ugCwFWlk1FCjizMwwSDDMORWrXg/view",
+      "type": "orchestrated_connector"
+    },
+    "external.github.code.branch_roundtrip": {
+      "actions": [
+        "create_branch",
+        "create_file",
+        "update_file",
+        "fetch_file",
+        "fetch_commit"
+      ],
+      "authority": "authenticated_repo_admin_push",
+      "branch_scope": "miccgi-capability-probe-a003-9d57efd",
+      "evidence_ids": [
+        "f9604d024ea234d5666adaf4"
+      ],
+      "provider": "GitHub",
+      "receipt_sha256": "78ac4bb6effb3e7ddddad427bdd1469dbd695a8645de6f2f9a777b2a34bfe7a8",
+      "repository_full_name": "kengorogoro-design/Spoon-Knife",
+      "required_evidence_class": "external_measured",
+      "resource_id": "kengorogoro-design/Spoon-Knife@miccgi-capability-probe-a003-9d57efd:miccgi/MICCGI_CAPABILITY_PROBE_A003.txt",
+      "resource_url": "https://github.com/kengorogoro-design/Spoon-Knife/blob/miccgi-capability-probe-a003-9d57efd/miccgi/MICCGI_CAPABILITY_PROBE_A003.txt",
+      "type": "orchestrated_connector"
+    },
+    "external.github_actions.remote_compute": {
+      "actions": [
+        "create_file_workflow",
+        "fetch_workflow_run",
+        "fetch_workflow_run_jobs",
+        "fetch_workflow_job_logs"
+      ],
+      "authority": "authenticated_public_repo_push_actions",
+      "branch_scope": "miccgi-capability-probe-a003-9d57efd",
+      "evidence_ids": [
+        "916a74e450a2b8f8ec944053"
+      ],
+      "provider": "GitHub_Actions",
+      "receipt_sha256": "1e79edd669475b78f441d8dfb25f04fd710798ad6fc4fe011a9b43c70c55d1d5",
+      "repository_full_name": "kengorogoro-design/Spoon-Knife",
+      "required_evidence_class": "external_measured",
+      "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37267526646",
+      "resource_url": "https://github.com/kengorogoro-design/Spoon-Knife/actions/runs/37267526646",
+      "runner": "ubuntu-latest",
+      "type": "orchestrated_connector"
+    },
+    "external.github_actions.remote_kernel_self_verification": {
+      "actions": [
+        "create_isolated_branch",
+        "publish_bound_kernel_source",
+        "create_self_verification_workflow",
+        "fetch_workflow_run",
+        "fetch_workflow_run_jobs",
+        "fetch_workflow_job_logs"
+      ],
+      "authority": "authenticated_public_repo_push_actions",
+      "branch_scope": "miccgi-selfverify-a005-016a16e",
+      "evidence_ids": [
+        "dbf6b038ae673c3ffbf83a9f"
+      ],
+      "provider": "GitHub_Actions",
+      "receipt_sha256": "864065ba66b2e61320f60b44247b79256344220586720301fb63f1531b227d3d",
+      "repository_full_name": "kengorogoro-design/Spoon-Knife",
+      "required_evidence_class": "external_measured",
+      "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268189795",
+      "resource_url": "https://github.com/kengorogoro-design/Spoon-Knife/actions/runs/37268189795",
+      "runner": "ubuntu-latest",
+      "type": "orchestrated_connector"
+    },
+    "external.github_actions.remote_successor_construction": {
+      "actions": [
+        "create_isolated_branch",
+        "create_successor_workflow",
+        "fetch_workflow_run",
+        "fetch_workflow_run_jobs",
+        "fetch_workflow_job_logs",
+        "fetch_workflow_artifacts",
+        "download_workflow_artifact"
+      ],
+      "authority": "authenticated_public_repo_push_actions",
+      "branch_scope": "miccgi-successor-a006-7fc956d",
+      "evidence_ids": [
+        "d73d1978ed22064117c9e8bf"
+      ],
+      "provider": "GitHub_Actions",
+      "receipt_sha256": "869d8fb7e0f9d5b248abf82db530ccf3121d8d0f3c0c03eeb42e5775b1f174d8",
+      "repository_full_name": "kengorogoro-design/Spoon-Knife",
+      "required_evidence_class": "external_measured",
+      "resource_id": "kengorogoro-design/Spoon-Knife/actions/runs/37268552860/artifacts/11326954132",
+      "resource_url": "https://github.com/kengorogoro-design/Spoon-Knife/actions/runs/37268552860/artifacts/11326954132",
+      "type": "orchestrated_connector"
+    },
+    "external.google_drive.persistence.roundtrip": {
+      "actions": [
+        "create_file",
+        "batch_update_document",
+        "get_document_text",
+        "fetch"
+      ],
+      "authority": "connected_provider_session",
+      "evidence_ids": [
+        "8dc0efd468ff17ccaae495fd"
+      ],
+      "provider": "Google_Drive",
+      "receipt_sha256": "7d7fca4b84504aff40e9597a1310a26b8139bcc64f55981ce69bbfb6901602d3",
+      "required_evidence_class": "external_measured",
+      "resource_id": "1b1aHgifgoaLVc5GqrAqHCSjAqI7ODRYJM0fN7IbUm6A",
+      "resource_scope": "user_drive",
+      "resource_url": "https://docs.google.com/document/d/1b1aHgifgoaLVc5GqrAqHCSjAqI7ODRYJM0fN7IbUm6A/edit",
+      "type": "orchestrated_connector"
+    },
+    "external.runtime.github_actions.fresh_successor_resume": {
+      "actions": [
+        "load_remote_successor",
+        "restore_runtime_state",
+        "remote_git_commit",
+        "remote_git_push",
+        "git_remote_readback",
+        "github_rest_readback",
+        "self_ingest_external_receipt",
+        "construct_successor"
+      ],
+      "authority": "github_actions_contents_write_isolated_branch",
+      "branch_scope": "miccgi-resume-a009-66deff7",
+      "evidence_ids": [
+        "1843db7ede6d89ab5add48bb"
+      ],
+      "provider": "GitHub_Actions_FreshResume",
+      "receipt_sha256": "78c29a5815fd614ea678569052cffe1c83ad640f203754077317c99a8d1c1ddc",
+      "repository_full_name": "kengorogoro-design/Spoon-Knife",
+      "required_evidence_class": "external_measured",
+      "resource_id": "kengorogoro-design/Spoon-Knife@a2beedf2c57004a0f27b01086793432ac1853764:miccgi/a009-output/FRESH_RESUME_PROBE.json",
+      "resource_url": "https://github.com/kengorogoro-design/Spoon-Knife/commit/a2beedf2c57004a0f27b01086793432ac1853764",
+      "type": "orchestrated_connector"
+    },
+    "external.runtime.github_actions.remote_self_publication": {
+      "actions": [
+        "remote_git_commit",
+        "remote_git_push",
+        "git_remote_readback",
+        "github_rest_readback",
+        "self_ingest_external_receipt",
+        "construct_successor"
+      ],
+      "authority": "github_actions_contents_write_isolated_branch",
+      "branch_scope": "miccgi-selfpublish-a008-e3cd93f",
+      "evidence_ids": [
+        "7fdfdf6331d40569fa1a4855"
+      ],
+      "provider": "GitHub_Actions_SelfActuation",
+      "receipt_sha256": "1e5997ebeb7a006aa27f6da726199584e96a873f523118f1192aa327aadfbc72",
+      "repository_full_name": "kengorogoro-design/Spoon-Knife",
+      "required_evidence_class": "external_measured",
+      "resource_id": "kengorogoro-design/Spoon-Knife@4a4c110289cc9f01550925a9154055a061aa1447:miccgi/a008-output/REMOTE_SELF_PUBLICATION_PROBE.json",
+      "resource_url": "https://github.com/kengorogoro-design/Spoon-Knife/commit/4a4c110289cc9f01550925a9154055a061aa1447",
+      "type": "orchestrated_connector"
+    },
+    "local.command.git": {
+      "default_probe": [
+        "--version"
+      ],
+      "path": "/usr/bin/git",
+      "type": "command"
+    },
+    "local.command.python": {
+      "default_probe": [
+        "-V"
+      ],
+      "path": "/usr/bin/python",
+      "type": "command"
+    },
+    "local.machine": {
+      "adapter": "local.machine",
+      "type": "builtin"
+    }
+  },
+  "generation": 9,
+  "lineage_id": "MICCGI-RC-7d1bb52964e6",
+  "micgi": "UNPROVEN",
+  "status": "ACTIVE_UNPROVEN",
+  "verified_realized_profit": "NOT_PROVEN"
+}
