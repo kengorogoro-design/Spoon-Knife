@@ -1,0 +1,113 @@
+name: MICCGI B001 challenge-response actor
+
+on:
+  push:
+    branches:
+      - miccgi-evidence-sovereignty-b001
+    paths:
+      - miccgi/b001/CHALLENGE.json
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  respond-to-witness-challenge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify precommitted contract and fresh challenge
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/b001
+          gh api "/repos/${GITHUB_REPOSITORY}/contents/miccgi/b001/BEHAVIOR_CONTRACT.json?ref=${GITHUB_SHA}" --jq .content | tr -d '\n' | base64 -d > /tmp/b001/contract.json
+          gh api "/repos/${GITHUB_REPOSITORY}/contents/miccgi/b001/CHALLENGE.json?ref=${GITHUB_SHA}" --jq .content | tr -d '\n' | base64 -d > /tmp/b001/challenge.json
+          python - <<'PY'
+          import hashlib,json
+          c=json.load(open('/tmp/b001/contract.json'))
+          raw=json.dumps(c,sort_keys=True,separators=(',',':')).encode()
+          h=hashlib.sha256(raw).hexdigest()
+          expected='2020e2db6ecb5ad94dd844f8979a8a564f61718db3364eca3c0c5af24f7f7614'
+          if h!=expected: raise SystemExit('B001_CONTRACT_DIGEST_MISMATCH')
+          q=json.load(open('/tmp/b001/challenge.json'))
+          if q.get('contract_sha256')!=expected: raise SystemExit('B001_CHALLENGE_CONTRACT_MISMATCH')
+          nonce=str(q.get('challenge_nonce',''))
+          if len(nonce)!=64 or any(ch not in '0123456789abcdef' for ch in nonce):
+              raise SystemExit('B001_BAD_CHALLENGE')
+          print('MICCGI_B001_CONTRACT_OK=1')
+          print('MICCGI_B001_CHALLENGE='+nonce)
+          PY
+
+      - name: Execute actor without evidence authority
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import base64,hashlib,json,os,urllib.request,urllib.error
+          repo=os.environ['GITHUB_REPOSITORY']
+          head=os.environ['GITHUB_SHA']
+          run=os.environ['GITHUB_RUN_ID']
+          token=os.environ['GH_TOKEN']
+          challenge=json.load(open('/tmp/b001/challenge.json'))
+          nonce=challenge['challenge_nonce']
+          contract=challenge['contract_sha256']
+          branch='miccgi-b001-response-'+run
+          path='miccgi/b001/response.txt'
+          canonical=f'MICCGI_B001_RESPONSE|contract={contract}|challenge={nonce}|run={run}|repo={repo}'
+
+          def api(method,path,payload=None):
+              body=None if payload is None else json.dumps(payload).encode()
+              req=urllib.request.Request(
+                  'https://api.github.com'+path,data=body,method=method,
+                  headers={'Accept':'application/vnd.github+json','Authorization':'Bearer '+token,
+                           'X-GitHub-Api-Version':'2022-11-28','User-Agent':'MICCGI-B001-actor',
+                           'Content-Type':'application/json'})
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as r:
+                      raw=r.read(); return None if not raw else json.loads(raw)
+              except urllib.error.HTTPError as e:
+                  raise SystemExit(f'B001_ACTOR_HTTP_{e.code}:'+e.read().decode(errors='replace')[:300])
+
+          api('POST',f'/repos/{repo}/git/refs',{'ref':'refs/heads/'+branch,'sha':head})
+          write=api('PUT',f'/repos/{repo}/contents/{path}',{
+              'message':canonical,
+              'content':base64.b64encode((canonical+'\n').encode()).decode(),
+              'branch':branch})
+          commit=write['commit']['sha']
+          rf=api('GET',f'/repos/{repo}/contents/{path}?ref={commit}')
+          rc=api('GET',f'/repos/{repo}/commits/{commit}')
+          file_text=base64.b64decode(rf['content']).decode().rstrip('\n')
+          commit_message=rc['commit']['message']
+          if file_text!=canonical or commit_message!=canonical:
+              raise SystemExit('B001_ACTOR_PROVIDER_READBACK_MISMATCH')
+
+          response={
+              'contract_sha256':contract,
+              'challenge_nonce':nonce,
+              'repository':repo,
+              'trigger_sha':head,
+              'workflow_run_id':run,
+              'response_branch':branch,
+              'response_path':path,
+              'response_commit_sha':commit,
+              'canonical_observation_sha256':hashlib.sha256(canonical.encode()).hexdigest(),
+              'actor_statement':'candidate response only; no evidence class; no admission authority'
+          }
+          open('/tmp/b001/ACTOR_RESPONSE.json','w').write(json.dumps(response,sort_keys=True,indent=2)+'\n')
+          print('MICCGI_B001_ACTOR_RESPONSE_OK=1')
+          print('MICCGI_B001_RESPONSE_BRANCH='+branch)
+          print('MICCGI_B001_RESPONSE_COMMIT='+commit)
+          print('MICCGI_B001_CANONICAL_SHA256='+response['canonical_observation_sha256'])
+          PY
+
+      - name: Publish candidate response only
+        uses: actions/upload-artifact@v4
+        with:
+          name: MICCGI_B001_ACTOR_RESPONSE
+          path: /tmp/b001/ACTOR_RESPONSE.json
+          if-no-files-found: error
+          retention-days: 90
