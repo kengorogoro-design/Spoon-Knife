@@ -1,0 +1,12 @@
+{
+  "account_creation_allowed": false,
+  "branch": "miccgi-m006-054b1dd9",
+  "charging_allowed": false,
+  "financial_actions_allowed": false,
+  "max_network_calls": 4,
+  "nonce": "054b1dd972873f42087039fe2e29fd5fe53917cf11f6fba34bd2678094f70371",
+  "reality_url": "https://www.imf.org/",
+  "schema": "MICCGI-M006-SEED-1",
+  "seed_sha256": "05302726a639af5b21709f9e9636f657650493430545f62bf921e2ef1939e475",
+  "source_m005_sha256": "efc2473855f34f688c2f094b520b72647d32dcfe8a434eb2f670e609f7207e07"
+}
