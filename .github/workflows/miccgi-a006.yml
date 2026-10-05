@@ -1,0 +1,123 @@
+name: MICCGI A006 remote successor construction
+
+on:
+  push:
+    branches:
+      - miccgi-successor-a006-7fc956d
+
+permissions:
+  contents: read
+
+jobs:
+  construct-successor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout isolated successor branch
+        uses: actions/checkout@v4
+
+      - name: Construct deterministic successor capsule
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PARENT_A005_SHA256="7fc956d6de1561ff9ac3413aeb0225f91e944b26231308a37dc7bb5ee84cf416"
+          PARENT_A005_RUN_ID="37268189795"
+          PARENT_A005_RECEIPT_SHA256="864065ba66b2e61320f60b44247b79256344220586720301fb63f1531b227d3d"
+          SOURCE_BUNDLE_SHA256="5fe145c2b0be4674a291050d46202898d629efdb8d91da2aef8f3b7783bb5a05"
+          SOURCE_TREE_SHA256="0c8853e5f7fe5ce50bdba696d6a6a330f5ee961ce6a1d4ed4e9f741ff6bbba9d"
+
+          base64 -d miccgi/a005/A004_KERNEL_SOURCE.tar.gz.b64 > /tmp/a006-kernel.tar.gz
+          test "$(sha256sum /tmp/a006-kernel.tar.gz | awk '{print $1}')" = "$SOURCE_BUNDLE_SHA256"
+
+          rm -rf /tmp/a006-src
+          mkdir -p /tmp/a006-src
+          tar -xzf /tmp/a006-kernel.tar.gz -C /tmp/a006-src
+
+          cd /tmp/a006-src
+          ACTUAL_TREE_SHA="$(python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          root=Path('.')
+          paths=[root/'pyproject.toml', root/'tests/test_kernel.py']+sorted((root/'micgi').rglob('*.py'))
+          h=hashlib.sha256()
+          for p in sorted(paths,key=lambda x:x.as_posix()):
+              rel=p.as_posix().encode()
+              data=p.read_bytes()
+              h.update(len(rel).to_bytes(8,'big')); h.update(rel)
+              h.update(len(data).to_bytes(8,'big')); h.update(data)
+          print(h.hexdigest())
+          PY
+          )"
+          test "$ACTUAL_TREE_SHA" = "$SOURCE_TREE_SHA256"
+
+          python3 -m venv /tmp/a006-venv
+          /tmp/a006-venv/bin/python -m pip install --disable-pip-version-check -q pytest
+          /tmp/a006-venv/bin/python -m pytest -q | tee /tmp/a006-pytest.txt
+          grep -q "11 passed" /tmp/a006-pytest.txt
+          /tmp/a006-venv/bin/python -m compileall -q micgi tests
+
+          cat > /tmp/a006-build.py <<'PY'
+          from pathlib import Path
+          import hashlib, json, zipfile, sys
+
+          src=Path('/tmp/a006-src')
+          out=Path(sys.argv[1])
+          parent={
+              "artifact":"MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006",
+              "parent_a005_artifact_sha256":"7fc956d6de1561ff9ac3413aeb0225f91e944b26231308a37dc7bb5ee84cf416",
+              "parent_a005_external_run_id":37268189795,
+              "parent_a005_receipt_sha256":"864065ba66b2e61320f60b44247b79256344220586720301fb63f1531b227d3d",
+              "source_tree_sha256":"0c8853e5f7fe5ce50bdba696d6a6a330f5ee961ce6a1d4ed4e9f741ff6bbba9d",
+              "parent_generation":5,
+              "claim_boundary":{
+                  "micgi":"UNPROVEN",
+                  "economic_t0":"NOT_OBSERVED",
+                  "verified_realized_profit":"NOT_PROVEN",
+                  "independent_external_verification":"NOT_ESTABLISHED"
+              },
+              "construction_scope":"remote deterministic successor capsule; no economic credit"
+          }
+          att=json.dumps(parent,sort_keys=True,indent=2).encode()+b"\n"
+          entries=[]
+          selected=[src/'pyproject.toml',src/'tests/test_kernel.py']+sorted((src/'micgi').rglob('*.py'))
+          for p in sorted(selected,key=lambda x:x.relative_to(src).as_posix()):
+              entries.append((p.relative_to(src).as_posix(),p.read_bytes()))
+          entries.append(('SUCCESSOR_ATTESTATION.json',att))
+          manifest=[]
+          for rel,data in entries:
+              manifest.append({"path":rel,"bytes":len(data),"sha256":hashlib.sha256(data).hexdigest()})
+          manifest_bytes=(json.dumps({"artifact":"MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006","files":manifest},sort_keys=True,indent=2)+"\n").encode()
+          entries.append(('MANIFEST.json',manifest_bytes))
+          with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for rel,data in sorted(entries):
+                  info=zipfile.ZipInfo('MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006/'+rel,date_time=(1980,1,1,0,0,0))
+                  info.compress_type=zipfile.ZIP_DEFLATED
+                  info.external_attr=(0o100644 & 0xffff)<<16
+                  info.create_system=3
+                  z.writestr(info,data,compress_type=zipfile.ZIP_DEFLATED,compresslevel=9)
+          PY
+
+          /tmp/a006-venv/bin/python /tmp/a006-build.py /tmp/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006_1.zip
+          /tmp/a006-venv/bin/python /tmp/a006-build.py /tmp/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006_2.zip
+
+          cmp /tmp/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006_1.zip /tmp/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006_2.zip
+          SUCCESSOR_SHA="$(sha256sum /tmp/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006_1.zip | awk '{print $1}')"
+          SUCCESSOR_BYTES="$(stat -c '%s' /tmp/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006_1.zip)"
+
+          echo "MICCGI_A006_PARENT_A005_SHA256=$PARENT_A005_SHA256"
+          echo "MICCGI_A006_SOURCE_TREE_SHA256=$ACTUAL_TREE_SHA"
+          echo "MICCGI_A006_REMOTE_TESTS=11_PASS"
+          echo "MICCGI_A006_REMOTE_COMPILEALL=PASS"
+          echo "MICCGI_A006_DETERMINISTIC_DOUBLE_BUILD=BYTE_IDENTICAL"
+          echo "MICCGI_A006_SUCCESSOR_SHA256=$SUCCESSOR_SHA"
+          echo "MICCGI_A006_SUCCESSOR_BYTES=$SUCCESSOR_BYTES"
+
+          cp /tmp/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006_1.zip "$GITHUB_WORKSPACE/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip"
+
+      - name: Persist remote successor capsule
+        uses: actions/upload-artifact@v4
+        with:
+          name: MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006
+          path: MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip
+          if-no-files-found: error
+          compression-level: 0
