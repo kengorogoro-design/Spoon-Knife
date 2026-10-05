@@ -1,0 +1,23 @@
+{
+  "actor_must": [
+    "consume the externally issued challenge after contract commitment",
+    "create a new isolated branch from the triggering commit",
+    "write a challenge-bound canonical observation to a dedicated path",
+    "read back the file from the provider",
+    "read back the resulting commit from the provider",
+    "emit provider locators without assigning its own evidence class"
+  ],
+  "challenge_format": "64 lowercase hex chars",
+  "contract_id": "miccgi.external_self_acquisition.challenge.v1",
+  "contract_version": 1,
+  "credit": "behavior-contract satisfaction only; no economic credit; no MICGI admission",
+  "provider": "GitHub",
+  "witness_must": [
+    "use a read path separate from the actor execution token",
+    "fetch workflow run and job state from the provider",
+    "fetch the response file by immutable commit SHA",
+    "fetch the response commit by immutable commit SHA",
+    "verify both observations bind the exact fresh challenge",
+    "issue the admission verdict; actor claims have zero admission authority"
+  ]
+}
