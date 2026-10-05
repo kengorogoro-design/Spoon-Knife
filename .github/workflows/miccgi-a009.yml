@@ -44,16 +44,22 @@ jobs:
           import json
           s=json.load(open('/tmp/a009-runtime/current_state.json'))
           assert s['generation']==8, s
-          assert s['micgi']=='UNPROVEN'
-          assert s['economic_t0']=='NOT_OBSERVED'
-          assert s['verified_realized_profit']=='NOT_PROVEN'
           assert 'external.runtime.github_actions.remote_self_publication' in s['claims']
-          print('MICCGI_A009_FRESH_RESTORE_GEN8=PASS')
+          print('MICCGI_A009_FRESH_RAW_STATE_GEN8=PASS')
           PY
 
           cd "$SRC"
           python3 -m compileall -q micgi tests
           PYTHONPATH="$SRC" python3 -m micgi --state-dir /tmp/a009-runtime status > /tmp/a009-status8-before.json
+          python3 - <<'PY'
+          import json
+          s=json.load(open('/tmp/a009-status8-before.json'))
+          assert s['generation']==8, s
+          assert s['micgi']=='UNPROVEN'
+          assert s['economic_t0']=='NOT_OBSERVED'
+          assert s['verified_realized_profit']=='NOT_PROVEN'
+          print('MICCGI_A009_FRESH_STATUS_GEN8_CLAIM_BOUNDARY=PASS')
+          PY
 
           cd "$GITHUB_WORKSPACE"
           mkdir -p miccgi/a009-output
