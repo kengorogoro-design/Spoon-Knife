@@ -1,0 +1,26 @@
+name: MICCGI M016 cross-logger off-policy evaluation
+on:
+  push:
+    branches:
+      - miccgi-m016-crosslogger-ope
+    paths:
+      - .github/workflows/miccgi-m016.yml
+      - miccgi_m016_runtime.py
+permissions:
+  contents: write
+jobs:
+  crosslogger-ope:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m016-crosslogger-ope
+          fetch-depth: 0
+      - name: Run cross-logger OPE
+        run: |
+          python3 miccgi_m016_runtime.py
+          git config user.name "MICCGI M016 Runtime"
+          git config user.email "miccgi-runtime@users.noreply.github.com"
+          git add miccgi_m016_state
+          git commit -m "MICCGI M016 final adjudication" || true
+          git push origin HEAD
