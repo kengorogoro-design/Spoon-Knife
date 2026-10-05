@@ -1,0 +1,20 @@
+name: MICCGI M008 bounded meta-machinery self-rewrite
+on:
+  push:
+    branches:
+      - miccgi-m008-selfrewrite-a799884c
+    paths:
+      - .github/workflows/miccgi-m008.yml
+      - miccgi_m008_runtime.py
+permissions:
+  contents: write
+jobs:
+  bounded-self-rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: miccgi-m008-selfrewrite-a799884c
+          fetch-depth: 0
+      - name: Run bounded source self-rewrite
+        run: python3 miccgi_m008_runtime.py
