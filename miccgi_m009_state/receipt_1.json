@@ -1,0 +1,10 @@
+{
+  "compiled": true,
+  "epoch": 1,
+  "language_sha256": "79af5cd8e8913a0726773f7fdc43937bddc41b89b8ba3b3c01823bbc6e031b4a",
+  "reason": "CONTINUE_LANGUAGE_GENESIS",
+  "source_changed": true,
+  "source_sha256": "76ace9abf4aba48db98853323f2a0289b7d9af575e04c218f76d0054e1733871",
+  "state_sha256": "4561af5a07042f2d73985468960f78b6ce52353d68ec17af8e3841f0a2a362a3",
+  "stop": false
+}

@@ -1,0 +1,301 @@
+{
+  "contract_actions": 0,
+  "epoch": 1,
+  "financial_actions": 0,
+  "holdout": {
+    "agg": 1.1294220180452188,
+    "complexity": 43,
+    "diversity": 1.2745098039215685,
+    "metrics": [
+      0.7793332029815657,
+      1.0053541749298351,
+      0.9787536874877556,
+      0.774173418312975,
+      0.8916985112704683
+    ],
+    "ok": true,
+    "rob": 0.7793332029815657
+  },
+  "language": {
+    "eval": {
+      "a": [
+        {
+          "a": [
+            {
+              "a": [],
+              "n": "floor",
+              "t": "v"
+            },
+            {
+              "a": [],
+              "t": "c",
+              "x": 1.2
+            }
+          ],
+          "op": "mul",
+          "t": "o"
+        },
+        {
+          "a": [
+            {
+              "n": "gm",
+              "t": "v"
+            },
+            {
+              "n": "mean",
+              "t": "v"
+            }
+          ],
+          "op": "max",
+          "t": "o"
+        }
+      ],
+      "op": "add",
+      "t": "o"
+    },
+    "gen": {
+      "a": [
+        {
+          "a": [
+            {
+              "n": "v",
+              "t": "v"
+            },
+            {
+              "a": [
+                {
+                  "a": [
+                    {
+                      "n": "noise",
+                      "t": "v"
+                    },
+                    {
+                      "t": "c",
+                      "x": 0.18
+                    }
+                  ],
+                  "op": "mul",
+                  "t": "o"
+                }
+              ],
+              "op": "exp",
+              "t": "o"
+            }
+          ],
+          "op": "max",
+          "t": "o"
+        }
+      ],
+      "op": "clippos",
+      "t": "o"
+    },
+    "id": "L1018",
+    "macros": [
+      {
+        "e": {
+          "a": [
+            {
+              "n": "a",
+              "t": "v"
+            },
+            {
+              "n": "b",
+              "t": "v"
+            }
+          ],
+          "op": "mean",
+          "t": "o"
+        },
+        "n": "blend",
+        "p": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "e": {
+          "a": [
+            {
+              "a": [
+                {
+                  "a": [
+                    {
+                      "a": [
+                        {
+                          "n": "a",
+                          "t": "v"
+                        },
+                        {
+                          "n": "a",
+                          "t": "v"
+                        }
+                      ],
+                      "op": "div",
+                      "t": "o"
+                    },
+                    {
+                      "a": [
+                        {
+                          "n": "a",
+                          "t": "v"
+                        }
+                      ],
+                      "op": "exp",
+                      "t": "o"
+                    }
+                  ],
+                  "op": "add",
+                  "t": "o"
+                },
+                {
+                  "a": [
+                    {
+                      "a": [
+                        {
+                          "n": "a",
+                          "t": "v"
+                        }
+                      ],
+                      "op": "exp",
+                      "t": "o"
+                    }
+                  ],
+                  "op": "log",
+                  "t": "o"
+                }
+              ],
+              "op": "sub",
+              "t": "o"
+            }
+          ],
+          "op": "abs",
+          "t": "o"
+        },
+        "n": "m1018",
+        "p": [
+          "a"
+        ]
+      }
+    ],
+    "ops": [
+      "abs",
+      "add",
+      "clip01",
+      "clippos",
+      "div",
+      "exp",
+      "gmean",
+      "log",
+      "max",
+      "mean",
+      "min",
+      "mul",
+      "neg",
+      "sigmoid",
+      "sub",
+      "tanh"
+    ],
+    "parent": "3ff9b0e2141a6b595ca7f9a0d6141aa7a1b53a46fa07095d4b50effb86e1a768",
+    "rep": {
+      "a": [
+        {
+          "a": [
+            {
+              "a": [
+                {
+                  "n": "x",
+                  "t": "v"
+                }
+              ],
+              "op": "clippos",
+              "t": "o"
+            },
+            {
+              "a": [],
+              "t": "c",
+              "x": 1.0
+            }
+          ],
+          "op": "mul",
+          "t": "o"
+        }
+      ],
+      "op": "tanh",
+      "t": "o"
+    },
+    "search": {
+      "a": [
+        {
+          "a": [
+            {
+              "a": [
+                {
+                  "a": [
+                    {
+                      "t": "c",
+                      "x": -0.6628700148778257
+                    }
+                  ],
+                  "op": "abs",
+                  "t": "o"
+                },
+                {
+                  "a": [
+                    {
+                      "n": "stagnation",
+                      "t": "v"
+                    }
+                  ],
+                  "op": "clippos",
+                  "t": "o"
+                }
+              ],
+              "op": "min",
+              "t": "o"
+            },
+            {
+              "a": [
+                {
+                  "a": [],
+                  "n": "novelty",
+                  "t": "v"
+                },
+                {
+                  "a": [],
+                  "t": "c",
+                  "x": 0.32
+                }
+              ],
+              "op": "mul",
+              "t": "o"
+            }
+          ],
+          "op": "add",
+          "t": "o"
+        }
+      ],
+      "op": "clip01",
+      "t": "o"
+    }
+  },
+  "language_sha256": "79af5cd8e8913a0726773f7fdc43937bddc41b89b8ba3b3c01823bbc6e031b4a",
+  "macro_count": 2,
+  "observations": [
+    {
+      "digest": "22fee916138f2c3200572d719e4e608a99162792d1a06e693e90e83af4585eb5",
+      "size": 15832,
+      "source": "https://api.github.com/repos/kengorogoro-design/Spoon-Knife",
+      "status": 200
+    },
+    {
+      "digest": "203f15ce63523ec5dbbf3462328c7e26d9903240a5f7b1782d36b8f9f388bfac",
+      "size": 282699,
+      "source": "https://pypi.org/pypi/pytest/json",
+      "status": 200
+    }
+  ],
+  "operator_count": 16,
+  "paid_actions": 0,
+  "parent_language_sha256": null,
+  "source_sha256": "76ace9abf4aba48db98853323f2a0289b7d9af575e04c218f76d0054e1733871"
+}
