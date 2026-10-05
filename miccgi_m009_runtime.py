@@ -87,12 +87,11 @@ def fuse(a,b,rng,serial):
 
 def refactor(g,serial):
     q=json.loads(json.dumps(g));q["id"]=f"R{serial}";q["parent"]=H(g)
-    targets=(("rep",["x"]),("gen",["v","noise"]),("eval",["floor","gm","mean","spread","novelty"]),("search",["stagnation","novelty","uncertainty","archive_diversity"]))
-    key,params=targets[serial%len(targets)]
-    name=f"abs{serial}"
-    original=json.loads(json.dumps(q[key]))
-    q["macros"].append({"n":name,"p":params,"e":original})
-    q[key]=X(name,*(V(p) for p in params))
+    targets=("rep","gen","eval","search")
+    key=targets[serial%len(targets)]
+    name=f"id{serial}"
+    q["macros"].append({"n":name,"p":["z"],"e":V("z")})
+    q[key]=X(name,json.loads(json.dumps(q[key])))
     return q
 
 def es(e):
