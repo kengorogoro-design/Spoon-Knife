@@ -19,24 +19,27 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          rm -rf /tmp/a008
           mkdir -p /tmp/a008
           cd /tmp/a008
-          gh api             -H "Accept: application/vnd.github+json"             /repos/kengorogoro-design/Spoon-Knife/actions/artifacts/11326954132/zip             > parent_wrapper.zip
-          echo "A008_PARENT_WRAPPER_SHA256=$(sha256sum parent_wrapper.zip | awk '{print $1}')"
-          test "$(sha256sum parent_wrapper.zip | awk '{print $1}')" = "0ceb568d97167013cb7375110735e71c73d889901d7ee4d8b8780a2d05e53a2d"
+          gh api -H "Accept: application/vnd.github+json"             /repos/kengorogoro-design/Spoon-Knife/actions/artifacts/11326954132/zip             > parent_wrapper.zip
+          WRAP="$(sha256sum parent_wrapper.zip | awk '{print $1}')"
+          echo "A008_PARENT_WRAPPER_SHA256=$WRAP"
+          test "$WRAP" = "0ceb568d97167013cb7375110735e71c73d889901d7ee4d8b8780a2d05e53a2d"
           unzip -q parent_wrapper.zip
-          test -f MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip
-          echo "A008_PARENT_INNER_SHA256=$(sha256sum MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip | awk '{print $1}')"
-          test "$(sha256sum MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip | awk '{print $1}')" = "84032dd13d332f315b7f02cb8684affece9c641c3bd67de81b34fb4214ac6d59"
+          INNER="$(sha256sum MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip | awk '{print $1}')"
+          echo "A008_PARENT_INNER_SHA256=$INNER"
+          test "$INNER" = "84032dd13d332f315b7f02cb8684affece9c641c3bd67de81b34fb4214ac6d59"
           mkdir src
           unzip -q MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006.zip -d src
           mv src/MICCGI_REMOTE_SUCCESSOR_CAPSULE_A006 src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
 
-      - name: Install cold recovery contract
+      - name: Install dependency-free recovery and self-test
         shell: bash
         run: |
           set -euo pipefail
           cd /tmp/a008/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
+
           cat > RECOVERY_CONTRACT.json <<'JSON'
           {
             "artifact": "MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008",
@@ -44,7 +47,9 @@ jobs:
             "parent_cross_provider_lineage_artifact_sha256": "e3cd93f0f797f14e31742548af5491dac2837617a9ef6be2cfb33fcb13c661ad",
             "required_runtime": "python>=3.11",
             "recovery_entrypoint": "python RECOVER.py",
+            "selftest_entrypoint": "python SELFTEST.py",
             "network_required_for_recovery": false,
+            "third_party_python_packages_required_for_recovery": false,
             "claim_boundary": {
               "micgi": "UNPROVEN",
               "economic_t0": "NOT_OBSERVED",
@@ -57,16 +62,10 @@ jobs:
           cat > RECOVER.py <<'PY'
           from __future__ import annotations
           import compileall, hashlib, json, pathlib, sys, tempfile
-
           ROOT = pathlib.Path(__file__).resolve().parent
-
           def fail(msg: str) -> None:
               raise SystemExit("RECOVERY_FAIL:" + msg)
-
-          manifest_path = ROOT / "MANIFEST.json"
-          if not manifest_path.exists():
-              fail("missing_manifest")
-          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          manifest = json.loads((ROOT / "MANIFEST.json").read_text(encoding="utf-8"))
           mismatches = []
           for entry in manifest["files"]:
               p = ROOT / entry["path"]
@@ -89,12 +88,144 @@ jobs:
               s0 = k.bootstrap()
               if s0.generation != 0 or s0.status != "ACTIVE_UNPROVEN":
                   fail("bootstrap")
-              result = k.cycle()
+              k.cycle()
               current = k.state_store.load()
               if current is None or current.status != "ACTIVE_UNPROVEN":
                   fail("post_cycle_state")
           print("MICCGI_A008_COLD_RECOVERY_OK=1")
           print("MICCGI_A008_MANIFEST_FILES=" + str(len(manifest["files"])))
+          PY
+
+          cat > SELFTEST.py <<'PY'
+          from __future__ import annotations
+          import hashlib, json, pathlib, sys, tempfile
+          ROOT = pathlib.Path(__file__).resolve().parent
+          sys.path.insert(0, str(ROOT))
+
+          from micgi.adjudication import adjudicate_successor
+          from micgi.evidence import Evidence, EvidenceClass, EvidenceStore
+          from micgi.model import CapabilityClaim, CapabilityEnvelope, Direction, GenerationState
+          from micgi.runtime import RecursiveCapabilityKernel
+
+          passed = 0
+          def check(fn):
+              global passed
+              fn()
+              passed += 1
+              print("PASS", fn.__name__)
+
+          def valid_external_receipt(root: pathlib.Path) -> pathlib.Path:
+              receipts = root / "external_receipts"
+              receipts.mkdir(parents=True, exist_ok=True)
+              h = hashlib.sha256(b"x").hexdigest()
+              base = {
+                  "receipt_version": 1,
+                  "capability_id": "external.test.roundtrip",
+                  "provider": "TestProvider",
+                  "resource_id": "R1",
+                  "expected_nonce_sha256": "N1",
+                  "write": {"resource_id": "R1", "canonical_observation_sha256": h},
+                  "readbacks": [
+                      {"method": "read_a", "resource_id": "R1", "nonce_sha256": "N1", "canonical_observation_sha256": h},
+                      {"method": "read_b", "resource_id": "R1", "nonce_sha256": "N1", "canonical_observation_sha256": h},
+                  ],
+                  "claims": [{"name": "external.test.available", "value": 1, "unit": "bool", "direction": "true"}],
+                  "executable_spec": {"type": "orchestrated_connector", "provider": "TestProvider", "actions": ["write", "read"]},
+              }
+              raw = json.dumps(base, sort_keys=True, separators=(",", ":")).encode()
+              base["receipt_sha256"] = hashlib.sha256(raw).hexdigest()
+              p = receipts / "valid.json"
+              p.write_text(json.dumps(base), encoding="utf-8")
+              return p
+
+          def t1():
+              with tempfile.TemporaryDirectory() as td:
+                  k=RecursiveCapabilityKernel(pathlib.Path(td)); s=k.bootstrap()
+                  assert s.generation==0 and s.status=="ACTIVE_UNPROVEN" and "local.machine" in s.executable_capabilities
+
+          def t2():
+              with tempfile.TemporaryDirectory() as td:
+                  k=RecursiveCapabilityKernel(pathlib.Path(td)); k.bootstrap(); k.cycle(); s=k.state_store.load()
+                  assert s is not None and s.status=="ACTIVE_UNPROVEN"
+                  assert all("profit" not in n for n in s.envelope.claims)
+
+          def t3():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); k=RecursiveCapabilityKernel(p); parent=k.bootstrap(); cand=k.build_candidate()
+                  r=adjudicate_successor(parent,cand,EvidenceStore(p/"evidence.jsonl"))
+                  if cand.executable_capabilities.keys()==parent.executable_capabilities.keys(): assert not r.admitted
+
+          def t4():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); store=EvidenceStore(p/"evidence.jsonl")
+                  ev=Evidence.create(EvidenceClass.LOCAL_MEASURED,"probe","failed capability",{"ok":False}); store.append(ev)
+                  parent=GenerationState(0,"L",CapabilityEnvelope(),{},"ACTIVE_UNPROVEN")
+                  cand=GenerationState(1,"L",CapabilityEnvelope({"x.available":CapabilityClaim("x.available",0.0,"bool",Direction.BOOLEAN_TRUE,(ev.evidence_id,))}),{"x":{"type":"command"}},"CANDIDATE")
+                  r=adjudicate_successor(parent,cand,store); assert not r.admitted and not r.improvements
+
+          def t5():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); (p/"capability_manifests").mkdir()
+                  tool=p/"generated_tool.py"; tool.write_text("print('OK')\n")
+                  spec={"capability_id":"generated.tool.ok","probe_argv":[sys.executable,str(tool)],"claims":[{"name":"generated.tool.ok.available","value_from":"probe_success","unit":"bool","direction":"true","objective_relevance":"supporting"}],"executable_spec":{"type":"python_tool","path":str(tool)}}
+                  (p/"capability_manifests"/"generated.json").write_text(json.dumps(spec))
+                  k=RecursiveCapabilityKernel(p); parent=k.bootstrap(); cand=k.build_candidate()
+                  r=adjudicate_successor(parent,cand,EvidenceStore(p/"evidence.jsonl"))
+                  assert r.admitted and "generated.tool.ok" in cand.executable_capabilities
+
+          def t6():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); (p/"capability_manifests").mkdir()
+                  tool=p/"bad_tool.py"; tool.write_text("raise SystemExit(7)\n")
+                  spec={"capability_id":"generated.tool.bad","probe_argv":[sys.executable,str(tool)],"claims":[{"name":"generated.tool.bad.available","value_from":"probe_success","unit":"bool","direction":"true"}],"executable_spec":{"type":"python_tool","path":str(tool)}}
+                  (p/"capability_manifests"/"bad.json").write_text(json.dumps(spec))
+                  k=RecursiveCapabilityKernel(p); k.bootstrap(); cand=k.build_candidate()
+                  assert "generated.tool.bad" not in cand.executable_capabilities
+                  assert any(e.source=="generated.tool.bad" for e in k.evidence_store.load())
+
+          def t7():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); valid_external_receipt(p); k=RecursiveCapabilityKernel(p)
+                  parent=k.bootstrap(); cand=k.build_candidate(); r=adjudicate_successor(parent,cand,EvidenceStore(p/"evidence.jsonl"))
+                  assert r.admitted and "external.test.roundtrip" in cand.executable_capabilities
+                  assert cand.executable_capabilities["external.test.roundtrip"]["required_evidence_class"]=="external_measured"
+
+          def t8():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); rp=valid_external_receipt(p); d=json.loads(rp.read_text())
+                  d["readbacks"][1]["nonce_sha256"]="WRONG"; d.pop("receipt_sha256")
+                  d["receipt_sha256"]=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(",",":")).encode()).hexdigest(); rp.write_text(json.dumps(d))
+                  k=RecursiveCapabilityKernel(p); cand=k.build_candidate()
+                  assert "external.test.roundtrip" not in cand.executable_capabilities
+                  assert any("rejected" in e.claim for e in k.evidence_store.load())
+
+          def t9():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); rp=valid_external_receipt(p); d=json.loads(rp.read_text())
+                  d["readbacks"]=[d["readbacks"][0],dict(d["readbacks"][0])]; d.pop("receipt_sha256")
+                  d["receipt_sha256"]=hashlib.sha256(json.dumps(d,sort_keys=True,separators=(",",":")).encode()).hexdigest(); rp.write_text(json.dumps(d))
+                  k=RecursiveCapabilityKernel(p); cand=k.build_candidate()
+                  assert "external.test.roundtrip" not in cand.executable_capabilities
+
+          def t10():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); valid_external_receipt(p); k=RecursiveCapabilityKernel(p)
+                  a=k.cycle(); b=k.cycle()
+                  assert a.admitted and not b.admitted and "no measured capability expansion" in b.reasons
+
+          def t11():
+              with tempfile.TemporaryDirectory() as td:
+                  p=pathlib.Path(td); store=EvidenceStore(p/"evidence.jsonl")
+                  ev=Evidence.create(EvidenceClass.LOCAL_MEASURED,"fake","local only",{"ok":True}); store.append(ev)
+                  parent=GenerationState(0,"L",CapabilityEnvelope(),{},"ACTIVE_UNPROVEN")
+                  claim=CapabilityClaim("external.fake.available",1.0,"bool",Direction.BOOLEAN_TRUE,(ev.evidence_id,))
+                  cand=GenerationState(1,"L",CapabilityEnvelope({claim.name:claim}),{"external.fake":{"type":"orchestrated_connector","provider":"Fake","actions":["write"],"evidence_ids":[ev.evidence_id],"required_evidence_class":"external_measured"}},"CANDIDATE")
+                  r=adjudicate_successor(parent,cand,store)
+                  assert not r.admitted and any("not externally measured" in x for x in r.reasons)
+
+          for fn in (t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11): check(fn)
+          print("MICCGI_A008_SELFTEST_PASS="+str(passed))
+          if passed != 11: raise SystemExit(1)
           PY
 
           python - <<'PY'
@@ -104,31 +235,27 @@ jobs:
           att["artifact"]="MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008"
           att["parent_a006_inner_sha256"]="84032dd13d332f315b7f02cb8684affece9c641c3bd67de81b34fb4214ac6d59"
           att["parent_a007_cross_provider_lineage_sha256"]="e3cd93f0f797f14e31742548af5491dac2837617a9ef6be2cfb33fcb13c661ad"
-          att["construction_scope"]="remote cold-recoverable successor capsule; no economic credit"
+          att["construction_scope"]="remote dependency-free cold-recoverable successor capsule; no economic credit"
           att["recovery_entrypoint"]="python RECOVER.py"
+          att["selftest_entrypoint"]="python SELFTEST.py"
           (root/"SUCCESSOR_ATTESTATION.json").write_text(json.dumps(att,sort_keys=True,indent=2)+"\n")
-
           files=[]
           for p in sorted(root.rglob("*")):
-              if not p.is_file():
-                  continue
+              if not p.is_file(): continue
               rel=p.relative_to(root).as_posix()
-              if rel=="MANIFEST.json" or "__pycache__" in rel or ".pytest_cache" in rel:
-                  continue
+              if rel=="MANIFEST.json" or "__pycache__" in rel or ".pytest_cache" in rel: continue
               data=p.read_bytes()
               files.append({"path":rel,"bytes":len(data),"sha256":hashlib.sha256(data).hexdigest()})
-          manifest={"artifact":"MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008","files":files}
-          (root/"MANIFEST.json").write_text(json.dumps(manifest,sort_keys=True,indent=2)+"\n")
+          (root/"MANIFEST.json").write_text(json.dumps({"artifact":"MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008","files":files},sort_keys=True,indent=2)+"\n")
           PY
 
-      - name: Prove clean cold recovery
+      - name: Prove dependency-free cold recovery
         shell: bash
         run: |
           set -euo pipefail
-          SRC=/tmp/a008/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
-          cd "$SRC"
+          cd /tmp/a008/src/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
           python RECOVER.py
-          python -m pytest -q
+          python SELFTEST.py
           python -m compileall -q micgi
 
       - name: Deterministic double-build
@@ -142,20 +269,16 @@ jobs:
           def build(out):
               with zipfile.ZipFile(out,"w",compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
                   for p in sorted(src.rglob("*")):
-                      if not p.is_file():
-                          continue
+                      if not p.is_file(): continue
                       rel=pathlib.Path("MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008")/p.relative_to(src)
                       data=p.read_bytes()
                       zi=zipfile.ZipInfo(rel.as_posix(),date_time=(1980,1,1,0,0,0))
                       zi.compress_type=zipfile.ZIP_DEFLATED
                       zi.external_attr=(0o100644 & 0xFFFF)<<16
                       z.writestr(zi,data)
-          build("A008_A.zip")
-          build("A008_B.zip")
-          a=pathlib.Path("A008_A.zip").read_bytes()
-          b=pathlib.Path("A008_B.zip").read_bytes()
-          if a != b:
-              raise SystemExit("NON_DETERMINISTIC_BUILD")
+          build("A008_A.zip"); build("A008_B.zip")
+          a=pathlib.Path("A008_A.zip").read_bytes(); b=pathlib.Path("A008_B.zip").read_bytes()
+          if a != b: raise SystemExit("NON_DETERMINISTIC_BUILD")
           print("MICCGI_A008_SUCCESSOR_SHA256="+hashlib.sha256(a).hexdigest())
           print("MICCGI_A008_SUCCESSOR_BYTES="+str(len(a)))
           PY
@@ -169,7 +292,7 @@ jobs:
           unzip -q /tmp/a008/A008_A.zip -d /tmp/a008/rehydrated
           cd /tmp/a008/rehydrated/MICCGI_COLD_RECOVERABLE_SUCCESSOR_CAPSULE_A008
           python RECOVER.py
-          python -m pytest -q
+          python SELFTEST.py
           echo "MICCGI_A008_REHYDRATED_OK=1"
 
       - name: Publish successor
