@@ -1,0 +1,6 @@
+{
+  "contract_sha256": "2020e2db6ecb5ad94dd844f8979a8a564f61718db3364eca3c0c5af24f7f7614",
+  "challenge_nonce": "28883d5e7c2bb0f9bd04381be4ad7c093461126f945450a4dd206135cc1724a0",
+  "issuer_role": "external_witness_challenge",
+  "candidate_has_admission_authority": false
+}
