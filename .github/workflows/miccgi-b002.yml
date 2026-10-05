@@ -1,0 +1,61 @@
+name: MICCGI B002 capability genesis compiler actor
+
+on:
+  push:
+    branches:
+      - miccgi-capability-genesis-b002
+    paths:
+      - miccgi/b002/CHALLENGE.json
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  compile-and-execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile fresh contract-bound capability
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,pathlib
+          from miccgi.b002.runtime.compiler import compile_contract
+          c=json.loads(pathlib.Path('miccgi/b002/BEHAVIOR_CONTRACT.json').read_text())
+          q=json.loads(pathlib.Path('miccgi/b002/CHALLENGE.json').read_text())
+          p=compile_contract(c,q)
+          pathlib.Path('/tmp/b002').mkdir(exist_ok=True)
+          pathlib.Path('/tmp/b002/ACTOR_PLAN.json').write_text(json.dumps(p.actor_plan,sort_keys=True,indent=2)+'\n')
+          pathlib.Path('/tmp/b002/WITNESS_PLAN.json').write_text(json.dumps(p.witness_plan,sort_keys=True,indent=2)+'\n')
+          pathlib.Path('/tmp/b002/CAPABILITY_ID.txt').write_text(p.capability_id+'\n')
+          print('MICCGI_B002_CONTRACT_SHA256='+p.contract_sha256)
+          print('MICCGI_B002_CAPABILITY_ID='+p.capability_id)
+          PY
+      - name: Execute compiled actor plan
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os,pathlib
+          from miccgi.b002.runtime.actor import execute
+          p=json.loads(pathlib.Path('/tmp/b002/ACTOR_PLAN.json').read_text())
+          out=execute(p,token=os.environ['GH_TOKEN'],run_id=os.environ['GITHUB_RUN_ID'],trigger_sha=os.environ['GITHUB_SHA'])
+          pathlib.Path('/tmp/b002/ACTOR_RESPONSE.json').write_text(json.dumps(out,sort_keys=True,indent=2)+'\n')
+          print('MICCGI_B002_ACTOR_OK=1')
+          print('MICCGI_B002_RESPONSE_BRANCH='+out['branch'])
+          print('MICCGI_B002_FINAL_COMMIT='+out['final_commit'])
+          PY
+      - name: Publish candidate locators only
+        uses: actions/upload-artifact@v4
+        with:
+          name: MICCGI_B002_ACTOR_RESPONSE
+          path: |
+            /tmp/b002/ACTOR_RESPONSE.json
+            /tmp/b002/WITNESS_PLAN.json
+            /tmp/b002/CAPABILITY_ID.txt
+          if-no-files-found: error
+          retention-days: 90
