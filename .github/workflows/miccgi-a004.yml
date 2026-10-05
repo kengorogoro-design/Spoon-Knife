@@ -1,0 +1,31 @@
+name: MICCGI A004 remote compute probe
+
+on:
+  push:
+    branches:
+      - miccgi-capability-probe-a003-9d57efd
+
+permissions:
+  contents: read
+
+jobs:
+  remote-compute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify remote computation
+        shell: bash
+        run: |
+          set -euo pipefail
+          NONCE="564c1b19fede289c8e21efe0caf1237c14fb1db7f4ee1a2c8a51fca9f5716a1f"
+          EXPECTED="6e4d390f7e6f7452d22226806d6f64c043deeae302c82b91086d4b4e904fa8a4"
+          ACTUAL="$(printf '%s' "$NONCE" | sha256sum | awk '{print $1}')"
+          echo "MICCGI_A004_NONCE=$NONCE"
+          echo "MICCGI_A004_COMPUTED_SHA256=$ACTUAL"
+          echo "MICCGI_A004_EXPECTED_SHA256=$EXPECTED"
+          test "$ACTUAL" = "$EXPECTED"
+          python3 - <<'PY'
+          import os, platform
+          print("MICCGI_A004_REMOTE_PYTHON_OK=1")
+          print("MICCGI_A004_REMOTE_PLATFORM=" + platform.platform())
+          print("MICCGI_A004_REMOTE_CPU_COUNT=" + str(os.cpu_count()))
+          PY
